@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { GlassCard } from '../components/GlassCard';
 import { LiquidButton } from '../components/LiquidButton';
+import { KeyboardPageCard } from '../components/KeyboardPageCard';
 
 const keyboardReviews = [
   {
@@ -74,38 +74,8 @@ export const KeyboardsPage: React.FC = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {keyboardReviews.slice(0, visibleCount).map((review, index) => (
-            <GlassCard key={review.id} className="p-6 fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
-              <img
-                src={review.image}
-                alt={review.title}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-              
-              <h3 className="text-xl font-semibold accent-text mb-2">
-                {review.title}
-              </h3>
-              
-              <p className="text-sm opacity-70 mb-3">
-                {review.date}
-              </p>
-              
-              <p className="text-sm mb-4 leading-relaxed">
-                {review.snippet}
-              </p>
-              
-              <blockquote className="text-sm italic opacity-80 mb-4 pl-4 border-l-2 border-interactive">
-                "{review.testimonial}"
-              </blockquote>
-              
-              <p className="text-xs opacity-60 mb-4">
-                {review.specs}
-              </p>
-              
-              <LiquidButton className="w-full text-center">
-                read more
-              </LiquidButton>
-            </GlassCard>
+          {keyboardReviews.slice(0, visibleCount).map((review) => (
+            <KeyboardPageCard key={review.id} review={review} />
           ))}
         </div>
 

@@ -12,11 +12,9 @@ function App() {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.remove('light');
-    } else {
-      document.documentElement.classList.add('light');
-    }
+    const root = window.document.documentElement;
+    root.classList.remove(isDark ? 'light' : 'dark');
+    root.classList.add(isDark ? 'dark' : 'light');
   }, [isDark]);
 
   const handlePageChange = (page: string) => {

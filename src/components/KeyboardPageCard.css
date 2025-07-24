@@ -1,0 +1,93 @@
+:root {
+	--hue-primary: 223;
+	--hue-secondary: 178;
+	--primary500: hsl(var(--hue-primary), 90%, 50%);
+	--primary600: hsl(var(--hue-primary), 90%, 60%);
+	--primary700: hsl(var(--hue-primary), 90%, 70%);
+	--secondary800: hsl(var(--hue-secondary), 90%, 80%);
+	--white0: hsla(0, 0%, 100%, 0);
+	--white50: hsla(0, 0%, 100%, 0.05);
+	--white100: hsla(0, 0%, 100%, 0.1);
+	--white200: hsla(0, 0%, 100%, 0.2);
+	--white300: hsla(0, 0%, 100%, 0.3);
+	--white400: hsla(0, 0%, 100%, 0.4);
+	--white500: hsla(0, 0%, 100%, 0.5);
+	--white: hsl(0, 0%, 100%);
+}
+
+.k-card-container {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-radius: 1.75rem;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: grab;
+    will-change: transform;
+    background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.k-card-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit; /* Use the same border-radius as the container */
+    padding: 1px; /* This will act as the border thickness */
+    background: linear-gradient(110deg, rgba(255,255,255,0), rgba(255,255,255,0), rgba(255,255,255,0.6), rgba(255,255,255,0), rgba(255,255,255,0));
+    background-size: 200% 100%;
+    background-position: 150% 0;
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.k-card-container:hover::after {
+    background-position: -50% 0;
+    transition: background-position 0.8s ease-in-out;
+}
+
+.k-card-content-area {
+    padding: 1.5rem;
+    transform: translateZ(40px); /* Bring content forward */
+    will-change: transform;
+}
+
+.k-card-image {
+    width: 100%;
+    height: 12rem; /* 192px */
+    object-fit: cover;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    transform: translateZ(60px); /* Bring image even more forward */
+    will-change: transform;
+}
+
+/* Light Mode Styles */
+.light .k-card-container {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.light .k-card-container::after {
+    background: linear-gradient(110deg, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.4), rgba(0,0,0,0), rgba(0,0,0,0));
+    background-size: 200% 100%;
+    background-position: 150% 0;
+}
+
+.light .k-card-container:hover::after {
+    background-position: -50% 0;
+}
+

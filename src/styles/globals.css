@@ -43,10 +43,12 @@ body {
 
 .logo-text {
   font-family: var(--font-print);
+  color: var(--primary-accent);
 }
 
 .page-header {
   font-family: var(--font-print);
+  color: var(--primary-accent);
 }
 
 :root:not(.light) .page-header,
@@ -62,7 +64,7 @@ body {
 }
 
 .light body {
-  color: #1a1a1a;
+  color: #111111;
   background: #fafafa;
 }
 

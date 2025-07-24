@@ -33,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={handleNavClick}
           className="logo-text hover:opacity-80 transition-opacity"
         >
-          thock & co.
+          thock&co.
         </Link>
         
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">

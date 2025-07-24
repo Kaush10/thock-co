@@ -1,16 +1,31 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { LiquidButton } from '../components/LiquidButton';
 import { KeyboardPageCard } from '../components/KeyboardPageCard';
-import { articles } from '../data/articles'; // Import articles from the new data file
-import { Link } from 'react-router-dom';
+import { articles } from '../data/articles';
+import { useNavigate } from 'react-router-dom';
+import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 
 export const KeyboardsPage: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(6);
+  const navigate = useNavigate();
+  const { handleCardClick: playCardAnimation } = useGlassCardEffect();
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Sort articles by date, newest first
   const sortedArticles = useMemo(() => {
     return [...articles].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, []);
+
+  const handleCardClick = (slug: string, index: number) => {
+    const cardElement = cardRefs.current[index];
+    if (cardElement) {
+      // The hook expects a MouseEvent, so we can create a partial one.
+      playCardAnimation({ currentTarget: cardElement } as React.MouseEvent<HTMLDivElement>);
+    }
+    
+    setTimeout(() => {
+      navigate(`/keyboards/${slug}`);
+    }); // A slightly longer delay to let the animation play out
+  };
 
   const loadMore = () => {
     setVisibleCount(prev => Math.min(prev + 3, sortedArticles.length));
@@ -24,10 +39,14 @@ export const KeyboardsPage: React.FC = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {sortedArticles.slice(0, visibleCount).map((article) => (
-            <Link to={`/keyboards/${article.slug}`} key={article.id} className="block">
+          {sortedArticles.slice(0, visibleCount).map((article, index) => (
+            <div 
+              key={article.id} 
+              onClick={() => handleCardClick(article.slug, index)}
+              ref={el => cardRefs.current[index] = el}
+            >
               <KeyboardPageCard review={article} />
-            </Link>
+            </div>
           ))}
         </div>
 

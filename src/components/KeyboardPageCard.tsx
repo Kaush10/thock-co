@@ -10,6 +10,7 @@ interface KeyboardPageCardProps {
 declare const VanillaTilt: any;
 
 export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review }) => {
+
   useEffect(() => {
     // Initialize VanillaTilt on elements with data-tilt.
     // We check if VanillaTilt is defined to avoid errors during server-side rendering or if the script fails to load.
@@ -41,12 +42,10 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review }) =>
                 <p className="text-sm sm:text-base font-light mb-4">
                     {review.snippet}
                 </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                    {review.specs.split(',').map((spec, index) => (
-                        <span key={index} className="spec-tag">
-                            {spec.trim()}
-                        </span>
-                    ))}
+                <div className="mb-4">
+                    <span className="spec-tag">
+                        {review.specs}
+                    </span>
                 </div>
                 <blockquote className="testimonial-quote">
                     "{review.testimonial}"

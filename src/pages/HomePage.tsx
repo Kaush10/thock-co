@@ -25,9 +25,7 @@ export const HomePage: React.FC<HomePageProps> = ({ isDark }) => {
       </div>
 
       {/* Temporary content for scrolling */}
-      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <h2 className="text-3xl font-bold text-center">More Content Below</h2>
-      </div>
+      <div style={{ height: '100vh' }}></div>
     </div>
   );
 };

@@ -1,10 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import './ScrollHero.css';
-import { GlassCard } from './GlassCard';
+import './KeyboardPageCard.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
+declare const VanillaTilt: any;
 
 interface ScrollHeroProps {
   bodyText: string;
@@ -15,6 +19,23 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   const componentRef = useRef<HTMLDivElement>(null);
   const textContainerRef = useRef<HTMLParagraphElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
+  const { handleCardClick } = useGlassCardEffect();
+
+  useEffect(() => {
+    // Initialize VanillaTilt on elements with data-tilt.
+    if (typeof VanillaTilt !== 'undefined') {
+        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+            max: 7,
+            speed: 500,
+            perspective: 1800,
+            glare: true,
+            "max-glare": 0.1,
+            scale: 1.03,
+            reset: true,
+            reverse: true
+        });
+    }
+  }, []);
 
   useEffect(() => {
     let st: ScrollTrigger | undefined;
@@ -94,34 +115,33 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   return (
     <div ref={componentRef} className="scroll-hero-container">
       <div className="scroll-hero-sticky-content">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Text */}
-          <div className="space-y-6">
-            <h1 className="text-6xl lg:text-7xl font-bold accent-text leading-tight page-header">
-              thock & co.
-            </h1>
-            <div className="relative space-y-4 text-lg opacity-80 leading-relaxed">
-              <p ref={textContainerRef} className="scroll-text-reveal">
-                {bodyText.split('').map((char, index) => (
-                  <span key={index}>{char}</span>
-                ))}
-              </p>
-              <span ref={cursorRef} className="cursor"></span>
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Text */}
+            <div className="space-y-6">
+              <h1 className="text-6xl lg:text-7xl font-bold accent-text leading-tight page-header">
+                thock&co.
+              </h1>
+              <div className="relative space-y-4 text-lg opacity-80 leading-relaxed">
+                <p ref={textContainerRef} className="scroll-text-reveal">
+                  {bodyText.split('').map((char, index) => (
+                    <span key={index}>{char}</span>
+                  ))}
+                </p>
+                <span ref={cursorRef} className="cursor"></span>
+              </div>
             </div>
-          </div>
 
-          {/* Right Column - Visual */}
-          <div className="flex justify-center lg:justify-end">
-            <GlassCard className="p-8 transform rotate-3">
-              <img
-                src="https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="custom keyboard artwork"
-                className="w-full h-80 object-cover rounded-lg"
-              />
-              <p className="text-center mt-4 text-sm opacity-70">
-                keyboard art by gf
-              </p>
-            </GlassCard>
+            {/* Right Column - Visual */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="w-full max-w-sm h-[28rem] transform rotate-3">
+                <div className="k-card-container w-full h-full" data-tilt onClick={handleCardClick}>
+                  <div className="k-card-content-area flex items-center justify-center">
+                    {/* Content removed as requested */}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -133,3 +133,8 @@
     color: #d1d5db; /* Tailwind's gray-300 */
 }
 
+/* Click effect for the card */
+.k-card-container.clicked {
+  /* This class is no longer used for the transform, but can be kept for other styling if needed */
+}
+

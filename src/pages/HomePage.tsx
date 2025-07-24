@@ -22,6 +22,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onPageChange, isDark }) => {
           custom keyboard build service
         </LiquidButton>
       </div>
+
+      {/* Temporary content for scrolling */}
+      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <h2 className="text-3xl font-bold text-center">More Content Below</h2>
+      </div>
     </div>
   );
 };

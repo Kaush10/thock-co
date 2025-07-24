@@ -17,71 +17,78 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   const cursorRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (componentRef.current) {
+    let st: ScrollTrigger | undefined;
+    let scrollTimeout: NodeJS.Timeout;
+
+    if (componentRef.current && textContainerRef.current && cursorRef.current) {
       const textColor = isDark ? 'white' : 'black';
       const cursorColor = isDark ? 'hsl(320 100% 50%)' : 'black';
       componentRef.current.style.setProperty('--cursor-color', cursorColor);
 
-      if (textContainerRef.current && cursorRef.current) {
-        const charSpans = Array.from(textContainerRef.current.querySelectorAll('span'));
-        if (charSpans.length === 0) return;
+      const charSpans = Array.from(textContainerRef.current.querySelectorAll('span'));
+      if (charSpans.length === 0) return;
 
-        const textLength = charSpans.length;
-        
-        // Set initial state
-        charSpans.forEach(span => {
-          span.style.color = 'transparent';
-        });
-        
-        // Make cursor visible from the start
-        cursorRef.current.classList.add('is-active');
+      const textLength = charSpans.length;
+      
+      charSpans.forEach(span => {
+        span.style.color = 'transparent';
+      });
+      
+      // Start with blinking cursor
+      cursorRef.current.classList.add('is-blinking');
 
-        ScrollTrigger.create({
-          trigger: componentRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 0.2,
-          onUpdate: (self) => {
-            const charIndex = Math.floor(self.progress * textLength);
+      st = ScrollTrigger.create({
+        trigger: componentRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.2,
+        onUpdate: (self) => {
+          // Pause blinking while scrolling
+          cursorRef.current?.classList.remove('is-blinking');
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            cursorRef.current?.classList.add('is-blinking');
+          }, 150); // Resume blinking after 150ms of no scrolling
+
+          const charIndex = Math.floor(self.progress * textLength);
+          
+          charSpans.forEach((span, i) => {
+            span.style.color = i < charIndex ? textColor : 'transparent';
+          });
+
+          const safeIndex = Math.min(charIndex, textLength - 1);
+          const currentChr = charSpans[safeIndex];
+          
+          if (currentChr && textContainerRef.current && cursorRef.current) {
+            const rect = currentChr.getBoundingClientRect();
+            const containerRect = textContainerRef.current.getBoundingClientRect();
             
-            // Reveal characters up to the current index
-            charSpans.forEach((span, i) => {
-              span.style.color = i < charIndex ? textColor : 'transparent';
-            });
-
-            // Update cursor position based on the current character
-            const safeIndex = Math.min(charIndex, textLength - 1);
-            const currentChr = charSpans[safeIndex];
-            
-            if (currentChr && textContainerRef.current && cursorRef.current) {
-              const rect = currentChr.getBoundingClientRect();
-              const containerRect = textContainerRef.current.getBoundingClientRect();
-              
-              cursorRef.current.style.left = `${(rect.right - containerRect.left) - 7}px`;
-              cursorRef.current.style.top = `${(rect.top - containerRect.top) - 20}px`;
-            }
-          },
-          onLeave: () => {
-            // Ensure all text is visible when scrolling past
-            charSpans.forEach(span => {
-              span.style.color = textColor;
-            });
-          },
-          onEnterBack: () => {
-            // When re-entering from the bottom, ensure text is fully visible before scrubbing back
-            charSpans.forEach(span => {
-              span.style.color = textColor;
-            });
-          },
-          onLeaveBack: () => {
-            // When scrolling back past the top, ensure text is fully transparent
-            charSpans.forEach(span => {
-              span.style.color = 'transparent';
-            });
+            cursorRef.current.style.left = `${(rect.right - containerRect.left) - 7}px`;
+            cursorRef.current.style.top = `${(rect.top - containerRect.top) - 20}px`;
           }
-        });
-      }
+        },
+        onLeave: () => {
+          charSpans.forEach(span => {
+            span.style.color = textColor;
+          });
+        },
+        onEnterBack: () => {
+          charSpans.forEach(span => {
+            span.style.color = textColor;
+          });
+        },
+        onLeaveBack: () => {
+          charSpans.forEach(span => {
+            span.style.color = 'transparent';
+          });
+        }
+      });
     }
+
+    return () => {
+      st?.kill();
+      clearTimeout(scrollTimeout);
+    };
   }, [bodyText, isDark]);
 
   return (

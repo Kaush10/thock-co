@@ -29,13 +29,12 @@
   background-color: var(--cursor-color, hsl(320 100% 50%));
   left: 0;
   top: 0;
-  opacity: 0;
+  opacity: 1; /* Always visible by default */
   transition: opacity 0.2s;
 }
 
-.cursor.is-active {
-  opacity: 1;
-  animation: blink 1.6s infinite;
+.cursor.is-blinking {
+  animation: blink 0.9s infinite;
 }
 
 @keyframes blink {

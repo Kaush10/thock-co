@@ -1,7 +1,8 @@
 .scroll-hero-container {
   /* This container creates the scrollable space needed for the animation. */
-  min-height: 1200vh;
+  /* The height is now set dynamically in the component. */
   position: relative;
+  margin-top: -128px;
 }
 
 .scroll-hero-sticky-content {

@@ -42,6 +42,10 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
     let scrollTimeout: NodeJS.Timeout;
 
     if (componentRef.current && textContainerRef.current && cursorRef.current) {
+      // Set the container's height to be the animation scroll distance + 1 screen height
+      const scrollDistance = 3500;
+      componentRef.current.style.height = `calc(100vh + ${scrollDistance}px)`;
+
       const textColor = isDark ? 'white' : 'black';
       const cursorColor = isDark ? 'hsl(320 100% 50%)' : 'black';
       componentRef.current.style.setProperty('--cursor-color', cursorColor);
@@ -61,8 +65,8 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
       st = ScrollTrigger.create({
         trigger: componentRef.current,
         start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.2,
+        end: `+=${scrollDistance}`,
+        scrub: true,
         onUpdate: (self) => {
           // Pause blinking while scrolling
           cursorRef.current?.classList.remove('is-blinking');

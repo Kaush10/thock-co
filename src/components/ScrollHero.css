@@ -1,0 +1,45 @@
+.scroll-hero-container {
+  /* This container creates the scrollable space needed for the animation. */
+  min-height: 1200vh;
+  position: relative;
+}
+
+.scroll-hero-sticky-content {
+  /* This is the element that will stick to the top of the viewport. */
+  position: sticky;
+  top: 0;
+  height: 100vh; /* Use viewport height to ensure it fills the screen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 1.5rem; /* Corresponds to px-6 in Tailwind */
+}
+
+/* Animation setup */
+.scroll-text-reveal {
+  white-space: pre-wrap; /* Use pre-wrap to respect newlines and wrap text */
+}
+
+.cursor {
+  position: absolute;
+  display: inline-block;
+  width: 1.3ch;
+  height: 1.2lh;
+  background-color: var(--cursor-color, hsl(320 100% 50%));
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cursor.is-active {
+  opacity: 1;
+  animation: blink 1.6s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

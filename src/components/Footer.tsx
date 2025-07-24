@@ -1,42 +1,40 @@
 import React from 'react';
 import { Instagram, MessageCircle, Mail, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-interface FooterProps {
-  onPageChange: (page: string) => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ onPageChange }) => {
-  const handleLinkClick = (page: string) => {
+export const Footer: React.FC = () => {
+  const handleLinkClick = () => {
     // Simulate click sound
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
     audio.volume = 0.1;
     audio.play().catch(() => {});
-    
-    onPageChange(page);
   };
 
   return (
     <footer className="glass-card mx-6 mb-6 p-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <button
-            onClick={() => handleLinkClick('about')}
+          <Link
+            to="/about"
+            onClick={handleLinkClick}
             className="text-sm hover:text-interactive transition-colors"
           >
             about me
-          </button>
-          <button
-            onClick={() => handleLinkClick('build-service')}
+          </Link>
+          <Link
+            to="/build-service"
+            onClick={handleLinkClick}
             className="text-sm hover:text-interactive transition-colors"
           >
             build services
-          </button>
-          <button
-            onClick={() => handleLinkClick('contact')}
+          </Link>
+          <Link
+            to="/contact"
+            onClick={handleLinkClick}
             className="text-sm hover:text-interactive transition-colors"
           >
             questions? say hi
-          </button>
+          </Link>
         </div>
         
         <div className="flex items-center gap-4">

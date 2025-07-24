@@ -1,16 +1,9 @@
 import React, { useEffect } from 'react';
 import './KeyboardPageCard.css';
+import { Article } from '../data/articles';
 
 interface KeyboardPageCardProps {
-  review: {
-    id: number;
-    title: string;
-    date: string;
-    image: string;
-    snippet: string;
-    testimonial: string;
-    specs: string;
-  };
+  review: Article;
 }
 
 // Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
@@ -39,12 +32,25 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review }) =>
         <div className="k-card-content-area">
             <img src={review.image} alt={review.title} className="k-card-image" />
             <div className="k-card-text-block">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2">
-                    {review.title}
-                </h3>
-                <p className="text-sm sm:text-base font-light">
+                <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-xl sm:text-2xl font-bold">
+                        {review.title}
+                    </h3>
+                    <span className="text-xs text-secondary">{review.date}</span>
+                </div>
+                <p className="text-sm sm:text-base font-light mb-4">
                     {review.snippet}
                 </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {review.specs.split(',').map((spec, index) => (
+                        <span key={index} className="spec-tag">
+                            {spec.trim()}
+                        </span>
+                    ))}
+                </div>
+                <blockquote className="testimonial-quote">
+                    "{review.testimonial}"
+                </blockquote>
             </div>
         </div>
     </div>

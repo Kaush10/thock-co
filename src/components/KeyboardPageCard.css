@@ -75,6 +75,23 @@
     will-change: transform;
 }
 
+.spec-tag {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    transition: all 0.2s ease-in-out;
+}
+
+.testimonial-quote {
+    font-style: italic;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    position: relative;
+}
+
 /* Light Mode Styles */
 .light .k-card-container {
     background: rgba(0, 0, 0, 0.05);
@@ -89,5 +106,30 @@
 
 .light .k-card-container:hover::after {
     background-position: -50% 0;
+}
+
+.light .spec-tag {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: #333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.light .testimonial-quote {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-left: 3px solid rgba(0, 0, 0, 0.2);
+    color: #222;
+}
+
+/* Dark Mode Styles */
+.dark .spec-tag {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e5e7eb; /* Tailwind's gray-200 */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dark .testimonial-quote {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+    color: #d1d5db; /* Tailwind's gray-300 */
 }
 

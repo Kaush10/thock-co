@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { KeyboardsPage } from './pages/KeyboardsPage';
 import { BuildServicePage } from './pages/BuildServicePage';
 import { AboutPage } from './pages/AboutPage';
+import ArticlePage from './pages/ArticlePage'; // Import the new ArticlePage
 import './styles/globals.css';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
@@ -17,44 +18,31 @@ function App() {
     root.classList.add(isDark ? 'dark' : 'light');
   }, [isDark]);
 
-  const handlePageChange = (page: string) => {
-    setCurrentPage(page);
-  };
-
   const handleThemeToggle = () => {
     setIsDark(!isDark);
   };
 
-  const renderCurrentPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <HomePage onPageChange={handlePageChange} isDark={isDark} />;
-      case 'keyboards':
-        return <KeyboardsPage />;
-      case 'build-service':
-        return <BuildServicePage />;
-      case 'about':
-        return <AboutPage />;
-      default:
-        return <HomePage onPageChange={handlePageChange} isDark={isDark} />;
-    }
-  };
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar 
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-        isDark={isDark}
-        onThemeToggle={handleThemeToggle}
-      />
-      
-      <main className="flex-1">
-        {renderCurrentPage()}
-      </main>
-      
-      <Footer onPageChange={handlePageChange} />
-    </div>
+    <Router>
+      <div className="min-h-screen flex flex-col">
+        <Navbar 
+          isDark={isDark}
+          onThemeToggle={handleThemeToggle}
+        />
+        
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage isDark={isDark} />} />
+            <Route path="/keyboards" element={<KeyboardsPage />} />
+            <Route path="/keyboards/:slug" element={<ArticlePage />} />
+            <Route path="/build-service" element={<BuildServicePage />} />
+            <Route path="/about" element={<AboutPage />} />
+          </Routes>
+        </main>
+        
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

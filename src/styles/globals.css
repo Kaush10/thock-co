@@ -128,14 +128,57 @@ body::after {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   z-index: 10;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s cubic-bezier(0.4, 0, 0.2, 1), border 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.10), /* mild shadow for tactile feedback */
     0 12px 40px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Exaggerated glass card with border shimmer */
+.glass-card-exaggerated {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card-exaggerated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(110deg, 
+    transparent, 
+    transparent, 
+    var(--interactive-highlight), 
+    transparent, 
+    transparent
+  );
+  background-size: 200% 100%;
+  background-position: 150% 0;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.15;
+  transition: all 0.6s ease-in-out;
+}
+
+.glass-card-exaggerated:hover::after {
+  background-position: -50% 0;
+  opacity: 0.4;
 }
 
 .glass-button {
@@ -227,4 +270,44 @@ body::after {
 
 .light ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+/* Theme Toggle Card Styling */
+.theme-toggle-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle-card > div {
+  position: relative;
+  z-index: 2;
+  color: var(--interactive-highlight);
+  transition: all 0.3s ease;
+}
+
+/* Shrink bounce effect for exaggerated glass cards (matches homepage pushback) */
+.glass-card-shrink {
+  animation: glassCardPushBounce 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+/* On hover, slightly enlarge for tactile feedback */
+.glass-card:hover,
+.glass-card-exaggerated:hover {
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.10), /* mild shadow for tactile feedback */
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: scale(1.04);
+}
+}
+
+@keyframes glassCardPushBounce {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(0.965);
+  }
+  100% {
+    transform: scale(1.04);
+  }
 }

@@ -17,10 +17,10 @@ function App() {
     return savedTheme ? savedTheme === 'dark' : true; // Default to dark
   });
 
-  // Initialize ambient audio (placeholder URL for now)
+  // Initialize ambient audio with mysterious synth vibes
   const ambientAudio = useAmbientAudio(
-    // Using a royalty-free ambient track for testing
-    'https://www.bensound.com/bensound-music/bensound-relaxing.mp3', // Placeholder - replace with your ambient track
+    // Local "Spaces" track - mysterious synth ambient
+    '/audio/Spaces.mp3',
     { 
       autoPlay: true, 
       loop: true,

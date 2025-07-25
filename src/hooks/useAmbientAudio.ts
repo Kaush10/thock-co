@@ -38,10 +38,10 @@ export const useAmbientAudio = (
     };
   }, [audioSrc, loop]);
 
-  // Load volume from localStorage and apply it
+  // Load volume from localStorage and apply it (scaled to 75% max)
   useEffect(() => {
     const savedVolume = localStorage.getItem('thock-volume');
-    const targetVolume = savedVolume ? parseFloat(savedVolume) / 100 : 0.3;
+    const targetVolume = savedVolume ? (parseFloat(savedVolume) / 100) * 0.75 : 0.225; // Scale to 75% max
     setVolume(targetVolume);
   }, []);
 
@@ -82,7 +82,7 @@ export const useAmbientAudio = (
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'thock-volume' && e.newValue) {
-        setVolume(parseFloat(e.newValue) / 100);
+        setVolume((parseFloat(e.newValue) / 100) * 0.75); // Scale to 75% max
       }
     };
 
@@ -90,7 +90,7 @@ export const useAmbientAudio = (
     const handleVolumeUpdate = () => {
       const savedVolume = localStorage.getItem('thock-volume');
       if (savedVolume) {
-        setVolume(parseFloat(savedVolume) / 100);
+        setVolume((parseFloat(savedVolume) / 100) * 0.75); // Scale to 75% max
       }
     };
 

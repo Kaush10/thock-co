@@ -118,7 +118,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     }
 
     // Always draw the vibrating line when not hovered (fade in during transition)
-    if (!isHovered && !isDragging && volume > 0) {
+    if (!isHovered && !isDragging) {
       // Draw vibrating line with alpha based on how much matrix has faded
       const lineAlpha = Math.max(0, 1 - (revealProgress / 0.3)); // Fade in as matrix fades out
       
@@ -129,23 +129,22 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
         const x = col * cellWidth + cellWidth / 2;
         const baseY = yOffset + centerRow * cellHeight + cellHeight / 2;
         
-        // Add vibration effect with enhanced speed and intensity above 50%
-        let animationSpeed = 0.005; // Base speed
-        let intensity = (volume / 100) * 2; // Base intensity
-        
-        if (volume >= 50) {
-          // 10% speed increase after hitting 50%
-          animationSpeed = 0.005 * 1.1;
+        // Add vibration effect with enhanced speed above 50% (only if volume > 0)
+        let vibrationOffset = 0;
+        if (volume > 0) {
+          let animationSpeed = 0.005; // Base speed
+          let intensity = (volume / 100) * 2; // Linear intensity scaling only
           
-          // Additional intensity boost from 50-100% volume
-          const volumeAbove50 = (volume - 50) / 50; // 0 to 1 range for 50-100%
-          const intensityBoost = volumeAbove50 * 1.5; // Extra 1.5x intensity at 100%
-          intensity = (volume / 100) * 2 + intensityBoost;
+          if (volume >= 50) {
+            // 10% speed increase after hitting 50%
+            animationSpeed = 0.005 * 1.1;
+            // No intensity boost - just keep linear scaling
+          }
+          
+          const time = Date.now() * animationSpeed;
+          const phaseOffset = col * 0.2;
+          vibrationOffset = Math.sin(time + phaseOffset) * intensity;
         }
-        
-        const time = Date.now() * animationSpeed;
-        const phaseOffset = col * 0.2;
-        const vibrationOffset = Math.sin(time + phaseOffset) * intensity;
         
         const finalY = baseY + vibrationOffset;
         const isFilled = x <= fillWidth;
@@ -346,16 +345,16 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     let vibrationAnimationId: number;
     
     const updateVibration = () => {
-      // Always update and redraw when not hovered to show vibration
-      if (!isHovered && !isDragging && volume > 0) {
+      // Always update and redraw when not hovered to show line (vibrating or static)
+      if (!isHovered && !isDragging) {
         setAnimationTime(Date.now());
-        drawControl(); // Force redraw to show vibration
+        drawControl(); // Force redraw to show line
       }
       vibrationAnimationId = requestAnimationFrame(updateVibration);
     };
 
     // Always run the animation loop when not hovered
-    if (!isHovered && !isDragging && volume > 0) {
+    if (!isHovered && !isDragging) {
       vibrationAnimationId = requestAnimationFrame(updateVibration);
     }
 

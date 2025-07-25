@@ -98,7 +98,68 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     const fillPercentage = volume / 100;
     const fillWidth = width * fillPercentage;
 
-    // Show matrix if we're hovered/dragging OR if there's any reveal progress (for fade-out animation)
+    // Draw static line background when volume >= 50% for helix effect
+    if (volume >= 50) {
+      ctx.save();
+      ctx.globalAlpha = 0.9; // 90% opacity as requested
+      
+      for (let col = 0; col < cols; col++) {
+        const x = col * cellWidth + cellWidth / 2;
+        const y = yOffset + centerRow * cellHeight + cellHeight / 2;
+        const isFilled = x <= fillWidth;
+        
+        ctx.beginPath();
+        ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
+        ctx.fillStyle = isFilled ? fillColor : bgDotColor;
+        ctx.fill();
+      }
+      
+      ctx.restore();
+    }
+
+    // Always draw the vibrating line when not hovered (fade in during transition)
+    if (!isHovered && !isDragging && volume > 0) {
+      // Draw vibrating line with alpha based on how much matrix has faded
+      const lineAlpha = Math.max(0, 1 - (revealProgress / 0.3)); // Fade in as matrix fades out
+      
+      ctx.save();
+      ctx.globalAlpha = lineAlpha;
+      
+      for (let col = 0; col < cols; col++) {
+        const x = col * cellWidth + cellWidth / 2;
+        const baseY = yOffset + centerRow * cellHeight + cellHeight / 2;
+        
+        // Add vibration effect with enhanced speed and intensity above 50%
+        let animationSpeed = 0.005; // Base speed
+        let intensity = (volume / 100) * 2; // Base intensity
+        
+        if (volume >= 50) {
+          // 10% speed increase after hitting 50%
+          animationSpeed = 0.005 * 1.1;
+          
+          // Additional intensity boost from 50-100% volume
+          const volumeAbove50 = (volume - 50) / 50; // 0 to 1 range for 50-100%
+          const intensityBoost = volumeAbove50 * 1.5; // Extra 1.5x intensity at 100%
+          intensity = (volume / 100) * 2 + intensityBoost;
+        }
+        
+        const time = Date.now() * animationSpeed;
+        const phaseOffset = col * 0.2;
+        const vibrationOffset = Math.sin(time + phaseOffset) * intensity;
+        
+        const finalY = baseY + vibrationOffset;
+        const isFilled = x <= fillWidth;
+        
+        ctx.beginPath();
+        ctx.arc(x, finalY, dotRadius, 0, Math.PI * 2);
+        ctx.fillStyle = isFilled ? fillColor : bgDotColor;
+        ctx.fill();
+      }
+      
+      ctx.restore();
+    }
+
+    // Show matrix with fade-out during transition
     if (isHovered || isDragging || revealProgress > 0) {
       // Full matrix mode with animated reveal
       for (let row = 0; row < rows; row++) {
@@ -139,31 +200,6 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
             ctx.restore();
           }
         }
-      }
-    } else {
-      // Single line mode - only center row with vibration
-      for (let col = 0; col < cols; col++) {
-        const x = col * cellWidth + cellWidth / 2;
-        const baseY = yOffset + centerRow * cellHeight + cellHeight / 2;
-        
-        // Add vibration effect when volume > 0
-        let vibrationOffset = 0;
-        if (volume > 0) {
-          const time = animationTime * 0.005; // Make vibration more visible
-          const intensity = (volume / 100) * 2; // Increase intensity
-          const phaseOffset = col * 0.2;
-          vibrationOffset = Math.sin(time + phaseOffset) * intensity;
-        }
-        
-        const finalY = baseY + vibrationOffset;
-        const isFilled = (col / cols) <= (volume / 100);
-        
-        ctx.beginPath();
-        ctx.arc(x, finalY, dotRadius, 0, Math.PI * 2);
-        
-        // In line mode, don't show volume icon - just use regular fill colors
-        ctx.fillStyle = isFilled ? fillColor : bgDotColor;
-        ctx.fill();
       }
     }
   }, [isHovered, isDragging, volume, setupCanvas, revealProgress, animationTime, volumeIcon]);
@@ -305,20 +341,21 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     };
   }, [isHovered, isDragging]);
 
-  // Continuous vibration animation - simplified to prevent conflicts
+  // Continuous vibration animation - start immediately on unhover
   useEffect(() => {
     let vibrationAnimationId: number;
     
     const updateVibration = () => {
-      // Only animate if in line mode and volume > 0
-      if (!isHovered && !isDragging && !hoverDelayActive && volume > 0) {
+      // Always update and redraw when not hovered to show vibration
+      if (!isHovered && !isDragging && volume > 0) {
         setAnimationTime(Date.now());
-        vibrationAnimationId = requestAnimationFrame(updateVibration);
+        drawControl(); // Force redraw to show vibration
       }
+      vibrationAnimationId = requestAnimationFrame(updateVibration);
     };
 
-    // Start vibration if conditions are met
-    if (!isHovered && !isDragging && !hoverDelayActive && volume > 0) {
+    // Always run the animation loop when not hovered
+    if (!isHovered && !isDragging && volume > 0) {
       vibrationAnimationId = requestAnimationFrame(updateVibration);
     }
 
@@ -327,7 +364,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
         cancelAnimationFrame(vibrationAnimationId);
       }
     };
-  }, [isHovered, isDragging, hoverDelayActive, volume]);
+  }, [isHovered, isDragging, volume, drawControl]);
 
   // Redraw on resize
   useEffect(() => {

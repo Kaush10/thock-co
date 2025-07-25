@@ -1,0 +1,37 @@
+.volume-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.volume-canvas {
+  width: 150px; /* Longer base width */
+  height: 50px; /* Increased height for more vertical dots */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: grab;
+}
+
+.volume-canvas:active {
+  cursor: grabbing;
+}
+
+/* No size change on hover - only content changes */
+.volume-control:hover .volume-canvas {
+  width: 150px; /* Same width */
+  height: 50px; /* Same height */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .volume-control:hover .volume-canvas {
+    width: 120px;
+    height: 40px;
+  }
+  
+  .volume-canvas {
+    width: 120px;
+    height: 40px;
+  }
+}

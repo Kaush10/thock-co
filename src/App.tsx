@@ -7,15 +7,34 @@ import { KeyboardsPage } from './pages/KeyboardsPage';
 import { BuildServicePage } from './pages/BuildServicePage';
 import { AboutPage } from './pages/AboutPage';
 import ArticlePage from './pages/ArticlePage'; // Import the new ArticlePage
+import { useAmbientAudio } from './hooks/useAmbientAudio';
 import './styles/globals.css';
 
 function App() {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(() => {
+    // Load theme preference from localStorage
+    const savedTheme = localStorage.getItem('thock-theme');
+    return savedTheme ? savedTheme === 'dark' : true; // Default to dark
+  });
+
+  // Initialize ambient audio (placeholder URL for now)
+  const ambientAudio = useAmbientAudio(
+    // Using a royalty-free ambient track for testing
+    'https://www.bensound.com/bensound-music/bensound-relaxing.mp3', // Placeholder - replace with your ambient track
+    { 
+      autoPlay: true, 
+      loop: true,
+      fadeInDuration: 3000 
+    }
+  );
 
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove(isDark ? 'light' : 'dark');
     root.classList.add(isDark ? 'dark' : 'light');
+    
+    // Save theme preference to localStorage
+    localStorage.setItem('thock-theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
   const handleThemeToggle = () => {

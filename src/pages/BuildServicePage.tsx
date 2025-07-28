@@ -2,10 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 
 
+
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
 import { LiquidButton } from '../components/LiquidButton';
 import '../components/KeyboardPageCard.css';
 import { Check, MessageCircle, Phone, Instagram, ChevronDown } from 'lucide-react';
+import { VerticalGallery } from '../components/VerticalGallery';
 
 export const BuildServicePage: React.FC = () => {
   const [activeContact, setActiveContact] = useState<string | null>(null);
@@ -114,10 +116,7 @@ export const BuildServicePage: React.FC = () => {
                 </div>
               </div>
               <div className="flex-1 flex justify-center items-center">
-
-                <div className="w-64 h-40 md:w-80 md:h-56 bg-black/20 rounded-xl flex items-center justify-center border-2 border-white/10">
-                  <span className="text-white/40 text-lg">[ Gallery Preview Coming Soon ]</span>
-                </div>
+                {/* (gallery removed from hero section) */}
               </div>
             </div>
             
@@ -132,23 +131,33 @@ export const BuildServicePage: React.FC = () => {
           {/* Desktop: Left 1/3, Right 2/3. Mobile: stacked (to be reworked later) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Left Column: 1/3 width on desktop */}
-            {/* Notes */}
-            <div className="k-card-container fade-in-up order-2 lg:order-1" style={{ boxShadow: 'none' }}>
-              <div className="k-card-content-area">
-                <h3 className="text-xl font-semibold accent-text mb-4">notes</h3>
-                <div className="space-y-4 text-sm leading-relaxed">
-                  <p>
-                    each build is carefully crafted with attention to detail. i focus on creating the perfect 
-                    typing experience based on your preferences and use case.
-                  </p>
-                  <p>
-                    quality materials, precise assembly, and thorough testing ensure your keyboard will 
-                    provide years of exceptional performance.
-                  </p>
-                  <p>
-                    from sound dampening to switch lubing, every modification is done to enhance your 
-                    typing experience.
-                  </p>
+            <div className="flex flex-col gap-8 order-2 lg:order-1">
+              {/* 3D Vertical Gallery */}
+              <div className="hidden md:block">
+                <VerticalGallery />
+              </div>
+              {/* Optionally, show a static preview or fallback on mobile */}
+              <div className="block md:hidden w-full h-40 bg-black/20 rounded-xl flex items-center justify-center border-2 border-white/10">
+                <span className="text-white/40 text-lg">[ Gallery Preview ]</span>
+              </div>
+              {/* Notes */}
+              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+                <div className="k-card-content-area">
+                  <h3 className="text-xl font-semibold accent-text mb-4">notes</h3>
+                  <div className="space-y-4 text-sm leading-relaxed">
+                    <p>
+                      each build is carefully crafted with attention to detail. i focus on creating the perfect 
+                      typing experience based on your preferences and use case.
+                    </p>
+                    <p>
+                      quality materials, precise assembly, and thorough testing ensure your keyboard will 
+                      provide years of exceptional performance.
+                    </p>
+                    <p>
+                      from sound dampening to switch lubing, every modification is done to enhance your 
+                      typing experience.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

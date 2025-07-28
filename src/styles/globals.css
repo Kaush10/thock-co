@@ -1,3 +1,14 @@
+/* Gallery mask color: white in light, black in dark */
+:root { --gallery-mask-color: white; }
+.dark, :root:not(.light) { --gallery-mask-color: black; }
+/* Gallery theme background (CSS only, always matches theme) */
+.gallery-bg { background: #fff !important; }
+.dark .gallery-bg, :root:not(.light) .gallery-bg { background: #181c24 !important; }
+/* Theme-aware background for gallery container */
+[data-theme-bg] { background: #fff !important; }
+@media (prefers-color-scheme: dark) {
+  [data-theme-bg] { background: #181c24 !important; }
+}
 /* Secondary highlight: lighter pink in dark, darker brown in light */
 :root {
   --secondary-highlight: #6b3f19; /* much darker brown for light mode */
@@ -240,7 +251,7 @@ body.dark .secondary-highlight,
   --c-dark: #000;
   --c-content: #224;
   --c-action: #0052f5;
-  --c-bg: #E8E8E9;
+  --c-bg: #fff;
   --glass-reflex-dark: 0.22;
   --glass-reflex-light: 0.22;
   --saturation: 150%;
@@ -260,7 +271,7 @@ body.dark .secondary-highlight,
   --c-dark: #000;
   --c-content: #224;
   --c-action: #0052f5;
-  --c-bg: #E8E8E9;
+  --c-bg: #fff;
   --glass-reflex-dark: 0.08;
   --glass-reflex-light: 0.13;
   --saturation: 150%;
@@ -273,7 +284,7 @@ body.dark .secondary-highlight,
   --c-dark: #000;
   --c-content: #e1e1e1;
   --c-action: #03d5ff;
-  --c-bg: #1b1b1d;
+  --c-bg: #181c24;
   --glass-reflex-dark: 2;
   --glass-reflex-light: 0.3;
   --saturation: 150%;

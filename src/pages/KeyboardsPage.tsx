@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 
 export const KeyboardsPage: React.FC = () => {
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(9);
   const navigate = useNavigate();
   const { handleCardClick: playCardAnimation } = useGlassCardEffect();
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -21,14 +21,11 @@ export const KeyboardsPage: React.FC = () => {
       // The hook expects a MouseEvent, so we can create a partial one.
       playCardAnimation({ currentTarget: cardElement } as React.MouseEvent<HTMLDivElement>);
     }
-    
-    setTimeout(() => {
-      navigate(`/keyboards/${slug}`);
-    }); // A slightly longer delay to let the animation play out
+    // Navigation disabled: do not open article page
   };
 
   const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 3, sortedArticles.length));
+    setVisibleCount(prev => Math.min(prev + 9, sortedArticles.length));
   };
 
   return (

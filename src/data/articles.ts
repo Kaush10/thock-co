@@ -10,85 +10,230 @@ export interface Article {
   fullContent: string;
 }
 
+
+// Pseudo entries generated from stuff folder image URLs
+
+// Gallery entries generated from stuff folder image URLs
 export const articles: Article[] = [
   {
     id: 1,
-    slug: 'project-alpha',
-    title: 'review: project alpha',
-    date: 'july 23, 2025',
-    image: 'https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg?auto=compress&cs=tinysrgb&w=400',
-    snippet: 'an exceptional board with unmatched typing feel. the custom plate and foam dampening create the perfect thock.',
-    testimonial: 'absolutely love the build quality and attention to detail. exactly what i was looking for!',
-    specs: 'gasket mount • alu plate • 67g boba u4t',
-    fullContent: `
-      <p>This is the full article content for Project Alpha. It was a challenging but rewarding build, focusing on achieving the perfect "thock" sound profile. The client was extremely pleased with the result.</p>
-      <p>We used a combination of a gasket-mounted aluminum plate and custom-cut foam to dampen any unwanted high-frequency sounds, resulting in a deep, satisfying typing experience.</p>
-    `
+    slug: 'dyna-2783-2',
+    title: 'DYNA 2783',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2025/07/DYNA_2783-2.jpg',
+    snippet: 'A bold, modern build with a striking finish and deep acoustics.',
+    testimonial: 'The DYNA 2783 is a showstopper. The sound and feel are unmatched.',
+    specs: 'Gasket mount • Alu plate • Boba U4T',
+    fullContent: `<p>DYNA 2783 features a premium aluminum case and a custom plate for a deep, resonant thock. The build quality is exceptional, making it a favorite among enthusiasts.</p>`
   },
   {
     id: 2,
-    slug: 'dyna-tkl',
-    title: 'review: dyna tkl',
-    date: 'july 18, 2025',
-    image: 'https://images.pexels.com/photos/2115217/pexels-photo-2115217.jpeg?auto=compress&cs=tinysrgb&w=400',
-    snippet: 'incredible acoustics and premium feel. the typing experience is smooth and satisfying with every keystroke.',
-    testimonial: 'the build exceeded my expectations. professional work and amazing communication throughout.',
-    specs: 'top mount • pc plate • lubed alpacas',
-    fullContent: `
-      <p>The Dyna TKL is a classic for a reason. This build focused on a smooth, linear typing experience. The polycarbonate plate provides a softer bottom-out than metal plates, which was a key request from the client.</p>
-      <p>Each switch was hand-lubed with Krytox 205g0 for maximum smoothness.</p>
-    `
+    slug: 'agar-1622',
+    title: 'AGAR 1622',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2025/04/AGAR_1622.jpg',
+    snippet: 'A minimalist build with clean lines and a soft typing feel.',
+    testimonial: 'AGAR 1622 is perfect for my workspace. Quiet and comfortable.',
+    specs: 'Top mount • PC plate • Silent Alpacas',
+    fullContent: `<p>AGAR 1622 is designed for those who appreciate simplicity. The silent switches and top mount structure make it ideal for office use.</p>`
   },
   {
     id: 3,
-    slug: 'alice-layout',
-    title: 'review: alice layout',
-    date: 'july 15, 2025',
-    image: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=400',
-    snippet: 'unique ergonomic design with flawless execution. the split layout takes some getting used to but feels great.',
-    testimonial: 'my first alice board and it\'s perfect. the custom cable and artisan keycaps are beautiful touches.',
-    specs: 'gasket mount • fr4 plate • silent alpacas',
-    fullContent: `
-      <p>The Alice layout is a popular ergonomic choice. This build was all about creating a comfortable and quiet keyboard for a professional office environment. The silent alpaca switches are perfect for this, providing a smooth linear feel without the noise.</p>
-    `
+    slug: 'cinque-1645',
+    title: 'Cinque 1645',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2025/04/cinque_1645.jpg',
+    snippet: 'Ergonomic split layout for maximum comfort and style.',
+    testimonial: 'Cinque 1645 changed the way I type. My wrists thank me every day.',
+    specs: 'Gasket mount • FR4 plate • Lubed Alpacas',
+    fullContent: `<p>Cinque 1645 offers a unique split layout and a soft FR4 plate for a comfortable typing experience. Perfect for long sessions.</p>`
   },
   {
     id: 4,
-    slug: '60-compact',
-    title: 'review: 60% compact',
-    date: 'july 12, 2025',
-    image: 'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=400',
-    snippet: 'perfect for minimal setups. the compact size doesn\'t compromise on typing quality or premium materials.',
-    testimonial: 'exactly what i needed for my small desk setup. the typing sound is crisp and clean.',
-    specs: 'tray mount • alu plate • gateron yellows',
-    fullContent: `
-      <p>A classic 60% build for a client who wanted a minimal desk setup. Gateron Yellow switches are a great budget-friendly linear option that still provides a great typing experience.</p>
-    `
+    slug: 'controlpanel01-0259-edit',
+    title: 'Control Panel 0259',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/09/controlpanel01_0259-Edit.jpg',
+    snippet: 'Industrial-inspired build with tactile feedback and robust design.',
+    testimonial: 'Control Panel 0259 is built like a tank. The tactile feel is amazing.',
+    specs: 'Tray mount • Brass plate • Box Jades',
+    fullContent: `<p>This build draws inspiration from industrial control panels, offering a robust feel and tactile switches for a satisfying experience.</p>`
   },
   {
     id: 5,
-    slug: 'arisu-split',
-    title: 'review: arisu split',
-    date: 'july 8, 2025',
-    image: 'https://images.pexels.com/photos/2115217/pexels-photo-2115217.jpeg?auto=compress&cs=tinysrgb&w=400',
-    snippet: 'beautiful arisu layout with excellent build quality. the split spacebar and arrow keys are incredibly productive.',
-    testimonial: 'love the unique layout and premium materials. shipping was fast and packaging was excellent.',
-    specs: 'gasket mount • cf plate • holy pandas',
-    fullContent: `
-      <p>The Arisu layout is a more aggressive ergonomic option than the Alice. This build used a carbon fiber plate for a firm typing feel and Holy Panda switches for maximum tactility.</p>
-    `
+    slug: 'sat-0250-edit',
+    title: 'SAT 0250',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/07/sat_0250-Edit.jpg',
+    snippet: 'Compact and portable, perfect for travel and small setups.',
+    testimonial: 'SAT 0250 fits in my bag and goes everywhere. Super convenient.',
+    specs: 'Top mount • PC plate • Lubed Alpacas',
+    fullContent: `<p>SAT 0250 is designed for portability without sacrificing performance. The compact layout and smooth switches make it a joy to use.</p>`
   },
   {
     id: 6,
-    slug: 'ortho-40',
-    title: 'review: ortho 40%',
-    date: 'july 5, 2025',
-    image: 'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=400',
-    snippet: 'ultra-compact ortholinear layout for maximum efficiency. takes time to learn but incredibly productive.',
-    testimonial: 'challenging but rewarding layout. the build quality is top-notch and the keycaps feel amazing.',
-    specs: 'tray mount • brass plate • box jades',
-    fullContent: `
-      <p>An ortholinear 40% is not for the faint of heart! This layout requires a significant learning curve but is incredibly efficient once mastered. The brass plate and clicky Box Jade switches make for a very loud and tactile typing experience.</p>
-    `
+    slug: 'dscf2017-edit',
+    title: 'DSCF2017',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/DSCF2017-Edit.jpg',
+    snippet: 'A retro-inspired build with modern internals and classic looks.',
+    testimonial: 'DSCF2017 brings back memories. Nostalgic and reliable.',
+    specs: 'Tray mount • Alu plate • Gateron Yellows',
+    fullContent: `<p>DSCF2017 combines vintage aesthetics with modern performance. The aluminum plate and Gateron Yellows ensure a crisp typing experience.</p>`
+  },
+  {
+    id: 7,
+    slug: 'b0000050-edit-1-1',
+    title: 'B0000050',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/04/B0000050-Edit-1-1.jpg',
+    snippet: 'Handcrafted details and artisan keycaps make this build unique.',
+    testimonial: 'B0000050 is a work of art. The artisan keycaps are stunning.',
+    specs: 'Gasket mount • FR4 plate • Silent Alpacas',
+    fullContent: `<p>B0000050 stands out with its handcrafted details and custom keycaps. The FR4 plate and silent switches make it perfect for quiet environments.</p>`
+  },
+  {
+    id: 8,
+    slug: 'b0000675-edit',
+    title: 'B0000675',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/B0000675-Edit.jpg',
+    snippet: 'Minimalist design with a focus on clean lines and simplicity.',
+    testimonial: 'B0000675 is the definition of minimalism. Love the clean look.',
+    specs: 'Gasket mount • CF plate • Holy Pandas',
+    fullContent: `<p>B0000675 is all about simplicity. The CF plate and Holy Pandas provide a tactile, satisfying feel for every keystroke.</p>`
+  },
+  {
+    id: 9,
+    slug: 'b0000685-edit',
+    title: 'B0000685',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/B0000685-Edit.jpg',
+    snippet: 'A versatile build for those who love to experiment with layouts.',
+    testimonial: 'B0000685 lets me try new things. Super versatile and fun.',
+    specs: 'Tray mount • Brass plate • Box Jades',
+    fullContent: `<p>B0000685 is perfect for keyboard enthusiasts who love to experiment. The brass plate and tactile switches make every keypress exciting.</p>`
+  },
+  {
+    id: 10,
+    slug: 'b0000277-edit',
+    title: 'B0000277',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/B0000277-Edit.jpg',
+    snippet: 'Professional build for serious typists. Fast, reliable, and comfortable.',
+    testimonial: 'B0000277 improved my typing speed. The comfort is unmatched.',
+    specs: 'Gasket mount • Alu plate • Boba U4T',
+    fullContent: `<p>B0000277 is designed for those who type for a living. The Boba U4T switches and gasket mount make it a top performer in any environment.</p>`
+  },
+  // Repeat the above 10 entries with new titles, slugs, and varied content for ids 11-20
+  {
+    id: 11,
+    slug: 'dyna-2783-2-alt',
+    title: 'DYNA 2783 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2025/07/DYNA_2783-2.jpg',
+    snippet: 'A refined version of the DYNA build, with upgraded acoustics.',
+    testimonial: 'The DYNA Alt is even better than the original. Superb sound!',
+    specs: 'Gasket mount • Alu plate • Boba U4T',
+    fullContent: `<p>DYNA 2783 Alt features upgraded dampening and a new finish. The sound profile is deeper and more refined for true enthusiasts.</p>`
+  },
+  {
+    id: 12,
+    slug: 'agar-1622-alt',
+    title: 'AGAR 1622 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2025/04/AGAR_1622.jpg',
+    snippet: 'A silent build with a focus on comfort and productivity.',
+    testimonial: 'AGAR Alt is my go-to for long workdays. Silent and smooth.',
+    specs: 'Top mount • PC plate • Silent Alpacas',
+    fullContent: `<p>AGAR 1622 Alt improves on the original with extra foam and a softer plate. Perfect for quiet environments.</p>`
+  },
+  {
+    id: 13,
+    slug: 'cinque-1645-alt',
+    title: 'Cinque 1645 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2025/04/cinque_1645.jpg',
+    snippet: 'Enhanced ergonomics and a new split layout for comfort.',
+    testimonial: 'Cinque Alt is even more comfortable. My hands never get tired.',
+    specs: 'Gasket mount • FR4 plate • Lubed Alpacas',
+    fullContent: `<p>Cinque 1645 Alt features a redesigned split and softer switches. Ideal for long typing sessions.</p>`
+  },
+  {
+    id: 14,
+    slug: 'controlpanel01-0259-edit-alt',
+    title: 'Control Panel 0259 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/09/controlpanel01_0259-Edit.jpg',
+    snippet: 'Industrial build with new tactile switches and improved durability.',
+    testimonial: 'The Alt version is even tougher. Love the new switches!',
+    specs: 'Tray mount • Brass plate • Box Jades',
+    fullContent: `<p>Control Panel 0259 Alt uses upgraded tactile switches and reinforced case. Built for heavy use.</p>`
+  },
+  {
+    id: 15,
+    slug: 'sat-0250-edit-alt',
+    title: 'SAT 0250 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/07/sat_0250-Edit.jpg',
+    snippet: 'A travel-friendly build with new keycap profiles.',
+    testimonial: 'SAT Alt is perfect for travel. The new keycaps feel great.',
+    specs: 'Top mount • PC plate • Lubed Alpacas',
+    fullContent: `<p>SAT 0250 Alt features new keycap profiles and improved portability. Great for on-the-go typing.</p>`
+  },
+  {
+    id: 16,
+    slug: 'dscf2017-edit-alt',
+    title: 'DSCF2017 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/DSCF2017-Edit.jpg',
+    snippet: 'Retro build with upgraded internals and classic style.',
+    testimonial: 'DSCF2017 Alt is a blast from the past. Reliable and stylish.',
+    specs: 'Tray mount • Alu plate • Gateron Yellows',
+    fullContent: `<p>DSCF2017 Alt upgrades the internals for a smoother experience. The classic look remains timeless.</p>`
+  },
+  {
+    id: 17,
+    slug: 'b0000050-edit-1-1-alt',
+    title: 'B0000050 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/04/B0000050-Edit-1-1.jpg',
+    snippet: 'Artisan build with new custom keycaps and silent switches.',
+    testimonial: 'B0000050 Alt is a masterpiece. The silent switches are perfect.',
+    specs: 'Gasket mount • FR4 plate • Silent Alpacas',
+    fullContent: `<p>B0000050 Alt features new artisan keycaps and silent switches. Ideal for quiet workspaces.</p>`
+  },
+  {
+    id: 18,
+    slug: 'b0000675-edit-alt',
+    title: 'B0000675 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/B0000675-Edit.jpg',
+    snippet: 'Minimalist build with improved tactile feedback.',
+    testimonial: 'B0000675 Alt is even more minimal. The tactile feel is great.',
+    specs: 'Gasket mount • CF plate • Holy Pandas',
+    fullContent: `<p>B0000675 Alt improves tactile feedback and keeps the minimalist aesthetic. Perfect for design lovers.</p>`
+  },
+  {
+    id: 19,
+    slug: 'b0000685-edit-alt',
+    title: 'B0000685 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/B0000685-Edit.jpg',
+    snippet: 'Versatile build with new layout options and tactile switches.',
+    testimonial: 'B0000685 Alt lets me customize layouts. Super fun!',
+    specs: 'Tray mount • Brass plate • Box Jades',
+    fullContent: `<p>B0000685 Alt adds new layout options and tactile switches for a more versatile experience.</p>`
+  },
+  {
+    id: 20,
+    slug: 'b0000277-edit-alt',
+    title: 'B0000277 Alt',
+    date: 'july 25, 2025',
+    image: 'https://www.alexotos.com/wp-content/uploads/2024/05/B0000277-Edit.jpg',
+    snippet: 'Professional build with enhanced comfort and speed.',
+    testimonial: 'B0000277 Alt is my daily driver. Fast and comfortable.',
+    specs: 'Gasket mount • Alu plate • Boba U4T',
+    fullContent: `<p>B0000277 Alt enhances comfort and speed for professional typists. The Boba U4T switches are a dream.</p>`
   }
 ];

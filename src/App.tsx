@@ -30,9 +30,38 @@ function App() {
 
   useEffect(() => {
     const root = window.document.documentElement;
+    const body = window.document.body;
     root.classList.remove(isDark ? 'light' : 'dark');
     root.classList.add(isDark ? 'dark' : 'light');
-    
+
+    // Set theme variables on body directly for instant CSS var switching (CodePen style)
+    const themeVars = isDark
+      ? {
+          '--c-glass': '#bbbbbc',
+          '--c-light': '#fff',
+          '--c-dark': '#000',
+          '--c-content': '#e1e1e1',
+          '--c-action': '#03d5ff',
+          '--c-bg': '#1b1b1d',
+          '--glass-reflex-dark': '2',
+          '--glass-reflex-light': '0.3',
+          '--saturation': '150%'
+        }
+      : {
+          '--c-glass': '#bbbbbc',
+          '--c-light': '#fff',
+          '--c-dark': '#000',
+          '--c-content': '#224',
+          '--c-action': '#0052f5',
+          '--c-bg': '#E8E8E9',
+          '--glass-reflex-dark': '1',
+          '--glass-reflex-light': '1',
+          '--saturation': '150%'
+        };
+    Object.entries(themeVars).forEach(([key, value]) => {
+      body.style.setProperty(key, value);
+    });
+
     // Save theme preference to localStorage
     localStorage.setItem('thock-theme', isDark ? 'dark' : 'light');
   }, [isDark]);

@@ -1,5 +1,7 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
+// Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
+declare const VanillaTilt: any;
 
 
 
@@ -20,6 +22,24 @@ export const BuildServicePage: React.FC = () => {
     budgetRange: '',
     additionalDetails: ''
   });
+  const { handleCardClick } = useGlassCardEffect();
+
+  // Initialize VanillaTilt on all .k-card-container elements
+  useEffect(() => {
+    if (typeof VanillaTilt !== 'undefined') {
+      VanillaTilt.init(document.querySelectorAll('.k-card-container'), {
+        max: 3.25, // 25% of original
+        speed: 500,
+        perspective: 1800,
+        glare: true,
+        "max-glare": 0.05, // 25% of original glare
+        scale: 1.00125, // 25% of original scale
+        reset: true,
+        reverse: true
+      });
+    }
+    // No cleanup needed; cards are static on this page
+  }, []);
 
   const contactMethods = [
     {
@@ -95,7 +115,7 @@ export const BuildServicePage: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="build-service-page">
       <div className="min-h-screen pb-16">
         {/* Wide Screen Hero Section - Full Bleed, now at very top */}
         <section className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-0">
@@ -141,7 +161,7 @@ export const BuildServicePage: React.FC = () => {
                 <span className="text-white/40 text-lg">[ Gallery Preview ]</span>
               </div>
               {/* Notes */}
-              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
                 <div className="k-card-content-area">
                   <h3 className="text-xl font-semibold accent-text mb-4">notes</h3>
                   <div className="space-y-4 text-sm leading-relaxed">
@@ -180,14 +200,14 @@ export const BuildServicePage: React.FC = () => {
               </div>
 
               {/* Pricing & Info */}
-              <div className="k-card-container fade-in-up no-shimmer">
+              <div className="k-card-container fade-in-up no-shimmer" onClick={handleCardClick} data-tilt>
                 <div className="k-card-content-area">
                   <PricingInfoSwitcherCard />
                 </div>
               </div>
 
               {/* How to Get Started */}
-            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
               <div className="k-card-content-area">
                 <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
                 <p className="text-sm mb-6">
@@ -227,7 +247,7 @@ export const BuildServicePage: React.FC = () => {
             </div>
 
               {/* Build Request Form */}
-            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
               <div className="k-card-content-area">
                 <h3 className="text-xl font-semibold accent-text mb-6">build request form</h3>
                 <form onSubmit={handleFormSubmit} className="space-y-4">
@@ -315,7 +335,7 @@ export const BuildServicePage: React.FC = () => {
             </div>
 
               {/* FAQ */}
-            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
               <div className="k-card-content-area">
                 <h3 className="text-xl font-semibold accent-text mb-6">frequently asked questions</h3>
                 <div className="space-y-3">
@@ -346,7 +366,7 @@ export const BuildServicePage: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

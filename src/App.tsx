@@ -58,9 +58,25 @@ function App() {
           '--glass-reflex-light': '1',
           '--saturation': '150%'
         };
+
     Object.entries(themeVars).forEach(([key, value]) => {
       body.style.setProperty(key, value);
     });
+
+    // Safari repaint hack: force a full reflow
+    // 1. Toggle a dummy class
+    body.classList.add('theme-repaint-hack');
+    // 2. Force layout read
+    void body.offsetHeight;
+    // 3. Toggle display property
+    const originalDisplay = body.style.display;
+    body.style.display = 'none';
+    // Force a reflow
+    void body.offsetHeight;
+    body.style.display = originalDisplay;
+    setTimeout(() => {
+      body.classList.remove('theme-repaint-hack');
+    }, 50);
 
     // Save theme preference to localStorage
     localStorage.setItem('thock-theme', isDark ? 'dark' : 'light');

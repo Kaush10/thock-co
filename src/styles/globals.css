@@ -95,7 +95,10 @@
   transition: all 160ms;
 }
 .switcher__option:hover {
-  --c: var(--c-action, #0052f5);
+  --c: var(--primary-accent, #b89c70);
+}
+.dark .switcher__option:hover, :root:not(.light) .switcher__option:hover {
+  --c: var(--interactive-highlight, #FF00AA);
   cursor: pointer;
 }
 .switcher__option:hover .switcher__icon {
@@ -330,6 +333,8 @@ body::after {
   position: relative;
   z-index: 10;
   transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s cubic-bezier(0.4, 0, 0.2, 1), border 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .glass-card:hover {
@@ -410,6 +415,8 @@ body::after {
   position: sticky;
   top: 0;
   z-index: 50;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .light .navbar-glass {

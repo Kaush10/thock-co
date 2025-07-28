@@ -7,7 +7,15 @@ interface VolumeControlProps {
 
 export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [volume, setVolume] = useState(0);
+  const [volume, setVolume] = useState(() => {
+    const savedVolume = localStorage.getItem('thock-volume');
+    if (savedVolume) {
+      return parseFloat(savedVolume);
+    } else {
+      localStorage.setItem('thock-volume', '51');
+      return 51;
+    }
+  });
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [revealProgress, setRevealProgress] = useState(0); // For smooth reveal animation
@@ -29,16 +37,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     [0, 0, 0, 0, 0, 0, 0, 0, 0]
   ];
 
-  // Load volume from localStorage on mount
-  useEffect(() => {
-    const savedVolume = localStorage.getItem('thock-volume');
-    if (savedVolume) {
-      const vol = parseFloat(savedVolume);
-      setVolume(vol);
-    } else {
-      setVolume(50); // Default volume 50%
-    }
-  }, []);
+  // Remove: Load volume from localStorage on mount (handled by useState initializer)
 
   // Save volume to localStorage when it changes
   useEffect(() => {

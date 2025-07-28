@@ -3,6 +3,7 @@ import { articles } from '../data/articles';
 import { GlassCard } from '../components/GlassCard';
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
 import { LiquidButton } from '../components/LiquidButton';
+import '../components/KeyboardPageCard.css';
 import { Check, MessageCircle, Phone, Instagram, ChevronDown, Keyboard } from 'lucide-react';
 
 export const BuildServicePage: React.FC = () => {
@@ -104,20 +105,23 @@ export const BuildServicePage: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen">
+      <div className="min-h-screen pb-16">
         {/* Wide Screen Hero Section - Full Bleed, now at very top */}
         <section className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-0">
             <div className="w-[100vw] bg-gradient-to-br from-[#181c24] to-[#23283a] overflow-hidden px-4 md:px-16 py-16 flex flex-col md:flex-row items-center gap-10 min-h-[320px]">
               <div className="flex-1 flex flex-col justify-center">
-                <h1 className="text-4xl md:text-5xl font-extrabold accent-text mb-4 drop-shadow-lg">
+                <h1
+                  className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg"
+                  style={{ fontFamily: 'Matrix Sans Print, sans-serif', color: '#fff' }}
+                >
                   Custom Keyboard Build Service
                 </h1>
                 <p className="text-lg md:text-2xl opacity-80 mb-6 max-w-xl">
-                  Handcrafted mechanical keyboards, built to your specs. Urbana-Champaign, IL & worldwide.
+                  <span style={{ color: '#fff' }}>Handcrafted mechanical keyboards, built to your specs. Urbana-Champaign, IL & worldwide.</span>
                 </p>
                 <div className="flex items-center gap-3 mb-2">
                   <Check className="w-6 h-6 text-green-400" />
-                  <span className="text-lg font-semibold">Commission Status: <span className="text-green-400">Open</span></span>
+                  <span className="text-lg font-semibold" style={{ color: '#fff' }}>Commission Status: <span className="text-green-400">Open</span></span>
                 </div>
               </div>
               <div className="flex-1 flex justify-center items-center">
@@ -140,52 +144,57 @@ export const BuildServicePage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Left Column: 1/3 width on desktop */}
             {/* Notes */}
-            <GlassCard className="p-6 fade-in-up order-2 lg:order-1">
-              <h3 className="text-xl font-semibold accent-text mb-4">notes</h3>
-              <div className="space-y-4 text-sm leading-relaxed">
-                <p>
-                  each build is carefully crafted with attention to detail. i focus on creating the perfect 
-                  typing experience based on your preferences and use case.
-                </p>
-                <p>
-                  quality materials, precise assembly, and thorough testing ensure your keyboard will 
-                  provide years of exceptional performance.
-                </p>
-                <p>
-                  from sound dampening to switch lubing, every modification is done to enhance your 
-                  typing experience.
-                </p>
+            <div className="k-card-container fade-in-up order-2 lg:order-1" style={{ boxShadow: 'none' }}>
+              <div className="k-card-content-area">
+                <h3 className="text-xl font-semibold accent-text mb-4">notes</h3>
+                <div className="space-y-4 text-sm leading-relaxed">
+                  <p>
+                    each build is carefully crafted with attention to detail. i focus on creating the perfect 
+                    typing experience based on your preferences and use case.
+                  </p>
+                  <p>
+                    quality materials, precise assembly, and thorough testing ensure your keyboard will 
+                    provide years of exceptional performance.
+                  </p>
+                  <p>
+                    from sound dampening to switch lubing, every modification is done to enhance your 
+                    typing experience.
+                  </p>
+                </div>
               </div>
-            </GlassCard>
-
-            <div className="text-center order-3 lg:order-3">
-              <p className="text-lg accent-text">or contact me</p>
             </div>
 
             {/* Right Column: 2/3 width on desktop */}
             <div className="space-y-8 lg:col-span-2 order-1 lg:order-2">
               {/* Commission Status */}
-              <GlassCard className="p-6 fade-in-up" staticEffect>
-                <div className="flex items-center gap-3">
-                  <Check className="w-6 h-6 text-green-400" />
-                  <span className="text-xl font-semibold">commission status: open</span>
-                </div>
-              </GlassCard>
+              <div
+                className="fade-in-up mb-4 px-8 py-6 rounded-[2.5rem] flex items-center gap-3 w-full"
+                style={{
+                  background: 'color-mix(in srgb, var(--c-glass) 12%, transparent)',
+                  backdropFilter: 'blur(8px) saturate(var(--saturation))',
+                  WebkitBackdropFilter: 'blur(8px) saturate(var(--saturation))',
+                  boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent), inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent)',
+                  width: '100%',
+                }}
+              >
+                <Check className="w-6 h-6 text-green-400" />
+                <span className="text-xl font-semibold" style={{ color: 'var(--c-content)', letterSpacing: '0.01em' }}>commission status: open</span>
+              </div>
 
               {/* Pricing & Info */}
-              <div className="k-card-container fade-in-up no-shimmer" data-tilt>
+              <div className="k-card-container fade-in-up no-shimmer">
                 <div className="k-card-content-area">
                   <PricingInfoSwitcherCard />
                 </div>
               </div>
 
               {/* How to Get Started */}
-              <GlassCard className="p-6 fade-in-up">
+            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+              <div className="k-card-content-area">
                 <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
                 <p className="text-sm mb-6">
                   shoot me an email at al.ka.......@gmail.com, or use the form below if you prefer.
                 </p>
-                
                 <div className="flex items-center justify-center gap-6 mb-6">
                   {contactMethods.map((method) => {
                     const IconComponent = method.icon;
@@ -208,20 +217,20 @@ export const BuildServicePage: React.FC = () => {
                     );
                   })}
                 </div>
-
                 <div className="text-center mb-4">
                   <a href="mailto:al.ka@thockandco.com" className="text-interactive hover:underline">
                     al.ka@thockandco.com
                   </a>
                 </div>
-
                 <p className="text-center text-sm opacity-80">
                   shy? no worries. start a form
                 </p>
-              </GlassCard>
+              </div>
+            </div>
 
               {/* Build Request Form */}
-              <GlassCard className="p-6 fade-in-up">
+            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+              <div className="k-card-content-area">
                 <h3 className="text-xl font-semibold accent-text mb-6">build request form</h3>
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -248,7 +257,6 @@ export const BuildServicePage: React.FC = () => {
                       />
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm mb-2">keyboard model</label>
                     <input
@@ -260,7 +268,6 @@ export const BuildServicePage: React.FC = () => {
                       className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none"
                     />
                   </div>
-
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm mb-2">switch preference</label>
@@ -291,7 +298,6 @@ export const BuildServicePage: React.FC = () => {
                       </select>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm mb-2">additional details</label>
                     <textarea
@@ -303,15 +309,16 @@ export const BuildServicePage: React.FC = () => {
                       className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none resize-none"
                     />
                   </div>
-
                   <LiquidButton className="w-full text-center py-3">
                     submit request
                   </LiquidButton>
                 </form>
-              </GlassCard>
+              </div>
+            </div>
 
               {/* FAQ */}
-              <GlassCard className="p-6 fade-in-up">
+            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }}>
+              <div className="k-card-content-area">
                 <h3 className="text-xl font-semibold accent-text mb-6">frequently asked questions</h3>
                 <div className="space-y-3">
                   {faqItems.map((faq) => (
@@ -335,7 +342,8 @@ export const BuildServicePage: React.FC = () => {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
+              </div>
+            </div>
             </div>
           </div>
         </div>

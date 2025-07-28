@@ -41,7 +41,7 @@ export const useAmbientAudio = (
   // Load volume from localStorage and apply it (scaled to 75% max)
   useEffect(() => {
     const savedVolume = localStorage.getItem('thock-volume');
-    const targetVolume = savedVolume ? (parseFloat(savedVolume) / 100) * 0.75 : 0.225; // Scale to 75% max
+    const targetVolume = savedVolume ? (parseFloat(savedVolume) / 100) * 0.75 : 0.3825; // 51% * 0.75
     setVolume(targetVolume);
   }, []);
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { LiquidButton } from '../components/LiquidButton';
 import { KeyboardPageCard } from '../components/KeyboardPageCard';
 import { articles } from '../data/articles';
@@ -38,11 +38,17 @@ export const KeyboardsPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {sortedArticles.slice(0, visibleCount).map((article, index) => (
             <div 
-              key={article.id} 
+              key={article.id}
               onClick={() => handleCardClick(article.slug, index)}
               ref={el => cardRefs.current[index] = el}
             >
-              <KeyboardPageCard review={article} />
+              <KeyboardPageCard
+                review={article}
+                onReadMore={() => {
+                  // Only navigate when Read More is clicked
+                  navigate(`/keyboards/${article.slug}`);
+                }}
+              />
             </div>
           ))}
         </div>

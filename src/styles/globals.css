@@ -1,3 +1,49 @@
+/* Secondary highlight: lighter pink in dark, darker brown in light */
+:root {
+  --secondary-highlight: #6b3f19; /* much darker brown for light mode */
+}
+.light {
+  --secondary-highlight: #6b3f19; /* much darker brown for light mode */
+}
+.dark, :root:not(.light) {
+  --secondary-highlight: #ffa4dc; /* lighter pink for dark mode */
+}
+
+:root.light .secondary-highlight,
+html.light .secondary-highlight,
+body.light .secondary-highlight {
+  color: #915f34 !important;
+}
+:root.dark .secondary-highlight,
+html.dark .secondary-highlight,
+body.dark .secondary-highlight,
+:root:not(.light) .secondary-highlight {
+  color: #ffa4dc !important;
+}
+
+/* Utility for secondary highlight color */
+.secondary-highlight {
+  color: var(--secondary-highlight) !important;
+  transition: color 0.2s;
+}
+/* Accent color utility: brown in light, pink in dark */
+.accent-link {
+  color: var(--primary-accent, #b89c70);
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.dark .accent-link, :root:not(.light) .accent-link {
+  color: var(--interactive-highlight, #FF00AA);
+  text-decoration: none;
+}
+/* Remove underline on Read More and arrow on hover */
+.hover\:underline:hover,
+.group:hover .hover\:underline,
+.group:hover .no-underline,
+.group:hover .read-more-link,
+.group:hover .read-more-arrow {
+  text-decoration: none !important;
+}
 .glass-card--transparent {
   --glass-bg: rgba(255,255,255,0.025) !important;
   --glass-border: rgba(255,255,255,0.06) !important;
@@ -382,7 +428,8 @@ body::after {
   transition: all 0.6s ease-in-out;
 }
 
-.glass-card-exaggerated:hover::after {
+.glass-card-exaggerated:hover::after,
+.glass-card:hover::after {
   background-position: -50% 0;
   opacity: 0.4;
 }

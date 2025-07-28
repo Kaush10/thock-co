@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { articles } from '../data/articles';
-import { GlassCard } from '../components/GlassCard';
+import React from 'react';
+import { useState } from 'react';
+
+
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
 import { LiquidButton } from '../components/LiquidButton';
 import '../components/KeyboardPageCard.css';
-import { Check, MessageCircle, Phone, Instagram, ChevronDown, Keyboard } from 'lucide-react';
+import { Check, MessageCircle, Phone, Instagram, ChevronDown } from 'lucide-react';
 
 export const BuildServicePage: React.FC = () => {
   const [activeContact, setActiveContact] = useState<string | null>(null);
@@ -39,14 +40,7 @@ export const BuildServicePage: React.FC = () => {
     }
   ];
 
-  const pricingItems = [
-    { service: 'full build service', price: '$150-200' },
-    { service: 'assembly only', price: '$100-125' },
-    { service: 'switch lubing', price: '$50-75' },
-    { service: 'stabilizer tuning', price: '$25-40' },
-    { service: 'foam modding', price: '$20-35' },
-    { service: 'tape mod', price: '$15-25' }
-  ];
+
 
   const faqItems = [
     {
@@ -71,12 +65,7 @@ export const BuildServicePage: React.FC = () => {
     }
   ];
 
-  const galleryImages = [
-    'https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg?auto=compress&cs=tinysrgb&w=400',
-    'https://images.pexels.com/photos/2115217/pexels-photo-2115217.jpeg?auto=compress&cs=tinysrgb&w=400',
-    'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=400',
-    'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=400'
-  ];
+
 
   const handleContactHover = (contactId: string) => {
     setActiveContact(contactId);
@@ -92,7 +81,7 @@ export const BuildServicePage: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    // ...existing code...
     // Handle form submission
   };
 
@@ -125,7 +114,7 @@ export const BuildServicePage: React.FC = () => {
                 </div>
               </div>
               <div className="flex-1 flex justify-center items-center">
-                {/* Placeholder for future hero image or carousel */}
+
                 <div className="w-64 h-40 md:w-80 md:h-56 bg-black/20 rounded-xl flex items-center justify-center border-2 border-white/10">
                   <span className="text-white/40 text-lg">[ Gallery Preview Coming Soon ]</span>
                 </div>
@@ -353,88 +342,5 @@ export const BuildServicePage: React.FC = () => {
 };
 
 // --- HorizontalCarousel Component ---
-function HorizontalCarousel() {
-  const images = articles.slice(0, 10).map(a => a.image);
-  const itemCount = images.length;
-  const itemWidth = 155;
-  const radius = Math.round((itemWidth / Math.sin(Math.PI / itemCount)) * 0.52);
-  const [angle, setAngle] = React.useState(0);
-  const requestRef = React.useRef<number>();
 
-  // Animation loop for smooth rotation
-  React.useEffect(() => {
-    const animate = () => {
-      setAngle(a => (a + 0.05) % 360);
-      requestRef.current = requestAnimationFrame(animate);
-    };
-    requestRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    };
-  }, []);
-
-  // Vertical: rotateX instead of rotateY, adjust container size
-  // Animate the light overlay rotation
-  React.useEffect(() => {
-    const overlay = document.getElementById('carousel-light-overlay');
-    if (!overlay) return;
-    let raf: number;
-    function animate() {
-      if (overlay) {
-        overlay.style.transform = `translate(-50%, -50%) rotate(${angle * 2}deg)`;
-      }
-      raf = requestAnimationFrame(animate);
-    }
-    animate();
-    return () => cancelAnimationFrame(raf);
-  }, [angle]);
-
-  return (
-    <div className="relative flex items-center justify-center select-none" style={{ perspective: 800, width: '100vw', height: 680 }}>
-      <ul
-        className="absolute left-1/2 top-0"
-        style={{
-          width: 240,
-          height: 680,
-          transform: 'translateX(-50%)',
-          transformStyle: 'preserve-3d',
-        }}
-      >
-        {images.map((img, i) => {
-          const itemAngle = (360 / itemCount) * i + angle;
-          // Only show images in the front 180deg arc
-          const normalized = ((itemAngle % 360) + 360) % 360;
-          const isFront = normalized <= 90 || normalized >= 270;
-          return (
-            <li
-              key={i}
-              className="absolute left-1/2 top-1/2"
-              style={{
-                width: 155,
-                height: 155,
-                transform: `translate(-50%, -50%) rotateX(${itemAngle}deg) translateZ(${radius}px)`,
-                transition: 'transform 0.5s cubic-bezier(.4,2,.6,1)',
-                boxShadow: '0 4px 24px 0 rgba(0,0,0,0.15)',
-                borderRadius: 12,
-                overflow: 'hidden',
-                background: '#000',
-                filter: 'brightness(0.95) saturate(0.9)',
-                opacity: isFront ? 1 : 0,
-                pointerEvents: isFront ? 'auto' : 'none',
-              }}
-            >
-              <img
-                src={img}
-                alt={`keyboard build ${i + 1}`}
-                className="w-full h-full object-cover"
-                draggable={false}
-                style={{ filter: 'brightness(1.08)' }}
-              />
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-}
 // --- HorizontalCarousel Component ---

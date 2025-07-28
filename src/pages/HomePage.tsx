@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { LiquidButton } from '../components/LiquidButton';
 import { ScrollHero } from '../components/ScrollHero';
 import { useNavigate } from 'react-router-dom';

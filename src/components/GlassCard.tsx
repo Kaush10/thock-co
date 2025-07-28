@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
+import { useTiltCard } from '../hooks/useTiltCard';
 
 declare const VanillaTilt: any;
 
@@ -22,82 +21,50 @@ export const GlassCard: React.FC<GlassCardProps> = ({
   staticEffect = false,
   reducedParallax = false
 }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const { handleCardClick } = useGlassCardEffect();
-
-  useEffect(() => {
-    if (staticEffect) return;
-    if (typeof VanillaTilt !== 'undefined' && cardRef.current) {
-      let settings;
-      if (exaggerated) {
-        settings = {
+  const cardRef = useTiltCard<HTMLDivElement>(
+    exaggerated
+      ? {
           max: 14,
           speed: 350,
           perspective: 1200,
           glare: true,
-          "max-glare": 0.1,
+          'max-glare': 0.1,
           scale: 1.06,
           reset: true,
           reverse: true
-        };
-      } else if (reducedParallax) {
-        settings = {
-          max: 3.5, // 50% of normal
+        }
+      : reducedParallax
+      ? {
+          max: 3.5,
           speed: 500,
           perspective: 1800,
           glare: true,
-          "max-glare": 0.1,
-          scale: 1.015, // 50% of normal scale
+          'max-glare': 0.1,
+          scale: 1.015,
           reset: true,
           reverse: true
-        };
-      } else {
-        settings = {
+        }
+      : staticEffect
+      ? undefined
+      : {
           max: 7,
           speed: 500,
           perspective: 1800,
           glare: true,
-          "max-glare": 0.1,
+          'max-glare': 0.1,
           scale: 1.03,
           reset: true,
           reverse: true
-        };
-      }
-      VanillaTilt.init(cardRef.current, settings);
-    }
+        }
+  );
 
-    // Cleanup function to destroy VanillaTilt instance
-    return () => {
-      if (cardRef.current && (cardRef.current as any).vanillaTilt) {
-        (cardRef.current as any).vanillaTilt.destroy();
-      }
-    };
-  }, [staticEffect]);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!staticEffect) {
-      // For exaggerated cards, add visual shrink bounce effect (always triggers)
-      if (exaggerated && cardRef.current) {
-        const card = cardRef.current;
-        card.classList.add('glass-card-shrink');
-        setTimeout(() => {
-          card.classList.remove('glass-card-shrink');
-        }, 320); // Duration matches new CSS animation
-      }
-      // Play the enhanced click animation (tilt effect)
-      handleCardClick(e);
-    }
-    // Execute the provided onClick callback
-    if (onClick) {
-      onClick();
-    }
-  };
 
   return (
     <div
       ref={cardRef}
       className={`glass-card ${exaggerated ? 'glass-card-exaggerated' : ''} relative overflow-hidden ${staticEffect ? '' : 'cursor-pointer'} ${className}`}
-      onClick={handleClick}
+      onClick={onClick}
       {...(!staticEffect && { 'data-tilt': true })}
     >
       <div className="relative z-10" style={exaggerated ? { transform: 'translateZ(20px)' } : {}}>

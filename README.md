@@ -54,3 +54,38 @@ Modify the fields of the new object you just pasted. Here is a description of ea
 
 Once you've added your new article object and saved the `articles.ts` file, the website will automatically update. The new keyboard will appear on the keyboards page, and its own dedicated article page will be created.
 
+
+## How to Modify Content on Each Page
+
+### About Page
+
+Edit the content directly in `src/pages/AboutPage.tsx`. The main text is inside the `<div className="space-y-6 text-lg leading-relaxed">` block, as a series of `<p>` tags. Change the text in these `<p>` tags to update the About page.
+
+### Home Page
+
+Edit the main body text in `src/pages/HomePage.tsx`. Look for the `bodyText` variable near the top of the file. Change its value to update the homepage description.
+
+### Build Service Page
+
+Edit the content in `src/pages/BuildServicePage.tsx`:
+- The hero section and notes are plain text in JSX.
+- The FAQ items are in the `faqItems` array.
+- The contact methods are in the `contactMethods` array.
+- The build request form fields and labels can be edited in the JSX form section.
+
+### Keyboards Page
+
+The Keyboards page automatically displays all articles from `src/data/articles.ts`. To add, remove, or edit a keyboard, just update the `articles` array in that file.
+
+### Article Pages
+
+Each article page is generated from the data in `src/data/articles.ts`. To edit an article's content, update its object in the `articles` array, especially the `fullContent` field (which supports HTML tags).
+
+### Site-wide Config
+
+For global settings (theme, music, etc.), edit `src/config/siteConfig.ts`.
+
+---
+
+**Tip:** After making changes, save the file and your site will update automatically on the next build or reload.
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './ScrollHero.css';
 import './KeyboardPageCard.css';
 import gsap from 'gsap';

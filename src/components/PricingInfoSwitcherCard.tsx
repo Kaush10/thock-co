@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TierSwitcherGlass } from './TierSwitcherGlass';
 
 const tierData = [

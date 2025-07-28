@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { GlassCard } from '../components/GlassCard';
 import '../components/KeyboardPageCard.css';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';

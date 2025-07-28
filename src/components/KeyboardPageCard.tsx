@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useEffect } from 'react';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 import './KeyboardPageCard.css';
 import { Article } from '../data/articles';
 
 interface KeyboardPageCardProps {
   review: Article;
+  onReadMore?: () => void;
 }
 
 // Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
 declare const VanillaTilt: any;
 
-export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review }) => {
+export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review, onReadMore }) => {
 
   const cardRef = React.useRef<HTMLDivElement>(null);
   const { handleCardClick } = useGlassCardEffect();
@@ -47,7 +49,9 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review }) =>
       onClick={handleClick}
     >
       <div className="k-card-content-area">
-        <img src={review.image} alt={review.title} className="k-card-image" />
+        {review.image && (
+          <img src={review.image} alt={review.title} className="k-card-image" />
+        )}
         <div className="k-card-text-block">
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-xl sm:text-2xl font-bold">
@@ -63,9 +67,22 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review }) =>
               {review.specs}
             </span>
           </div>
-          <blockquote className="testimonial-quote">
+          <blockquote className="testimonial-quote mb-4">
             "{review.testimonial}"
           </blockquote>
+          {onReadMore && (
+            <button
+              className="mt-2 text-sm font-medium hover:underline flex items-center gap-1 group bg-transparent p-0 border-0 outline-none focus:underline secondary-highlight"
+              style={{ background: 'none', boxShadow: 'none', cursor: 'pointer' }}
+              onClick={e => {
+                e.stopPropagation();
+                onReadMore();
+              }}
+            >
+              <span className="lowercase">read more</span>
+              <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

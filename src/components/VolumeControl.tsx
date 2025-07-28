@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import './VolumeControl.css';
 
 interface VolumeControlProps {
@@ -20,7 +20,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
   const [isDragging, setIsDragging] = useState(false);
   const [revealProgress, setRevealProgress] = useState(0); // For smooth reveal animation
   const [animationTime, setAnimationTime] = useState(0); // For vibration animation timing
-  const [hoverDelayActive, setHoverDelayActive] = useState(false); // Prevent rapid hover changes
+  // ...existing code...
   const revealAnimationRef = useRef<number>();
   const hoverDelayRef = useRef<NodeJS.Timeout>();
 
@@ -260,9 +260,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     const shouldDelay = false; // Remove delay entirely for now
     
     const startAnimation = () => {
-      if (shouldDelay) {
-        setHoverDelayActive(true);
-      }
+      // ...existing code...
       
       const startTime = Date.now();
       let startProgress: number;
@@ -313,8 +311,6 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
         const duration = isExpanding ? 800 : 960;
         if (elapsed < duration) {
           revealAnimationRef.current = requestAnimationFrame(animateReveal);
-        } else {
-          setHoverDelayActive(false);
         }
       };
       

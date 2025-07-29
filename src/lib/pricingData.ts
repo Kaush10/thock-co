@@ -2,8 +2,8 @@
 export const LAYOUTS = [
   { key: '60', label: '60-65%' },
   { key: '75', label: '75%-TKL' },
-  { key: 'full', label: 'Full-size/1800' },
-  { key: 'custom', label: 'Custom/Other' }
+  { key: 'full', label: 'full-size' },
+  { key: 'custom', label: 'special' }
 ];
 
 export const TIERS = [

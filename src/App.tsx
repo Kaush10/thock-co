@@ -22,8 +22,13 @@ function AppContent() {
   useEffect(() => {
     const root = window.document.documentElement;
     const body = window.document.body;
-    root.classList.remove(isDark ? 'light' : 'dark');
-    root.classList.add(isDark ? 'dark' : 'light');
+    // Remove both classes from both elements
+    root.classList.remove('light', 'dark');
+    body.classList.remove('light', 'dark');
+    // Add correct class to both elements
+    const themeClass = isDark ? 'dark' : 'light';
+    root.classList.add(themeClass);
+    body.classList.add(themeClass);
     Object.entries(themeVars).forEach(([key, value]) => {
       body.style.setProperty(key, value);
     });
@@ -37,7 +42,7 @@ function AppContent() {
     setTimeout(() => {
       body.classList.remove('theme-repaint-hack');
     }, 50);
-    localStorage.setItem('thock-theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('thock-theme', themeClass);
   }, [isDark, themeVars]);
 
   const handleThemeToggle = () => setIsDark(!isDark);

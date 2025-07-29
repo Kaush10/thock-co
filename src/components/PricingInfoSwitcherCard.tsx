@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TierSwitcherGlass } from './TierSwitcherGlass';
 import { TIERS, LAYOUTS } from '../lib/pricingData';
+import { LayoutSwitcherGlass } from './LayoutSwitcherGlass';
 
 // Map old toggle indices to new tier keys
 const TIER_INDEX_MAP = [
@@ -95,17 +96,12 @@ export const PricingInfoSwitcherCard: React.FC = () => {
               </div>
             ))}
       </div>
-      {/* Layout Slider (moved to bottom) */}
-      <div className="flex justify-center mt-6 gap-2">
-        {LAYOUTS.map((l) => (
-          <button
-            key={l.key}
-            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${layoutKey === l.key ? 'bg-interactive text-white border-interactive' : 'bg-white/10 text-interactive border-white/20'}`}
-            onClick={() => setLayoutKey(l.key)}
-          >
-            {l.label}
-          </button>
-        ))}
+      {/* Layout Switcher Glass (compact glass toggle) */}
+      <div className="flex justify-center mt-6">
+        <LayoutSwitcherGlass
+          value={LAYOUTS.findIndex(l => l.key === layoutKey)}
+          onChange={idx => setLayoutKey(LAYOUTS[idx].key)}
+        />
       </div>
     </div>
   );

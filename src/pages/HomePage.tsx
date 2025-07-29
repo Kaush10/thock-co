@@ -1,6 +1,8 @@
 
 import { LiquidButton } from '../components/LiquidButton';
 import { ScrollHero } from '../components/ScrollHero';
+import { HomeTierIntroCards } from '../components/HomeTierIntroCards';
+import { AnimatedHole } from '../components/AnimatedHole';
 import { useNavigate } from 'react-router-dom';
 
 interface HomePageProps {
@@ -15,17 +17,17 @@ export const HomePage: React.FC<HomePageProps> = ({ isDark }) => {
     <div className="px-6 py-12">
       <ScrollHero bodyText={bodyText} isDark={isDark} />
 
-      {/* CTA Button */}
-      <div className="flex justify-center fade-in-up my-16">
-        <LiquidButton
-          onClick={() => navigate('/build-service')}
-        >
-          custom keyboard build service
-        </LiquidButton>
-      </div>
+      {/* 3-column tier intro cards below hero */}
+      <HomeTierIntroCards isDark={isDark} />
 
       {/* Temporary content for scrolling */}
       <div style={{ height: '100vh' }}></div>
+
+      {/* Animated pen effect at the very bottom */}
+      <div className="w-full" style={{ position: 'relative', height: 400 }}>
+        {/* @ts-ignore: custom element is injected at runtime */}
+        <AnimatedHole />
+      </div>
     </div>
   );
 };

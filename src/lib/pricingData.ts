@@ -14,21 +14,21 @@ export const TIERS = [
     payment: 'Upfront for service fee.',
     services: [
       {
-        category: 'Switch Optimization',
+        category: 'switches',
         items: [
           { name: 'Standard Lubing', price: { all: '$0.75 / switch' } },
           { name: 'Lubing + Filming', price: { all: '$1.00 / switch' } }
         ]
       },
       {
-        category: 'Stabilizers',
+        category: 'stabilizers',
         items: [
           { name: 'Stabilizer Tuning', price: { all: '$15 / set' } },
           { name: 'Stabilizer Replacement & Tuning', price: { all: '$40 / set' } }
         ]
       },
       {
-        category: 'Desoldering',
+        category: 'desoldering',
         items: [
           { name: 'Desoldering Service', price: {
             '60': '$40',

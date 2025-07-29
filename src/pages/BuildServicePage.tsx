@@ -5,8 +5,9 @@ declare const VanillaTilt: any;
 
 
 
-import { LAYOUTS, TIERS, GENERAL_INFO, FAQ } from '../lib/pricingData';
+import { LAYOUTS, TIERS, FAQ } from '../lib/pricingData';
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
+import { FAQCard } from '../components/FAQCard';
 import { CheckCircle, Truck, Clock, Award } from 'lucide-react';
 import { LiquidButton } from '../components/LiquidButton';
 import '../components/KeyboardPageCard.css';
@@ -193,22 +194,10 @@ export const BuildServicePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* General Info (data-driven, styled as notes) */}
+              {/* FAQ Card (now includes general info at top, with glass/parallax effects) */}
               <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
                 <div className="k-card-content-area">
-                  <h3 className="text-xl font-semibold accent-text mb-4">general info</h3>
-                  <div className="space-y-4 text-sm leading-relaxed">
-                    {GENERAL_INFO.map((info) => (
-                      <div key={info.label} className="flex items-start gap-2">
-                        {info.icon === 'check-circle' && <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />}
-                        {info.icon === 'truck' && <Truck className="w-5 h-5 text-blue-400 mt-0.5" />}
-                        {info.icon === 'clock' && <Clock className="w-5 h-5 text-yellow-400 mt-0.5" />}
-                        {info.icon === 'award' && <Award className="w-5 h-5 text-pink-400 mt-0.5" />}
-                        <span className="font-medium text-white/90">{info.label}:</span>
-                        <span className="text-white/70">{info.value}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <FAQCard />
                 </div>
               </div>
 
@@ -340,34 +329,6 @@ export const BuildServicePage: React.FC = () => {
               </div>
             </div>
 
-              {/* FAQ (data-driven, legacy style) */}
-              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
-                <div className="k-card-content-area">
-                  <h3 className="text-xl font-semibold accent-text mb-6">frequently asked questions</h3>
-                  <div className="space-y-3">
-                    {FAQ.map((faq, idx) => (
-                      <div key={faq.q} className="border-b border-white/10 last:border-b-0">
-                        <button
-                          onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                          className="w-full flex items-center justify-between py-3 text-left hover:text-interactive transition-colors"
-                        >
-                          <span className="text-sm font-medium">{faq.q}</span>
-                          <ChevronDown 
-                            className={`w-4 h-4 transition-transform ${
-                              openFaq === idx ? 'rotate-180' : ''
-                            }`} 
-                          />
-                        </button>
-                        {openFaq === idx && (
-                          <div className="pb-3">
-                            <p className="text-sm opacity-80 leading-relaxed">{faq.a}</p>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

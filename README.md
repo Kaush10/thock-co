@@ -65,13 +65,20 @@ Edit the content directly in `src/pages/AboutPage.tsx`. The main text is inside 
 
 Edit the main body text in `src/pages/HomePage.tsx`. Look for the `bodyText` variable near the top of the file. Change its value to update the homepage description.
 
-### Build Service Page
 
-Edit the content in `src/pages/BuildServicePage.tsx`:
-- The hero section and notes are plain text in JSX.
-- The FAQ items are in the `faqItems` array.
-- The contact methods are in the `contactMethods` array.
-- The build request form fields and labels can be edited in the JSX form section.
+### Build Service Page & Pricing System
+
+All pricing tiers, services, general info, and FAQ content are now managed in a single data file:
+
+- **Edit pricing, services, and layouts in:** `src/lib/pricingData.ts`
+- **Edit general info (shipping, turnaround, etc.) in:** `src/lib/pricingData.ts` (see `GENERAL_INFO`)
+- **Edit FAQ content in:** `src/lib/pricingData.ts` (see `FAQ`)
+
+To update any pricing, service descriptions, or FAQ answers, simply edit the relevant section in `pricingData.ts`. The UI will automatically reflect your changes.
+
+The hero section and notes are still plain text in JSX in `src/pages/BuildServicePage.tsx`.
+The contact methods are in the `contactMethods` array in the same file.
+The build request form fields and labels can be edited in the JSX form section.
 
 ### Keyboards Page
 

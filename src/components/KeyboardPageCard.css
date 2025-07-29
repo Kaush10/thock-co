@@ -1,26 +1,3 @@
-/* BuildServicePage shimmer override: 60% more transparent */
-
-/* Build Service Page: faint but animated shimmer */
-/* Build Service Page: more visible faint shimmer, with z-index */
-
-/* Build Service Page: force shimmer visible for debug */
-.build-service-page .k-card-container::after,
-.build-service-page .k-card-container:hover::after {
-  background: linear-gradient(110deg, rgba(255,255,255,0), rgba(255,255,255,0), rgba(255,255,255,0.45), rgba(255,255,255,0), rgba(255,255,255,0)) !important;
-  background-size: 200% 100% !important;
-  background-position: 150% 0 !important;
-  animation: shimmer-move 1.36s cubic-bezier(0.23, 1, 0.32, 1) infinite;
-  pointer-events: none;
-}
-
-.build-service-page.light .k-card-container::after,
-.build-service-page.light .k-card-container:hover::after {
-  background: linear-gradient(110deg, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.35), rgba(0,0,0,0), rgba(0,0,0,0)) !important;
-  background-size: 200% 100% !important;
-  background-position: 150% 0 !important;
-  animation: shimmer-move 1.36s cubic-bezier(0.23, 1, 0.32, 1) infinite;
-  pointer-events: none;
-}
 @keyframes shimmer-move {
   0% {
     background-position: 150% 0;

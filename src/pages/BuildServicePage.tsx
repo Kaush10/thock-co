@@ -5,7 +5,9 @@ declare const VanillaTilt: any;
 
 
 
+import { LAYOUTS, TIERS, GENERAL_INFO, FAQ } from '../lib/pricingData';
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
+import { CheckCircle, Truck, Clock, Award } from 'lucide-react';
 import { LiquidButton } from '../components/LiquidButton';
 import '../components/KeyboardPageCard.css';
 import { Check, MessageCircle, Phone, Instagram, ChevronDown } from 'lucide-react';
@@ -13,7 +15,7 @@ import { VerticalGallery } from '../components/VerticalGallery';
 
 export const BuildServicePage: React.FC = () => {
   const [activeContact, setActiveContact] = useState<string | null>(null);
-  const [openFaq, setOpenFaq] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,6 +24,11 @@ export const BuildServicePage: React.FC = () => {
     budgetRange: '',
     additionalDetails: ''
   });
+
+  // Remove dynamic pricing card state (handled by PricingInfoSwitcherCard)
+  // FAQ State
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
   const { handleCardClick } = useGlassCardEffect();
 
   // Initialize VanillaTilt on all .k-card-container elements
@@ -64,28 +71,7 @@ export const BuildServicePage: React.FC = () => {
 
 
 
-  const faqItems = [
-    {
-      id: 'timeline',
-      question: 'how long does a build take?',
-      answer: 'typical builds take 2-3 weeks from start to finish, depending on complexity and current queue. rush orders available for additional fee.'
-    },
-    {
-      id: 'switches',
-      question: 'do you provide switches and keycaps?',
-      answer: 'we can source switches and keycaps for you, or you can provide your own. we work with all major switch manufacturers and keycap vendors.'
-    },
-    {
-      id: 'fullbuild',
-      question: "what's included in the full build service?",
-      answer: 'full build includes assembly, switch lubing, stabilizer tuning, foam modding, and comprehensive testing. detailed photos provided throughout the process.'
-    },
-    {
-      id: 'shipping',
-      question: 'do you ship internationally?',
-      answer: 'yes, we ship worldwide. international shipping costs vary by location. all builds are carefully packaged and insured.'
-    }
-  ];
+
 
 
 
@@ -97,9 +83,7 @@ export const BuildServicePage: React.FC = () => {
     setActiveContact(null);
   };
 
-  const handleFaqToggle = (faqId: string) => {
-    setOpenFaq(openFaq === faqId ? null : faqId);
-  };
+
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,7 +116,7 @@ export const BuildServicePage: React.FC = () => {
                 </p>
                 <div className="flex items-center gap-3 mb-2">
                   <Check className="w-6 h-6 text-green-400" />
-                  <span className="text-lg font-semibold" style={{ color: '#fff' }}>Commission Status: <span className="text-green-400">Open</span></span>
+                  <span className="text-lg font-semibold" style={{ color: '#fff' }}>commission status: <span className="text-green-400">open</span></span>
                 </div>
               </div>
               <div className="flex-1 flex justify-center items-center">
@@ -199,10 +183,32 @@ export const BuildServicePage: React.FC = () => {
                 <span className="text-xl font-semibold" style={{ color: 'var(--c-content)', letterSpacing: '0.01em' }}>commission status: open</span>
               </div>
 
-              {/* Pricing & Info */}
-              <div className="k-card-container fade-in-up no-shimmer" onClick={handleCardClick} data-tilt>
+
+
+
+              {/* Pricing & Info (glass toggle restored via PricingInfoSwitcherCard) */}
+              <div className="k-card-container fade-in-up no-shimmer">
                 <div className="k-card-content-area">
                   <PricingInfoSwitcherCard />
+                </div>
+              </div>
+
+              {/* General Info (data-driven, styled as notes) */}
+              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
+                <div className="k-card-content-area">
+                  <h3 className="text-xl font-semibold accent-text mb-4">general info</h3>
+                  <div className="space-y-4 text-sm leading-relaxed">
+                    {GENERAL_INFO.map((info) => (
+                      <div key={info.label} className="flex items-start gap-2">
+                        {info.icon === 'check-circle' && <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />}
+                        {info.icon === 'truck' && <Truck className="w-5 h-5 text-blue-400 mt-0.5" />}
+                        {info.icon === 'clock' && <Clock className="w-5 h-5 text-yellow-400 mt-0.5" />}
+                        {info.icon === 'award' && <Award className="w-5 h-5 text-pink-400 mt-0.5" />}
+                        <span className="font-medium text-white/90">{info.label}:</span>
+                        <span className="text-white/70">{info.value}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -334,34 +340,34 @@ export const BuildServicePage: React.FC = () => {
               </div>
             </div>
 
-              {/* FAQ */}
-            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
-              <div className="k-card-content-area">
-                <h3 className="text-xl font-semibold accent-text mb-6">frequently asked questions</h3>
-                <div className="space-y-3">
-                  {faqItems.map((faq) => (
-                    <div key={faq.id} className="border-b border-white/10 last:border-b-0">
-                      <button
-                        onClick={() => handleFaqToggle(faq.id)}
-                        className="w-full flex items-center justify-between py-3 text-left hover:text-interactive transition-colors"
-                      >
-                        <span className="text-sm font-medium">{faq.question}</span>
-                        <ChevronDown 
-                          className={`w-4 h-4 transition-transform ${
-                            openFaq === faq.id ? 'rotate-180' : ''
-                          }`} 
-                        />
-                      </button>
-                      {openFaq === faq.id && (
-                        <div className="pb-3">
-                          <p className="text-sm opacity-80 leading-relaxed">{faq.answer}</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+              {/* FAQ (data-driven, legacy style) */}
+              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
+                <div className="k-card-content-area">
+                  <h3 className="text-xl font-semibold accent-text mb-6">frequently asked questions</h3>
+                  <div className="space-y-3">
+                    {FAQ.map((faq, idx) => (
+                      <div key={faq.q} className="border-b border-white/10 last:border-b-0">
+                        <button
+                          onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                          className="w-full flex items-center justify-between py-3 text-left hover:text-interactive transition-colors"
+                        >
+                          <span className="text-sm font-medium">{faq.q}</span>
+                          <ChevronDown 
+                            className={`w-4 h-4 transition-transform ${
+                              openFaq === idx ? 'rotate-180' : ''
+                            }`} 
+                          />
+                        </button>
+                        {openFaq === idx && (
+                          <div className="pb-3">
+                            <p className="text-sm opacity-80 leading-relaxed">{faq.a}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </div>

@@ -1,3 +1,27 @@
+/* Register Reddit Mono font for subheadings */
+@font-face {
+  font-family: 'Reddit Mono';
+  src: url('../assets/fonts/RedditMono-VariableFont_wght.ttf') format('truetype');
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Apply Reddit Mono to all subheadings (h2–h6), all caps, lightest weight */
+h2, h3, h4, h5, h6 {
+  font-family: 'Reddit Mono', monospace;
+  font-weight: 200;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+@font-face {
+  font-family: 'Varela Round';
+  src: url('../assets/fonts/VarelaRound-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 /* Gallery mask color: white in light, black in dark */
 :root { --gallery-mask-color: white; }
 .dark, :root:not(.light) { --gallery-mask-color: black; }
@@ -296,11 +320,9 @@ body.dark .secondary-highlight,
   margin: 0;
 }
 
-html,
-body {
-  max-width: 100vw;
-  font-family: 'Inter', sans-serif;
-  text-transform: lowercase;
+html, body {
+  font-family: 'Varela Round', system-ui, sans-serif;
+  font-weight: normal;
 }
 
 .logo-text {

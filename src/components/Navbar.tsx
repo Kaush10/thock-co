@@ -1,6 +1,9 @@
 
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Menu } from 'lucide-react';
+import './menu-drawer-card.css';
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { VolumeControl } from './VolumeControl';
 import { GlassCard } from './GlassCard';
 
@@ -9,9 +12,9 @@ interface NavbarProps {
   onThemeToggle: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ 
-  isDark, 
-  onThemeToggle 
+export const Navbar: React.FC<NavbarProps> = ({
+  isDark,
+  onThemeToggle
 }) => {
   const location = useLocation();
   const navItems = [
@@ -19,26 +22,68 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'keyboards', path: '/keyboards', label: 'keyboards' },
     { id: 'build-service', path: '/build-service', label: 'build service' }
   ];
+  const [menuOpen, setMenuOpen] = useState(false); // controls menu open state
+  const [menuVisible, setMenuVisible] = useState(false); // controls mounting
+  const [animateOpen, setAnimateOpen] = useState(false); // controls animation class
+  const closeTimeout = useRef<number | undefined>();
+  const menuCardRef = useRef<HTMLDivElement | null>(null);
+
+  // Mount/unmount logic (two effects for correct animation)
+  useEffect(() => {
+    if (menuOpen) {
+      setMenuVisible(true);
+    } else {
+      setAnimateOpen(false);
+      closeTimeout.current = window.setTimeout(() => setMenuVisible(false), 220);
+    }
+    return () => {
+      if (closeTimeout.current) clearTimeout(closeTimeout.current);
+    };
+  }, [menuOpen]);
+
+  // When menuVisible becomes true, trigger the open animation
+  useEffect(() => {
+    if (menuVisible && menuOpen) {
+      // Next tick after mount
+      const id = setTimeout(() => {
+        setAnimateOpen(true);
+      }, 10);
+      return () => clearTimeout(id);
+    }
+  }, [menuVisible, menuOpen]);
 
   const handleNavClick = () => {
     // Simulate click sound
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
     audio.volume = 0.1;
     audio.play().catch(() => {});
+    setMenuOpen(false);
   };
 
   return (
-    <nav className="navbar-glass px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-        <Link 
+    <nav className="navbar-glass px-6 py-4 sm:px-4 sm:py-2" style={{ height: '70px', minHeight: '70px', maxHeight: '70px' }}>
+      <div className="max-w-7xl mx-auto flex items-center justify-between relative h-full">
+        {/* Hamburger only visible on mobile (sm and below), left of logo */}
+        <button
+          className="flex sm:hidden items-center justify-center w-10 h-10 mr-2"
+          aria-label="Open menu"
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <Menu size={22} />
+        </button>
+
+        {/* Logo, shifts right when hamburger is present on desktop */}
+        <Link
           to="/"
           onClick={handleNavClick}
-          className="logo-text hover:opacity-80 transition-opacity"
+          className="logo-text hover:opacity-80 transition-opacity text-xl sm:text-lg"
+          style={{ marginLeft: '0.5rem' }}
         >
           thock&co.
         </Link>
-        
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
+
+        {/* Nav Links centered and visible on desktop, hidden on mobile */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6 hidden sm:flex">
           {navItems.map((item) => (
             <Link
               key={item.id}
@@ -52,8 +97,35 @@ export const Navbar: React.FC<NavbarProps> = ({
             </Link>
           ))}
         </div>
-        
-        <div className="flex items-center gap-4">
+
+        {/* Menu Drawer (opened by hamburger) */}
+        {menuVisible && typeof window !== 'undefined' && createPortal(
+          <div style={{ position: 'fixed', left: 0, top: '75px', minWidth: '16rem', zIndex: 9999 }}>
+            <div
+              ref={menuCardRef}
+              className={`k-card-container glass-card menu-drawer-card rounded-b-xl p-4 ml-2 backdrop-blur-[16px] bg-white/10 menu-drawer-animate${animateOpen ? ' menu-drawer-animate-open' : ''}`}
+              style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)'}}
+            >
+              {navItems.map((item) => (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  onClick={handleNavClick}
+                  className={`block py-2 pl-2 text-base transition-all duration-300 hover:text-interactive ${
+                    location.pathname === item.path ? 'text-interactive' : ''
+                  }`}
+                  style={{ marginBottom: '0.25rem' }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>,
+          document.body
+        )}
+
+        {/* Right Controls */}
+        <div className="flex items-center gap-4 ml-auto">
           <VolumeControl />
           <GlassCard
             onClick={onThemeToggle}

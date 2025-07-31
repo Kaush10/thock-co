@@ -1,4 +1,11 @@
 import React, { useEffect, useState } from 'react';
+// Returns 'dark' or 'light' based on current system or browser theme
+function getCurrentTheme() {
+  if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+  return 'light';
+}
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 // Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
 declare const VanillaTilt: any;
@@ -13,8 +20,17 @@ import { LiquidButton } from '../components/LiquidButton';
 import '../components/KeyboardPageCard.css';
 import { Check, MessageCircle, Phone, Instagram, ChevronDown } from 'lucide-react';
 import { VerticalGallery } from '../components/VerticalGallery';
+import { GlobeBanner } from '../components/GlobeBanner';
 
 export const BuildServicePage: React.FC = () => {
+  // Theme-aware gradient for hero section
+  const [theme, setTheme] = useState(getCurrentTheme());
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e) => setTheme(e.matches ? 'dark' : 'light');
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
   const [activeContact, setActiveContact] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -100,11 +116,16 @@ export const BuildServicePage: React.FC = () => {
   };
 
   return (
-    <div className="build-service-page">
+    <div className="build-service-page overflow-x-hidden">
       <div className="min-h-screen pb-16">
-        {/* Wide Screen Hero Section - Full Bleed, now at very top */}
-        <section className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-0">
-            <div className="w-[100vw] bg-gradient-to-br from-[#181c24] to-[#23283a] overflow-hidden px-4 md:px-16 py-16 flex flex-col md:flex-row items-center gap-10 min-h-[320px]">
+        {/* Hero Section - Safe width, no overflow */}
+        <section className="w-full relative mb-0" style={{zIndex: 2, position: 'relative'}}>
+            <div
+              className="w-full bg-gradient-to-br overflow-hidden px-4 md:px-16 py-16 flex flex-col md:flex-row items-center gap-10 min-h-[320px]"
+              style={{
+                background: `linear-gradient(135deg, var(--hero-gradient-from) 0%, var(--hero-gradient-to) 100%)`
+              }}
+            >
               <div className="flex-1 flex flex-col justify-center">
                 <h1
                   className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg"
@@ -121,13 +142,12 @@ export const BuildServicePage: React.FC = () => {
                 </div>
               </div>
               <div className="flex-1 flex justify-center items-center">
-                {/* (gallery removed from hero section) */}
+                {/* GlobeBanner temporarily disabled */}
               </div>
             </div>
-            
-            {/* Screenwide border to separate hero from cards below */}
-            <div className="w-full h-2 bg-gradient-to-r from-interactive to-transparent" />
-          </section>
+              {/* Screenwide border to separate hero from cards below */}
+              <div className="w-full h-2 bg-gradient-to-r from-interactive to-transparent" />
+            </section>
 
         {/* Padding between hero and cards section */}
         <div className="h-10 md:h-16" />
@@ -137,13 +157,9 @@ export const BuildServicePage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Left Column: 1/3 width on desktop */}
             <div className="flex flex-col gap-8 order-2 lg:order-1">
-              {/* 3D Vertical Gallery */}
-              <div className="hidden md:block">
+              {/* Vertical Gallery: only visible in left column for lg and up */}
+              <div className="hidden lg:block">
                 <VerticalGallery />
-              </div>
-              {/* Optionally, show a static preview or fallback on mobile */}
-              <div className="block md:hidden w-full h-40 bg-black/20 rounded-xl flex items-center justify-center border-2 border-white/10">
-                <span className="text-white/40 text-lg">[ Gallery Preview ]</span>
               </div>
               {/* Notes */}
               <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
@@ -169,6 +185,7 @@ export const BuildServicePage: React.FC = () => {
 
             {/* Right Column: 2/3 width on desktop */}
             <div className="space-y-8 lg:col-span-2 order-1 lg:order-2">
+
               {/* Commission Status */}
               <div
                 className="fade-in-up mb-4 px-8 py-6 rounded-[2.5rem] flex items-center gap-3 w-full"
@@ -184,14 +201,56 @@ export const BuildServicePage: React.FC = () => {
                 <span className="text-xl font-semibold" style={{ color: 'var(--c-content)', letterSpacing: '0.01em' }}>commission status: open</span>
               </div>
 
-
-
-
               {/* Pricing & Info (glass toggle restored via PricingInfoSwitcherCard) */}
               <div className="k-card-container fade-in-up no-shimmer">
                 <div className="k-card-content-area">
                   <PricingInfoSwitcherCard />
                 </div>
+              </div>
+
+              {/* How to Get Started */}
+              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
+                <div className="k-card-content-area">
+                  <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
+                  <p className="text-sm mb-6">
+                    shoot me an email at al.ka.......@gmail.com, or use the form below if you prefer.
+                  </p>
+                  <div className="flex items-center justify-center gap-6 mb-6">
+                    {contactMethods.map((method) => {
+                      const IconComponent = method.icon;
+                      return (
+                        <div
+                          key={method.id}
+                          className="relative"
+                          onMouseEnter={() => handleContactHover(method.id)}
+                          onMouseLeave={handleContactLeave}
+                        >
+                          <button className="p-3 rounded-lg glass-button hover:bg-interactive/20 transition-colors">
+                            <IconComponent className="w-6 h-6" />
+                          </button>
+                          {activeContact === method.id && (
+                            <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded whitespace-nowrap z-20">
+                              {method.info}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="text-center mb-4">
+                    <a href="mailto:al.ka@thockandco.com" className="text-interactive hover:underline">
+                      al.ka@thockandco.com
+                    </a>
+                  </div>
+                  <p className="text-center text-sm opacity-80">
+                    shy? no worries. start a form
+                  </p>
+                </div>
+              </div>
+
+              {/* Vertical Gallery: only visible below lg, below How to Get Started, above FAQ */}
+              <div className="block lg:hidden">
+                <VerticalGallery />
               </div>
 
               {/* FAQ Card (now includes general info at top, with glass/parallax effects) */}
@@ -200,46 +259,6 @@ export const BuildServicePage: React.FC = () => {
                   <FAQCard />
                 </div>
               </div>
-
-              {/* How to Get Started */}
-            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
-              <div className="k-card-content-area">
-                <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
-                <p className="text-sm mb-6">
-                  shoot me an email at al.ka.......@gmail.com, or use the form below if you prefer.
-                </p>
-                <div className="flex items-center justify-center gap-6 mb-6">
-                  {contactMethods.map((method) => {
-                    const IconComponent = method.icon;
-                    return (
-                      <div
-                        key={method.id}
-                        className="relative"
-                        onMouseEnter={() => handleContactHover(method.id)}
-                        onMouseLeave={handleContactLeave}
-                      >
-                        <button className="p-3 rounded-lg glass-button hover:bg-interactive/20 transition-colors">
-                          <IconComponent className="w-6 h-6" />
-                        </button>
-                        {activeContact === method.id && (
-                          <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded whitespace-nowrap z-20">
-                            {method.info}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="text-center mb-4">
-                  <a href="mailto:al.ka@thockandco.com" className="text-interactive hover:underline">
-                    al.ka@thockandco.com
-                  </a>
-                </div>
-                <p className="text-center text-sm opacity-80">
-                  shy? no worries. start a form
-                </p>
-              </div>
-            </div>
 
               {/* Build Request Form */}
             <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
@@ -339,4 +358,4 @@ export const BuildServicePage: React.FC = () => {
 
 // --- HorizontalCarousel Component ---
 
-// --- HorizontalCarousel Component ---
+// --- HorizontalCarousel Component ---please re

@@ -52,19 +52,17 @@ function AppContent() {
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Navbar isDark={isDark} onThemeToggle={handleThemeToggle} />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<HomePage isDark={isDark} />} />
-            <Route path="/keyboards" element={<KeyboardsPage />} />
-            <Route path="/keyboards/:slug" element={<ArticlePage />} />
-            <Route path="/build-service" element={<BuildServicePage />} />
-            <Route path="/about" element={<AboutPage />} />
-          </Routes>
-        </main>
+        {/* Only apply overflow-x-hidden to content below hero on homepage */}
+        <Routes>
+          <Route path="/" element={<HomePage isDark={isDark} overflowXHiddenClass="overflow-x-hidden-except-hero" />} />
+          <Route path="/keyboards" element={<KeyboardsPage />} />
+          <Route path="/keyboards/:slug" element={<ArticlePage />} />
+          <Route path="/build-service" element={<BuildServicePage />} />
+          <Route path="/about" element={<AboutPage />} />
+        </Routes>
         <Footer />
       </div>
     </Router>
-
   );
 }
 

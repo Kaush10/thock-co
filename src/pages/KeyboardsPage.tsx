@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { LiquidButton } from '../components/LiquidButton';
 import { KeyboardPageCard } from '../components/KeyboardPageCard';
 import { articles } from '../data/articles';
@@ -29,18 +29,19 @@ export const KeyboardsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen px-6 py-12 pt-24">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen w-full overflow-x-hidden px-4 sm:px-6 py-12 pt-24 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto w-full">
         <h1 className="text-4xl font-bold accent-text mb-12 text-center fade-in-up page-header">
           keyboard gallery & reviews
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 w-full max-w-full">
           {sortedArticles.slice(0, visibleCount).map((article, index) => (
             <div 
               key={article.id}
               onClick={() => handleCardClick(article.slug, index)}
               ref={el => cardRefs.current[index] = el}
+              className="w-full max-w-full"
             >
               <KeyboardPageCard
                 review={article}

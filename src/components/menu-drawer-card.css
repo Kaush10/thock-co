@@ -1,0 +1,20 @@
+
+/* Remove popup and shadow on hover/focus for the hamburger menu card only */
+.menu-drawer-card,
+.menu-drawer-card:hover,
+.menu-drawer-card:focus {
+  box-shadow: none !important;
+}
+
+/* Animation for menu drawer */
+.menu-drawer-card.menu-drawer-animate {
+  opacity: 0 !important;
+  transform: scale(0.85) translateY(-16px) translateX(-16px) !important;
+  /* more pronounced bounce: cubic-bezier(0.7, -0.8, 0.2, 1.5) */
+  transition: opacity 0.14s cubic-bezier(0.7,-0.8,0.2,1.5), transform 0.14s cubic-bezier(0.7,-0.8,0.2,1.5) !important;
+  pointer-events: auto;
+}
+.menu-drawer-card.menu-drawer-animate.menu-drawer-animate-open {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) translateX(0) !important;
+}

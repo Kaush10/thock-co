@@ -1,3 +1,21 @@
+@media (max-width: 480px) {
+  .navbar-glass {
+  padding-left: 0.20rem !important;
+  padding-right: 0.25rem !important;
+  }
+  .navbar-glass .logo-text {
+    margin-left: 0rem !important;
+  }
+  .navbar-glass .theme-toggle-card,
+  .navbar-glass .volume-control,
+  .navbar-glass button[aria-label="Open menu"] {
+    margin-right: 0.1rem !important;
+  }
+  .navbar-glass .flex {
+    gap: 0.5rem !important;
+  }
+}
+
 /* AnimatedHole effect styles */
 a-hole {
   position: absolute;
@@ -131,6 +149,8 @@ h2, h3, h4, h5, h6 {
 /* Secondary highlight: lighter pink in dark, darker brown in light */
 :root {
   --secondary-highlight: #6b3f19; /* much darker brown for light mode */
+  --hero-gradient-from: #b89c70;
+  --hero-gradient-to: #403535;
 }
 .light {
 }
@@ -138,6 +158,8 @@ html.light, body.light {
   --secondary-highlight: #6b3f19; /* much darker brown for light mode */
 }
 .dark, :root:not(.light) {
+  --hero-gradient-from: #ff00cc;
+  --hero-gradient-to: #3333ff;
 }
 html.dark, body.dark, :root:not(.light) {
   --secondary-highlight: #ffa4dc; /* lighter pink for dark mode */
@@ -498,6 +520,7 @@ html.dark, body.dark, :root:not(.light) {
 html, body {
   font-family: 'Varela Round', system-ui, sans-serif;
   font-weight: normal;
+  /* overflow-x: hidden; */
 }
 
 .logo-text {
@@ -670,8 +693,6 @@ body::after {
   position: sticky;
   top: 0;
   z-index: 50;
-  will-change: transform;
-  backface-visibility: hidden;
 }
 
 .light .navbar-glass {

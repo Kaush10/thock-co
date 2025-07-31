@@ -2,19 +2,39 @@
   /* This container creates the scrollable space needed for the animation. */
   /* The height is now set dynamically in the component. */
   position: relative;
-  margin-top: -128px;
+  margin-top: 0;
 }
 
 .scroll-hero-sticky-content {
   /* This is the element that will stick to the top of the viewport. */
-  position: sticky;
-  top: 0;
-  height: 100vh; /* Use viewport height to ensure it fills the screen */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0 1.5rem; /* Corresponds to px-6 in Tailwind */
+position: sticky;
+top: 4.5rem;
+height: 100vh; /* Use viewport height to ensure it fills the screen */
+display: flex;
+align-items: flex-start;
+justify-content: center;
+margin: 0;
+padding: 15rem 1.5rem 5rem 1.5rem; /* Top padding for logo spacing */
+}
+
+@media (max-width: 1023px) {
+  .scroll-hero-sticky-content {
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100vh;
+    padding-top: 5rem;
+    padding-bottom: 2.5rem;
+  }
+  .scroll-hero-sticky-content .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .scroll-hero-sticky-content h1 {
+    font-size: 2.5rem !important;
+    text-align: left;
+    margin-bottom: 1rem;
+  }
 }
 
 /* Animation setup */

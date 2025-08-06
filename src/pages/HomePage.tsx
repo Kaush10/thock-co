@@ -12,7 +12,12 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ isDark, overflowXHiddenClass }) => {
-  const bodyText = `crafting the perfect keystroke experience through meticulous attention to detail and premium materials. every build is a testament to the art of mechanical keyboards. from sound dampening to switch lubing, we transform your vision into a typing masterpiece that delivers years of exceptional performance. based in urbana-champaign, il, we serve enthusiasts worldwide who demand nothing but the finest in custom keyboard craftsmanship.`;
+  const bodyText = `to touch and to feel is deeply human. 
+it's something i've always believed defines our connection to the world. 
+
+to me, a keyboard is the most personal interface for interacting with our digital world... and even beyond that, it's a sensory experience—a beautiful fusion of sound and feel. 
+
+at thock & co., my mission is to transform your vision into a typing masterpiece that delivers unparalleled aesthetics and intensely gratifying feel.  `;
 
   return (
     <div className="px-6 pt-0">

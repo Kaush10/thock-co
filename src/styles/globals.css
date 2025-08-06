@@ -797,3 +797,19 @@ body::after {
     transform: scale(1.04);
   }
 }
+
+
+/* prevents hover effects on touch devices */
+@media (hover: none) {
+  *:hover {
+    /* Remove all hover effects */
+    pointer-events: auto !important;
+    /* Optionally, reset color, background, etc. */
+    /* color: inherit !important; */
+    /* background: inherit !important; */
+    /* box-shadow: none !important; */
+    /* opacity: 1 !important; */
+    /* transition: none !important; */
+  }
+}
+

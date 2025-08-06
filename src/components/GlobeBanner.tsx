@@ -51,6 +51,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // Props: coordinates to show pointer (lat, lng)
 export interface GlobeBannerProps {
   pointerCoords?: { lat: number; lng: number };
+  containerHeight?: number; // height in px to use for desktop sizing
+  containerWidth?: number; // width in px to use for desktop sizing
 }
 
 // Helper: convert lat/lng to cartesian coordinates on unit sphere
@@ -105,7 +107,7 @@ const fragmentShader = `
   return { x, y, z };
 }
 
-export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords }) => {
+export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, containerHeight, containerWidth }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvas3DRef = useRef<HTMLCanvasElement>(null);
   const canvas2DRef = useRef<HTMLCanvasElement>(null);
@@ -234,9 +236,9 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords }) => {
           updateMousePosition(e.clientX, e.clientY);
           const res = checkIntersects();
           if (res.length) {
-            pointerPos = res[0].face.normal.clone();
-            pointer.position.set(res[0].face.normal.x, res[0].face.normal.y, res[0].face.normal.z);
-            mapMaterial.uniforms.u_pointer.value = res[0].face.normal;
+            // pointerPos = res[0].face.normal.clone();
+            // pointer.position.set(res[0].face.normal.x, res[0].face.normal.y, res[0].face.normal.z);
+            // mapMaterial.uniforms.u_pointer.value = res[0].face.normal;
             popupEl.innerHTML = cartesianToLatLong();
             showPopupAnimation(true);
             clock.start();
@@ -348,12 +350,21 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords }) => {
     }
 
     function updateSize() {
-      const minSide = 0.65 * Math.min(window.innerWidth, window.innerHeight);
-      containerEl.style.width = minSide + 'px';
-      containerEl.style.height = minSide + 'px';
-      renderer.setSize(minSide, minSide);
-      canvas2D.width = canvas2D.height = minSide;
-      mapMaterial.uniforms.u_dot_size.value = 0.04 * minSide;
+      // Responsive: on screens larger than md, use containerHeight/containerWidth if provided
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      let size: number;
+      if (isDesktop && containerHeight && containerWidth) {
+        size = Math.min(containerHeight, containerWidth);
+      } else if (isDesktop && containerHeight) {
+        size = containerHeight;
+      } else {
+        size = 0.65 * Math.min(window.innerWidth, window.innerHeight);
+      }
+      containerEl.style.width = size + 'px';
+      containerEl.style.height = size + 'px';
+      renderer.setSize(size, size);
+      canvas2D.width = canvas2D.height = size;
+      mapMaterial.uniforms.u_dot_size.value = 0.04 * size;
     }
 
     initScene();

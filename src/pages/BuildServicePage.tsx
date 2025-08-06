@@ -16,7 +16,6 @@ import { LAYOUTS, TIERS, FAQ } from '../lib/pricingData';
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
 import { FAQCard } from '../components/FAQCard';
 import { CheckCircle, Truck, Clock, Award } from 'lucide-react';
-import { LiquidButton } from '../components/LiquidButton';
 import '../components/KeyboardPageCard.css';
 import { Check, MessageCircle, Phone, Instagram, ChevronDown } from 'lucide-react';
 import { VerticalGallery } from '../components/VerticalGallery';
@@ -33,36 +32,40 @@ export const BuildServicePage: React.FC = () => {
   }, []);
   const [activeContact, setActiveContact] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    keyboardModel: '',
-    switchPreference: '',
-    budgetRange: '',
-    additionalDetails: ''
-  });
 
-  // Remove dynamic pricing card state (handled by PricingInfoSwitcherCard)
-  // FAQ State
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const { handleCardClick } = useGlassCardEffect();
 
   // Initialize VanillaTilt on all .k-card-container elements
   useEffect(() => {
+    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     if (typeof VanillaTilt !== 'undefined') {
-      VanillaTilt.init(document.querySelectorAll('.k-card-container'), {
-        max: 3.25, // 25% of original
-        speed: 500,
-        perspective: 1800,
-        glare: true,
-        "max-glare": 0.05, // 25% of original glare
-        scale: 1.00125, // 25% of original scale
-        reset: true,
-        reverse: true
-      });
+      if (isTouchDevice) {
+        // On mobile: disable all tilt and clickback
+        VanillaTilt.init(document.querySelectorAll('.k-card-container'), {
+          max: 0, // disables tilt and clickback
+          speed: 500,
+          perspective: 1800,
+          glare: false,
+          scale: 1.0,
+          reset: true,
+          reverse: true
+        });
+        // TODO: Add custom mobile tap/click animation here if desired
+      } else {
+        // On desktop: normal settings (or your preferred values)
+        VanillaTilt.init(document.querySelectorAll('.k-card-container'), {
+          max: 3.25, // 25% of original
+          speed: 500,
+          perspective: 1800,
+          glare: true,
+          "max-glare": 0.05, // 25% of original glare
+          scale: 1.00125, // 25% of original scale
+          reset: true,
+          reverse: true
+        });
+      }
     }
-    // No cleanup needed; cards are static on this page
   }, []);
 
   const contactMethods = [
@@ -102,18 +105,21 @@ export const BuildServicePage: React.FC = () => {
 
 
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // ...existing code...
-    // Handle form submission
-  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
+  // Ref and state for hero text height
+  const heroTextRef = React.useRef<HTMLDivElement>(null);
+  const [heroTextHeight, setHeroTextHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    function updateHeight() {
+      if (heroTextRef.current) {
+        setHeroTextHeight(heroTextRef.current.offsetHeight);
+      }
+    }
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   return (
     <div className="build-service-page overflow-x-hidden">
@@ -126,24 +132,36 @@ export const BuildServicePage: React.FC = () => {
                 background: `linear-gradient(135deg, var(--hero-gradient-from) 0%, var(--hero-gradient-to) 100%)`
               }}
             >
-              <div className="flex-1 flex flex-col justify-center">
+              <div className="flex-1 flex flex-col justify-center" ref={heroTextRef}>
                 <h1
                   className="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg"
                   style={{ fontFamily: 'Matrix Sans Print, sans-serif', color: '#fff' }}
                 >
                   Custom Keyboard Build Service
                 </h1>
-                <p className="text-lg md:text-2xl opacity-80 mb-6 max-w-xl">
-                  <span style={{ color: '#fff' }}>Handcrafted mechanical keyboards, built to your specs. Urbana-Champaign, IL & worldwide.</span>
-                </p>
-                <div className="flex items-center gap-3 mb-2">
-                  <Check className="w-6 h-6 text-green-400" />
-                  <span className="text-lg font-semibold" style={{ color: '#fff' }}>commission status: <span className="text-green-400">open</span></span>
+                <h2 className="text-xl md:text-2xl font-semibold opacity-90 mb-6 max-w-xl" style={{ color: '#fff' }}>
+                  Currently based in <br />
+                  <span className="underline">Urbana-Champaign, IL</span>
+                </h2>
+                {/* Commission status removed from hero section */}
+              </div>
+              {window.innerWidth >= 768 && (
+                <div
+                  className="flex justify-center items-center"
+                  style={{
+                    height: heroTextHeight ? `${Math.round(heroTextHeight * 0.7)}px` : undefined,
+                    width: heroTextHeight ? `${Math.round(heroTextHeight * 0.7)}px` : '100%',
+                    minHeight: '300px',
+                    minWidth: '300px',
+                    flex: 'none',
+                    transition: 'height 0.2s, width 0.2s',
+                  }}
+                >
+                  <GlobeBanner containerHeight={heroTextHeight ? Math.round(heroTextHeight * 0.7) : heroTextHeight}
+                    containerWidth={heroTextHeight ? Math.round(heroTextHeight * 0.7) : undefined}
+                  />
                 </div>
-              </div>
-              <div className="flex-1 flex justify-center items-center">
-                {/* GlobeBanner temporarily disabled */}
-              </div>
+              )}
             </div>
               {/* Screenwide border to separate hero from cards below */}
               <div className="w-full h-2 bg-gradient-to-r from-interactive to-transparent" />
@@ -188,7 +206,7 @@ export const BuildServicePage: React.FC = () => {
 
               {/* Commission Status */}
               <div
-                className="fade-in-up mb-4 px-8 py-6 rounded-[2.5rem] flex items-center gap-3 w-full"
+                className="fade-in-up mb-4 px-8 py-6 rounded-[2.5rem] flex items-center justify-center w-full text-center gap-3"
                 style={{
                   background: 'color-mix(in srgb, var(--c-glass) 12%, transparent)',
                   backdropFilter: 'blur(8px) saturate(var(--saturation))',
@@ -197,8 +215,8 @@ export const BuildServicePage: React.FC = () => {
                   width: '100%',
                 }}
               >
-                <Check className="w-6 h-6 text-green-400" />
                 <span className="text-xl font-semibold" style={{ color: 'var(--c-content)', letterSpacing: '0.01em' }}>commission status: open</span>
+                <CheckCircle className="w-8 h-8 text-green-400 ml-3" />
               </div>
 
               {/* Pricing & Info (glass toggle restored via PricingInfoSwitcherCard) */}
@@ -213,7 +231,7 @@ export const BuildServicePage: React.FC = () => {
                 <div className="k-card-content-area">
                   <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
                   <p className="text-sm mb-6">
-                    shoot me an email at al.ka.......@gmail.com, or use the form below if you prefer.
+                    let's chat!
                   </p>
                   <div className="flex items-center justify-center gap-6 mb-6">
                     {contactMethods.map((method) => {
@@ -238,12 +256,12 @@ export const BuildServicePage: React.FC = () => {
                     })}
                   </div>
                   <div className="text-center mb-4">
-                    <a href="mailto:al.ka@thockandco.com" className="text-interactive hover:underline">
+                    <a href="mailto:info@thockandco.com" className="text-interactive hover:underline">
                       al.ka@thockandco.com
                     </a>
                   </div>
                   <p className="text-center text-sm opacity-80">
-                    shy? no worries. start a form
+                    build service form is still in development, so please reach out to me directly through the highlighted methods
                   </p>
                 </div>
               </div>
@@ -260,93 +278,6 @@ export const BuildServicePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Build Request Form */}
-            <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
-              <div className="k-card-content-area">
-                <h3 className="text-xl font-semibold accent-text mb-6">build request form</h3>
-                <form onSubmit={handleFormSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm mb-2">name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="your name"
-                        className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm mb-2">email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="your email"
-                        className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-2">keyboard model</label>
-                    <input
-                      type="text"
-                      name="keyboardModel"
-                      value={formData.keyboardModel}
-                      onChange={handleInputChange}
-                      placeholder="e.g., tofu65, kbd67 lite, etc."
-                      className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm mb-2">switch preference</label>
-                      <select
-                        name="switchPreference"
-                        value={formData.switchPreference}
-                        onChange={handleInputChange}
-                        className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none"
-                      >
-                        <option value="">select type</option>
-                        <option value="linear">linear</option>
-                        <option value="tactile">tactile</option>
-                        <option value="clicky">clicky</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm mb-2">budget range</label>
-                      <select
-                        name="budgetRange"
-                        value={formData.budgetRange}
-                        onChange={handleInputChange}
-                        className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none"
-                      >
-                        <option value="">select range</option>
-                        <option value="100-200">$100-200</option>
-                        <option value="200-300">$200-300</option>
-                        <option value="300+">$300+</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm mb-2">additional details</label>
-                    <textarea
-                      name="additionalDetails"
-                      value={formData.additionalDetails}
-                      onChange={handleInputChange}
-                      placeholder="tell me about your ideal typing experience, any specific requirements, etc."
-                      rows={4}
-                      className="w-full p-3 rounded-lg bg-white/5 border border-white/10 focus:border-interactive focus:outline-none resize-none"
-                    />
-                  </div>
-                  <LiquidButton className="w-full text-center py-3">
-                    submit request
-                  </LiquidButton>
-                </form>
-              </div>
-            </div>
 
             </div>
           </div>

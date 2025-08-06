@@ -17,14 +17,14 @@ export const TIERS = [
         category: 'switches',
         items: [
           { name: 'Standard Lubing', price: { all: '$0.75 / switch' } },
-          { name: 'Lubing + Filming', price: { all: '$1.00 / switch' } }
+          { name: 'Lubing + Filming', price: { all: '$1.00 / switch' }, details: 'Prices are the same for all layouts.' }
         ]
       },
       {
         category: 'stabilizers',
         items: [
           { name: 'Stabilizer Tuning', price: { all: '$15 / set' } },
-          { name: 'Stabilizer Replacement & Tuning', price: { all: '$40 / set' } }
+          { name: 'Stabilizer Replacement & Tuning', price: { all: '$40 / set' }, details: 'Prices are the same for all layouts.' }
         ]
       },
       {
@@ -42,13 +42,13 @@ export const TIERS = [
         category: 'Foam Mods',
         items: [
           { name: 'Case Foam Installation', price: {
-            '60': '$20', '75': '$20', 'full': '$30', 'custom': 'Contact' }, details: 'Standard: $20; Full-size: $30.' },
+            '60': '$20', '75': '$20', 'full': '$30', 'custom': 'Contact' }},
           { name: 'PCB-Plate Foam Installation', price: {
-            '60': '$25', '75': '$25', 'full': '$40', 'custom': 'Contact' }, details: 'Standard: $25; Full-size: $40.' },
+            '60': '$25', '75': '$25', 'full': '$40', 'custom': 'Contact' }},
           { name: 'PE Foam Mod', price: {
-            '60': '$30', '75': '$40', 'full': '$50', 'custom': 'Contact' }, details: '60-65%: $30; 75%-TKL: $40; Full-size: $50.' },
+            '60': '$30', '75': '$40', 'full': '$50', 'custom': 'Contact' }},
           { name: 'Tape Mod', price: {
-            '60': '$15', '75': '$15', 'full': '$20', 'custom': 'Contact' }, details: 'Standard: $15; Full-size: $20.' }
+            '60': '$15', '75': '$15', 'full': '$20', 'custom': 'Contact' }, details: 'Price varies by layout.' }
         ]
       }
     ]
@@ -86,7 +86,6 @@ export const TIERS = [
 ];
 
 export const GENERAL_INFO = [
-  { icon: 'check-circle', label: 'Commission Status', value: 'Open' },
   { icon: 'truck', label: 'Shipping', value: 'Client is responsible for shipping costs (both ways). Please ensure all parts are securely packaged.' },
   { icon: 'clock', label: 'Turnaround', value: 'Tier 1 & 2: 3-7 business days after parts received. Tier 3: 2-4 weeks (or longer if sourcing rare parts).' },
   { icon: 'award', label: 'Quality Assurance', value: 'Every build undergoes rigorous testing for functionality, acoustics, and aesthetics.' }

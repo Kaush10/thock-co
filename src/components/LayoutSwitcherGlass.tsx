@@ -36,7 +36,7 @@ export const LayoutSwitcherGlass: React.FC<{
     <fieldset
       className={`switcher switcher--compact ${className}`}
       ref={fieldsetRef}
-      style={{ width: '80%', maxWidth: 420, minWidth: 220, margin: '0 auto', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, minHeight: 0, height: 44 }}
+      style={{ width: '120%', maxWidth: 420, minWidth: 220, margin: '0 auto', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, minHeight: 0, height: 44 }}
     >
       <legend className="switcher__legend sr-only">Choose layout</legend>
       {/* Selector bubble is now handled by .switcher::after in CSS, no extra div needed */}

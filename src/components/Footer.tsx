@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="glass-card mx-6 mb-6 p-6">
+    <footer className="w-full px-6 py-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full">
           <div className="flex items-center gap-6 mb-2 md:mb-0 whitespace-nowrap">

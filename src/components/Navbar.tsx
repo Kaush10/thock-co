@@ -1,11 +1,12 @@
 
-import { Sun, Moon, Menu } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import './menu-drawer-card.css';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { VolumeControl } from './VolumeControl';
 import { GlassCard } from './GlassCard';
+import { HamburgerToggle } from './HamburgerToggle';
 
 interface NavbarProps {
   isDark: boolean;
@@ -64,19 +65,19 @@ export const Navbar: React.FC<NavbarProps> = ({
     <nav className="navbar-glass px-6 py-4 sm:px-4 sm:py-2" style={{ height: '70px', minHeight: '70px', maxHeight: '70px' }}>
       <div className="max-w-7xl mx-auto flex items-center justify-between relative h-full">
         {/* Hamburger only visible on mobile (sm and below), left of logo */}
-        <button
-          className="flex sm:hidden items-center justify-center w-10 h-10 mr-2"
-          aria-label="Open menu"
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          <Menu size={22} />
-        </button>
+        <div className="sm:hidden mr-2 pl-5 flex items-center justify-center">
+          <HamburgerToggle
+            open={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            color={isDark ? '#fff' : 'var(--color-primary-accent, #bfa181)'}
+          />
+        </div>
 
         {/* Logo, shifts right when hamburger is present on desktop */}
         <Link
           to="/"
           onClick={handleNavClick}
-          className="logo-text hover:opacity-80 transition-opacity text-xl sm:text-lg"
+          className="logo-text hover:opacity-80 transition-opacity text-xl sm:text-xl"
           style={{ marginLeft: '0.5rem' }}
         >
           thock&co.

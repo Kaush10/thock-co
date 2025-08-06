@@ -1,0 +1,49 @@
+
+/* Hamburger/X toggle animation styles */
+.wrapper-menu {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 230ms ease-out;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.wrapper-menu.open {
+  transform: rotate(-45deg);
+}
+
+.line-menu {
+  background-color: var(--hamburger-color, #fff);
+  border-radius: 5px;
+  width: 100%;
+  height: 3px;
+  transition: background 0.2s;
+}
+
+.line-menu.half {
+  width: 50%;
+}
+
+.line-menu.start {
+  transition: transform 230ms cubic-bezier(0.54, -0.81, 0.57, 0.57);
+  transform-origin: right;
+}
+
+.wrapper-menu.open .line-menu.start {
+  transform: rotate(-90deg) translateX(3px);
+}
+
+.line-menu.end {
+  align-self: flex-end;
+  transition: transform 230ms cubic-bezier(0.54, -0.81, 0.57, 0.57);
+  transform-origin: left;
+}
+
+.wrapper-menu.open .line-menu.end {
+  transform: rotate(-90deg) translateX(-3px);
+}

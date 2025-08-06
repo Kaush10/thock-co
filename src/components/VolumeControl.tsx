@@ -1,3 +1,11 @@
+import { VolumeTogglePhone, isPhone } from './VolumeTogglePhone';
+
+// Extend Window interface for custom property
+declare global {
+  interface Window {
+    __thock_user_interacted?: boolean;
+  }
+}
 import { useEffect, useRef, useState, useCallback } from 'react';
 import './VolumeControl.css';
 
@@ -5,7 +13,139 @@ interface VolumeControlProps {
   className?: string;
 }
 
+// Device check
+const phone = typeof window !== 'undefined' && isPhone();
+
 export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) => {
+  // Device check
+  const phone = typeof window !== 'undefined' && isPhone();
+
+  // Mute state for phone toggle
+  const [muted, setMuted] = useState(() => {
+    // Always use localStorage for initial mute state, default to unmuted if not set
+    const saved = localStorage.getItem('thock-muted');
+    if (saved === null) {
+      localStorage.setItem('thock-muted', 'false');
+      return false;
+    }
+    return saved === 'true';
+  });
+  // On mount, always update audio element to match mute state for phone
+  useEffect(() => {
+    if (phone) {
+      const audio = document.getElementById('ambient-audio') as HTMLAudioElement | null;
+      if (audio) {
+        if (muted) {
+          audio.muted = true;
+          audio.volume = 0;
+          audio.pause();
+        } else {
+          audio.muted = false;
+          audio.volume = 1;
+        }
+      }
+    }
+  }, [phone]);
+
+  // Always initialize user interaction flag on mount for phone
+  useEffect(() => {
+    if (phone && typeof window !== 'undefined') {
+      window.__thock_user_interacted = false;
+    }
+  }, [phone]);
+  useEffect(() => {
+    localStorage.setItem('thock-muted', muted ? 'true' : 'false');
+    window.dispatchEvent(new CustomEvent('thock-mute-change'));
+    // Handle muting/unmuting audio element on phone
+    if (phone) {
+      const audio = document.getElementById('ambient-audio') as HTMLAudioElement | null;
+      if (audio) {
+        if (muted) {
+          audio.muted = true;
+          audio.volume = 0;
+          audio.pause();
+        } else {
+          audio.muted = false;
+          audio.volume = 1;
+          // Only play if user has interacted (prevent autoplay)
+          if (window.__thock_user_interacted) {
+            audio.play().catch(() => {});
+          }
+        }
+      }
+    }
+  }, [muted, phone]);
+
+  if (phone) {
+    // Only show the toggle on phone
+    // Track if user has interacted (for iOS autoplay restrictions)
+    if (typeof window !== 'undefined' && !window.__thock_user_interacted) {
+      window.__thock_user_interacted = false;
+    }
+    const handlePhoneToggle = () => {
+      // Mark user as having interacted
+      if (typeof window !== 'undefined') {
+        window.__thock_user_interacted = true;
+      }
+      setMuted(m => {
+        const nextMuted = !m;
+        // Immediately update audio element
+        const audio = document.getElementById('ambient-audio') as HTMLAudioElement | null;
+        if (audio) {
+          if (nextMuted) {
+            audio.muted = true;
+            audio.volume = 0;
+            audio.pause();
+          } else {
+            audio.muted = false;
+            audio.volume = 1;
+            audio.play().catch(() => {});
+          }
+        }
+        return nextMuted;
+      });
+    };
+    return (
+      <div className={`volume-control ${className}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <VolumeTogglePhone
+          muted={muted}
+          onToggle={handlePhoneToggle}
+        />
+      </div>
+    );
+  }
+  // Touch state
+  const [isTouching, setIsTouching] = useState(false);
+  const inactivityTimer = useRef<NodeJS.Timeout | null>(null);
+  const lastTouchTime = useRef<number>(0);
+  // Helper: collapse matrix after inactivity
+  const startInactivityTimer = useCallback(() => {
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    inactivityTimer.current = setTimeout(() => {
+      setIsHovered(false);
+      setIsDragging(false);
+      setIsTouching(false);
+    }, 2000);
+  }, []);
+
+  // Helper: collapse matrix on outside tap/click
+  useEffect(() => {
+    function handleOutside(e: MouseEvent | TouchEvent) {
+      if (!canvasRef.current) return;
+      if (!(e.target instanceof Node)) return;
+      if (!canvasRef.current.contains(e.target as Node)) {
+        setIsHovered(false);
+        setIsDragging(false);
+        setIsTouching(false);
+      }
+    }
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
+  }, []);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [volume, setVolume] = useState(() => {
     const savedVolume = localStorage.getItem('thock-volume');
@@ -204,7 +344,10 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
 
   // Handle mouse interactions
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    // If a touch just happened, ignore this mouse event (prevents double trigger)
+    if (Date.now() - lastTouchTime.current < 500) return;
     setIsDragging(true);
+    setIsHovered(true);
     updateVolumeFromPosition(e);
   }, []);
 
@@ -240,6 +383,45 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
       };
     }
   }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  // Touch handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    lastTouchTime.current = Date.now();
+    setIsTouching(true);
+    setIsHovered(true);
+    setIsDragging(false); // Only start dragging on move
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    // Prevent scrolling
+    e.preventDefault();
+    // Do NOT set volume on initial tap
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isTouching) return;
+    setIsDragging(true); // Start dragging on first move
+    // Prevent scrolling
+    e.preventDefault();
+    updateVolumeFromTouch(e);
+  }, [isTouching]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    setIsTouching(false);
+    setIsDragging(false);
+    startInactivityTimer();
+  }, [startInactivityTimer]);
+
+  // Helper: update volume from touch position
+  const updateVolumeFromTouch = useCallback((e: React.TouchEvent) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0] || e.changedTouches[0];
+    if (!touch) return;
+    const x = touch.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    const newVolume = Math.round(percentage * 100);
+    setVolume(newVolume);
+  }, []);
 
   // Main drawing effect - simplified to prevent conflicts
   useEffect(() => {
@@ -378,6 +560,11 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
         onMouseDown={handleMouseDown}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        // Prevent scrolling on iOS Safari
+        tabIndex={0}
       />
     </div>
   );

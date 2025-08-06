@@ -19,7 +19,7 @@ export const FAQCard: React.FC = () => {
           <li key={info.label} className="flex items-start gap-2">
             <span>{ICONS[info.icon]}</span>
             <span className="text-sm font-semibold text-interactive">{info.label}:</span>
-            <span className="text-sm text-theme-body">{info.value}</span>
+            <span className="text-sm text-theme-body text-right flex-1">{info.value}</span>
           </li>
         ))}
       </ul>

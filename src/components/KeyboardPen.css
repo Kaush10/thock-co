@@ -1,0 +1,79 @@
+.keyboard-pen {
+  position: relative;
+}
+
+.keyboard-pen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -100vh);
+  width: 1.25em;
+  height: 100vh;
+  background:
+    linear-gradient(90deg, #ccc, #eee, #ddd) 0 100% / 100% 1.75em,
+    linear-gradient(90deg, #0000 20%, #ccc 0, #ddd, #eee, #ddd 80%, #0000 0);
+  background-repeat: no-repeat;
+  filter: drop-shadow(-0.25em 0 0.5em #0005);
+  z-index: -1;
+}
+.keyboard-pen {
+  padding: 1.75em;
+  position: relative;
+  background: linear-gradient(90deg, #8884, #aaa6, #ccc6, #bbb6), linear-gradient(#aaa, #ccc);
+  border-radius: 1.5em;
+  box-shadow: 
+    inset 0 0 0.2em #ddd,
+    inset 0 -0.25em 0.5em #0001,
+    0 0 1em #0003,
+    -0.35em -0.35em 1em #3212, 
+    -0.25em -0.25em 0.25em #3211, 
+    0 0 0 1px #ababab inset;
+}
+
+.keyboard-pen::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 2.5em);
+  height: calc(100% - 2.5em);
+  background: #fff2;
+  border-radius: 0.75em;
+  box-shadow: 
+    inset 0 0 0.6em #0008,
+    inset -0.1em -0.1em 0.5em #0003,
+    inset 0 0.5em 0.25em #fff3;
+}
+
+.keyboard-pen button {
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 0.65em;
+  font-size: 1em;
+  padding: 1em;
+  display: flex;
+  align-items: flex-end;
+  border: 0.125em solid #000;
+  color: #eeec;
+  width: 3em;
+  height: 2em;
+  background:
+    radial-gradient(at 50% 10%, #fff1, #fff0),
+    #333;
+  box-shadow: 
+    inset 0 0 0 0.1em #333,
+    inset 0 0 0.25em 0.1em #fff3,
+    -0.125em -0.125em 0.5em #000c;
+  transition: all 0.125s;
+}
+
+.keyboard-pen button:active {
+  border: 0.05em solid #000;
+  padding: 1.05em;
+  box-shadow: 
+    inset 0 0 0 0.1em #333,
+    inset 0 0 0.25em 0.1em #fff3,
+    -0.125em -0.125em 0.25em #000c;
+}

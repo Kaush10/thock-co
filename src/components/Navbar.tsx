@@ -7,6 +7,8 @@ import { createPortal } from 'react-dom';
 import { VolumeControl } from './VolumeControl';
 import { GlassCard } from './GlassCard';
 import { HamburgerToggle } from './HamburgerToggle';
+import { AmbienceStartCard } from './AmbienceStartCard';
+import { isPhone } from './VolumeTogglePhone';
 
 interface NavbarProps {
   isDark: boolean;
@@ -28,6 +30,23 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [animateOpen, setAnimateOpen] = useState(false); // controls animation class
   const closeTimeout = useRef<number | undefined>();
   const menuCardRef = useRef<HTMLDivElement | null>(null);
+
+  // Ambience notification card state
+  const [showAmbienceCard, setShowAmbienceCard] = useState(false);
+  useEffect(() => {
+    // Only show on initial load
+    if (typeof window !== 'undefined') {
+      if (isPhone()) {
+        // Mobile: show if not muted
+        const muted = localStorage.getItem('thock-muted');
+        if (muted !== 'true') setShowAmbienceCard(true);
+      } else {
+        // Desktop: show if volume > 0
+        const vol = localStorage.getItem('thock-volume');
+        if (vol && parseFloat(vol) > 0) setShowAmbienceCard(true);
+      }
+    }
+  }, []);
 
   // Mount/unmount logic (two effects for correct animation)
   useEffect(() => {
@@ -64,6 +83,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <nav className="navbar-glass px-6 py-4 sm:px-4 sm:py-2" style={{ height: '70px', minHeight: '70px', maxHeight: '70px' }}>
       <div className="max-w-7xl mx-auto flex items-center justify-between relative h-full">
+        {/* Ambience notification card (rendered in portal for stacking/blur) */}
+        {showAmbienceCard && typeof window !== 'undefined' && createPortal(
+          <AmbienceStartCard
+            isMobile={isPhone()}
+            onDismiss={() => setShowAmbienceCard(false)}
+          />,
+          document.body
+        )}
         {/* Hamburger only visible on mobile (sm and below), left of logo */}
         <div className="sm:hidden mr-2 pl-5 flex items-center justify-center">
           <HamburgerToggle

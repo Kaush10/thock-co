@@ -14,7 +14,10 @@ interface VolumeControlProps {
 }
 
 // Device check
-const phone = typeof window !== 'undefined' && isPhone();
+const phone = typeof window !== 'undefined' && (
+  /iphone|ipod|android.*mobile|windows phone|blackberry|bb10|mini|mobile|mobi|phone/i.test(navigator.userAgent.toLowerCase()) ||
+  (window.innerWidth < 600 && 'ontouchstart' in window)
+);
 
 export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) => {
   // Device check
@@ -30,23 +33,6 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     }
     return saved === 'true';
   });
-  // On mount, always update audio element to match mute state for phone
-  useEffect(() => {
-    if (phone) {
-      const audio = document.getElementById('ambient-audio') as HTMLAudioElement | null;
-      if (audio) {
-        if (muted) {
-          audio.muted = true;
-          audio.volume = 0;
-          audio.pause();
-        } else {
-          audio.muted = false;
-          audio.volume = 1;
-        }
-      }
-    }
-  }, [phone]);
-
   // Always initialize user interaction flag on mount for phone
   useEffect(() => {
     if (phone && typeof window !== 'undefined') {
@@ -56,24 +42,6 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
   useEffect(() => {
     localStorage.setItem('thock-muted', muted ? 'true' : 'false');
     window.dispatchEvent(new CustomEvent('thock-mute-change'));
-    // Handle muting/unmuting audio element on phone
-    if (phone) {
-      const audio = document.getElementById('ambient-audio') as HTMLAudioElement | null;
-      if (audio) {
-        if (muted) {
-          audio.muted = true;
-          audio.volume = 0;
-          audio.pause();
-        } else {
-          audio.muted = false;
-          audio.volume = 1;
-          // Only play if user has interacted (prevent autoplay)
-          if (window.__thock_user_interacted) {
-            audio.play().catch(() => {});
-          }
-        }
-      }
-    }
   }, [muted, phone]);
 
   if (phone) {
@@ -87,23 +55,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
       if (typeof window !== 'undefined') {
         window.__thock_user_interacted = true;
       }
-      setMuted(m => {
-        const nextMuted = !m;
-        // Immediately update audio element
-        const audio = document.getElementById('ambient-audio') as HTMLAudioElement | null;
-        if (audio) {
-          if (nextMuted) {
-            audio.muted = true;
-            audio.volume = 0;
-            audio.pause();
-          } else {
-            audio.muted = false;
-            audio.volume = 1;
-            audio.play().catch(() => {});
-          }
-        }
-        return nextMuted;
-      });
+      setMuted(m => !m);
     };
     return (
       <div className={`volume-control ${className}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>

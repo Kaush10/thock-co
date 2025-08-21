@@ -182,10 +182,21 @@ export const PricingInfoSwitcherCard: React.FC = () => {
         </div>
         {/* Layout Switcher Glass (compact glass toggle) */}
         <div className="flex justify-center mt-6">
-          <LayoutSwitcherGlass
-            value={LAYOUTS.findIndex(l => l.key === layoutKey)}
-            onChange={idx => setLayoutKey(LAYOUTS[idx].key)}
-          />
+          {/* Grey out and disable layout switcher for switches and stabilizers in essentials */}
+          {tier.key === 'essentials' && (tier.services[categoryIdx]?.category === 'switches' || tier.services[categoryIdx]?.category === 'stabilizers') ? (
+            <div style={{ opacity: 0.5, pointerEvents: 'none', filter: 'grayscale(1)', width: '100%', maxWidth: 'unset', overflow: 'visible', display: 'flex', justifyContent: 'center' }}>
+              <LayoutSwitcherGlass
+                value={LAYOUTS.findIndex(l => l.key === layoutKey)}
+                onChange={() => {}} // no-op
+                className="w-full"
+              />
+            </div>
+          ) : (
+            <LayoutSwitcherGlass
+              value={LAYOUTS.findIndex(l => l.key === layoutKey)}
+              onChange={idx => setLayoutKey(LAYOUTS[idx].key)}
+            />
+          )}
         </div>
       </div>
     </div>

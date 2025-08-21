@@ -1,0 +1,63 @@
+.rotatingText-container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  height: 90px;
+}
+
+.rotatingText-adjective {
+  font-family: "Open Sans", sans-serif;
+  /* responsive font size that scales between mobile and desktop */
+  font-size: clamp(20px, 6vw, 50px);
+  font-style: normal;
+  font-weight: 700;
+  margin: 0;
+  opacity: 0;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* When the element is mounted with this class the animation runs */
+.rotating-play {
+  animation-name: rotate;
+  animation-duration: 1855ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(.34,1.56,.64,1);
+}
+
+.rotating-play-long {
+  animation-name: rotate;
+  animation-duration: 4000ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes rotate {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 50px, 0);
+  }
+  20%, 80% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -25px, 0);
+  }
+}
+
+@keyframes rotate-last {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 50px, 0);
+  }
+  50%, 100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}

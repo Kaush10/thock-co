@@ -1,5 +1,9 @@
 import { useEffect } from "react";
 
+interface AnimatedHoleProps {
+  isDark?: boolean;
+}
+
 // TypeScript: declare custom element for JSX
 declare global {
   namespace JSX {
@@ -11,7 +15,7 @@ declare global {
 
 // This component mounts the custom element and ensures compatibility with React/Vite
 // NOTE: TypeScript errors in this file are expected and do not affect runtime. The custom element logic is injected at runtime and is not type-checked by TS.
-export const AnimatedHole: React.FC = () => {
+export const AnimatedHole: React.FC<AnimatedHoleProps> = ({ isDark = true }) => {
   useEffect(() => {
     // Dynamically load easing-utils from CDN and define the custom element
     let script: HTMLScriptElement | null = null;
@@ -20,9 +24,25 @@ export const AnimatedHole: React.FC = () => {
       const easingUtils = await import('https://esm.sh/easing-utils');
       // Define the custom element in window scope
       class AHole extends HTMLElement {
+        getColors() {
+          return isDark
+            ? {
+                line: '#444',
+                disc: '#444',
+                particle: (opacity: number) => `rgba(255,255,255,${opacity})`,
+                bg: '#000'
+              }
+            : {
+                line: '#7C4B2A',
+                disc: '#7C4B2A',
+                particle: (opacity: number) => `rgba(124,75,42,${opacity})`,
+                bg: '#fff'
+              };
+        }
         connectedCallback() {
           this.canvas = this.querySelector('.js-canvas');
           this.ctx = this.canvas.getContext('2d');
+          this.colors = this.getColors();
           this.discs = [];
           this.lines = [];
           this.setSize();
@@ -137,7 +157,7 @@ export const AnimatedHole: React.FC = () => {
               ctx.beginPath();
               ctx.moveTo(p0.x, p0.y);
               ctx.lineTo(p1.x, p1.y);
-              ctx.strokeStyle = '#444';
+              ctx.strokeStyle = this.colors.line;
               ctx.lineWidth = 2;
               ctx.stroke();
               ctx.closePath();
@@ -178,7 +198,7 @@ export const AnimatedHole: React.FC = () => {
             vy,
             p: 0,
             r,
-            c: `rgba(255, 255, 255, ${Math.random()})`
+            c: this.colors.particle(Math.random())
           };
         }
         tweenValue(start, end, p, ease = false) {
@@ -191,7 +211,7 @@ export const AnimatedHole: React.FC = () => {
         }
         drawDiscs() {
           const { ctx } = this;
-          ctx.strokeStyle = '#444';
+          ctx.strokeStyle = this.colors.disc;
           ctx.lineWidth = 2;
           const outerDisc = this.startDisc;
           ctx.beginPath();
@@ -268,7 +288,28 @@ export const AnimatedHole: React.FC = () => {
         }
         tick(time) {
           const { ctx } = this;
-          ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          ctx.save();
+          // Radial gradient background for theme
+          const w = this.canvas.width;
+          const h = this.canvas.height;
+          const gradient = ctx.createRadialGradient(
+            w / 2,
+            h / 2,
+            Math.min(w, h) * 0.1,
+            w / 2,
+            h / 2,
+            Math.max(w, h) * 0.7
+          );
+          if (this.colors.bg === '#fff') {
+            gradient.addColorStop(0, '#fff');
+            gradient.addColorStop(1, '#f5e9e2'); // very light brown for light mode
+          } else {
+            gradient.addColorStop(0, '#000');
+            gradient.addColorStop(1, '#1a002a'); // deep dark for dark mode
+          }
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, w, h);
+          ctx.restore();
           ctx.save();
           ctx.scale(this.render.dpi, this.render.dpi);
           this.moveDiscs();

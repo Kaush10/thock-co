@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { isPhone } from '../components/VolumeTogglePhone';
 
 interface UseAmbientAudioOptions {
   autoPlay?: boolean;
@@ -21,6 +22,8 @@ export const useAmbientAudio = (
   const [volume, setVolume] = useState(0);
   const fadeIntervalRef = useRef<NodeJS.Timeout>();
 
+
+
   // Initialize audio element
   useEffect(() => {
     const audio = new Audio(audioSrc);
@@ -29,6 +32,16 @@ export const useAmbientAudio = (
     audio.preload = 'auto';
     audioRef.current = audio;
 
+    // Initial play/pause logic for mobile and desktop
+    if (typeof window !== 'undefined' && isPhone()) {
+      const muted = localStorage.getItem('thock-muted');
+      if (muted !== 'true' && autoPlay) {
+        play();
+      }
+    } else if (autoPlay) {
+      play();
+    }
+
     return () => {
       if (fadeIntervalRef.current) {
         clearInterval(fadeIntervalRef.current);
@@ -36,7 +49,7 @@ export const useAmbientAudio = (
       audio.pause();
       audio.src = '';
     };
-  }, [audioSrc, loop]);
+  }, [audioSrc, loop, autoPlay]);
 
   // Load volume from localStorage and apply it (scaled to 75% max)
   useEffect(() => {
@@ -95,14 +108,29 @@ export const useAmbientAudio = (
     };
 
     window.addEventListener('storage', handleStorageChange);
-    
-    // Custom event for same-tab updates
     window.addEventListener('thock-volume-change', handleVolumeUpdate);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('thock-volume-change', handleVolumeUpdate);
     };
+  }, []);
+
+  // Listen for mute changes (must be after play/pause are defined)
+  useEffect(() => {
+    const handleMuteChange = () => {
+      const muted = localStorage.getItem('thock-muted') === 'true';
+      if (typeof window !== 'undefined' && isPhone() && audioRef.current) {
+        if (muted) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+        } else {
+          play();
+        }
+      }
+    };
+    window.addEventListener('thock-mute-change', handleMuteChange);
+    return () => window.removeEventListener('thock-mute-change', handleMuteChange);
   }, []);
 
   const play = async () => {
@@ -163,7 +191,14 @@ export const useAmbientAudio = (
   useEffect(() => {
     if (autoPlay) {
       const handleFirstInteraction = () => {
-        play();
+        if (typeof window !== 'undefined' && isPhone()) {
+          const muted = localStorage.getItem('thock-muted');
+          if (muted !== 'true') {
+            play();
+          }
+        } else {
+          play();
+        }
         document.removeEventListener('click', handleFirstInteraction);
         document.removeEventListener('keydown', handleFirstInteraction);
       };

@@ -1,9 +1,9 @@
-
 import { LiquidButton } from '../components/LiquidButton';
 import { ScrollHero } from '../components/ScrollHero';
 import { HomeTierIntroCards } from '../components/HomeTierIntroCards';
 import { AnimatedHole } from '../components/AnimatedHole';
 import { useNavigate } from 'react-router-dom';
+import { ScrollHeroTiers } from '../components/ScrollHeroTiers';
 
 
 interface HomePageProps {
@@ -23,10 +23,11 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
     <div className="px-6 pt-0">
       {/* Remove top padding so ScrollHero is flush with top */}
       <ScrollHero bodyText={bodyText} isDark={isDark} />
+      <ScrollHeroTiers isDark={isDark} topPadding="2.5rem" topOffset="12rem" />
+      {/* Remove extra vertical space between heroes */}
       <div className={`${overflowXHiddenClass || ''} overflow-x-hidden w-full`}>
-        {/* Patch: Ensure all child containers use w-full, not w-screen or w-[100vw] */}
-        <HomeTierIntroCards isDark={isDark} />
-        <div className="w-full" style={{ height: '100vh' }}></div>
+        {/* <HomeTierIntroCards isDark={isDark} /> -- now handled by ScrollHeroTiers */}
+        { <div className="w-full" style={{ height: '20vh' }}></div> }
         <div className="w-full" style={{ position: 'relative', height: 400 }}>
           {/* @ts-ignore: custom element is injected at runtime */}
           <AnimatedHole />

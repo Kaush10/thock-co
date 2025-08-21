@@ -10,7 +10,7 @@ export const TIERS = [
   {
     key: 'essentials',
     label: 'The Essentials',
-    description: 'Perfecting individual components or providing modifications to an existing keyboard.',
+    description: 'I offer component-focused services to perfect your existing board or individual parts. each mod is a chance to elevate your typing experience.',
     payment: 'Upfront for service fee.',
     services: [
       {
@@ -56,7 +56,7 @@ export const TIERS = [
   {
     key: 'craft',
     label: 'The Craft',
-    description: 'Bringing all components together into a cohesive, perfectly assembled, and tuned custom keyboard.',
+    description: 'I bring all your components together into a cohesive, perfectly assembled, and tuned  keyboard.',
     payment: 'Upfront for service fee.',
     services: [
       {
@@ -64,7 +64,7 @@ export const TIERS = [
         items: [
           { name: 'Hotswap Assembly', price: { all: '$75' } },
           { name: 'Soldered Assembly', price: {
-            '60': '$100', '75': '$100', 'full': '$125', 'custom': 'Contact' }, details: 'Standard: $100; Full-size: $125.' }
+            '60': '$100', '75': '$100', 'full': '$125', 'custom': 'Contact' }, details: 'Including complimentary basic stabilizer tuning' }
         ]
       }
     ]
@@ -72,13 +72,13 @@ export const TIERS = [
   {
     key: 'vision',
     label: 'The Vision',
-    description: 'The ultimate personalized experience. From initial concept to a fully optimized keyboard, I handle everything.',
+    description: 'The ultimate personalized experience. From your initial concept (the vision) to → the fully optimized keyboard, I handle everything.',
     payment: '50% upfront deposit, remaining 50% upon completion.',
     services: [
       {
         category: 'Comprehensive Build',
         items: [
-          { name: 'Full Custom Build & Optimization', price: { all: '$200 - $400 (labor & curation fee) + cost of all parts' }, details: 'Fee determined by project complexity, sourcing, and mods.' }
+          { name: 'Full Custom Build & Optimization', price: { all: '$120 - $400 (labor & curation fee) + cost of all parts' }, details: 'Fee determined by project complexity, sourcing, and mods. Full transparency.' }
         ]
       }
     ]

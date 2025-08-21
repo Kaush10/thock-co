@@ -26,6 +26,8 @@ a-hole {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  background: transparent;
+  z-index: 2;
 }
 a-hole::before {
   position: absolute;
@@ -35,7 +37,7 @@ a-hole::before {
   display: block;
   width: 150%;
   height: 140%;
-  background: radial-gradient(ellipse at 50% 55%, transparent 10%, black 50%);
+  background: radial-gradient(ellipse at 50% 55%, transparent 10%, var(--hole-bg, black) 50%);
   transform: translate3d(-50%, -50%, 0);
   content: "";
 }
@@ -49,13 +51,21 @@ a-hole::after {
   height: 100%;
   background: radial-gradient(
     ellipse at 50% 75%,
-    #a900ff 20%,
+    var(--hole-accent, #a900ff) 20%,
     transparent 75%
   );
   mix-blend-mode: overlay;
   transform: translate3d(-50%, -50%, 0);
   content: "";
-}
+  }
+
+  /* Light mode overrides for AnimatedHole */
+  .light a-hole::before {
+    --hole-bg: #f1f7f9;
+  }
+  .light a-hole::after {
+    --hole-accent: #e6cbb3;
+  }
 @keyframes aura-glow {
   0% {
     background-position: 0 100%;
@@ -73,13 +83,13 @@ a-hole .aura {
   height: 140%;
   background: linear-gradient(
       20deg,
-      #00f8f1,
-      #ffbd1e20 16.5%,
-      #fe848f 33%,
-      #fe848f20 49.5%,
-      #00f8f1 66%,
-      #00f8f160 85.5%,
-      #ffbd1e 100%
+      var(--hole-aura-1, #00f8f1),
+      var(--hole-aura-2, #ffbd1e20) 16.5%,
+      var(--hole-aura-3, #fe848f) 33%,
+      var(--hole-aura-4, #fe848f20) 49.5%,
+      var(--hole-aura-1, #00f8f1) 66%,
+      var(--hole-aura-5, #00f8f160) 85.5%,
+      var(--hole-aura-2, #ffbd1e) 100%
     )
     0 100% / 100% 200%;
   border-radius: 0 0 100% 100%;
@@ -99,9 +109,20 @@ a-hole .overlay {
   background: repeating-linear-gradient(
     transparent,
     transparent 1px,
-    white 1px,
-    white 2px
+    var(--hole-overlay, white) 1px,
+    var(--hole-overlay, white) 2px
   );
+/* Light mode overrides for AnimatedHole */
+.light a-hole .aura {
+  --hole-aura-1: #f5e9e2;
+  --hole-aura-2: #f5e9e2;
+  --hole-aura-3: #e6cbb3;
+  --hole-aura-4: #e6cbb320;
+  --hole-aura-5: #e6cbb360;
+}
+.light a-hole .overlay {
+  --hole-overlay: #f5e9e2;
+}
   mix-blend-mode: overlay;
   opacity: 0.5;
 }
@@ -563,7 +584,8 @@ body::before {
     linear-gradient(90deg, rgba(255, 255, 255, var(--grid-opacity)) 2px, transparent 2px);
   background-size: 46px 46px;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
+  pointer-events: none;
   mask-image: linear-gradient(to top left, transparent, black 130%);
 }
 

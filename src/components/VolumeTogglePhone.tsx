@@ -16,8 +16,8 @@ interface VolumeTogglePhoneProps {
 }
 
 export const VolumeTogglePhone: React.FC<VolumeTogglePhoneProps> = ({ muted, onToggle, className = '' }) => {
-  // Vibration animation state
-  const [animationTime, setAnimationTime] = useState(Date.now());
+  // Vibration animation state (real time, like matrix)
+  const [animationTime, setAnimationTime] = useState(0);
   const animationRef = useRef<number>();
 
   // Theme colors
@@ -25,14 +25,15 @@ export const VolumeTogglePhone: React.FC<VolumeTogglePhoneProps> = ({ muted, onT
   const onColor = isDark ? '#FF00AA' : '#b89c70';
   const offColor = isDark ? '#333' : '#ccc';
 
-  // Vibration logic
   useEffect(() => {
+    let running = true;
     const animate = () => {
-      setAnimationTime(Date.now());
-      animationRef.current = requestAnimationFrame(animate);
+      setAnimationTime(performance.now() / 1000); // use seconds for smoother animation
+      if (running) animationRef.current = requestAnimationFrame(animate);
     };
     animationRef.current = requestAnimationFrame(animate);
     return () => {
+      running = false;
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, []);
@@ -44,24 +45,20 @@ export const VolumeTogglePhone: React.FC<VolumeTogglePhoneProps> = ({ muted, onT
     { left: 0, top: 24 }, { left: 12, top: 24 }, { left: 24, top: 24 },
   ];
 
-  // For the "X" shape, move 4 dots to the center
+  // When muted: static 3x3 grid, no vibration, no X shape
+  // When unmuted: all dots vibrate
   const getDotStyle = (i: number) => {
-    let { left, top } = dotPositions[i];
-    // Animate to X shape if muted
-    if (muted) {
-      // Dots 1,3,7,9 move to center (12,12)
-      if ([0,2,6,8].includes(i)) {
-        left = 12;
-        top = 12;
-      }
-    }
-    // Vibration
-    const vibration = Math.sin(animationTime / 120 + i) * 1.2;
+  let { left, top } = dotPositions[i];
+  // Diagonal wave: offset each dot by its index for a true wave
+  const phaseOffset = i * 0.2; // 0, 0.5, 1.0, ...
+  const amplitude = 2.0; // px
+  const speed = 2.5; // radians/sec
+  const vibrationY = !muted ? Math.sin(animationTime * speed + phaseOffset) * amplitude : 0;
     return {
-      left: left + vibration,
-      top: top + vibration,
+      left,
+      top: top + vibrationY,
       background: muted ? offColor : onColor,
-      transition: 'all 0.4s cubic-bezier(.8, .5, .2, 1.4)',
+      transition: muted ? 'all 0.4s cubic-bezier(.8, .5, .2, 1.4)' : 'none',
       position: 'absolute' as const,
       width: 5,
       height: 5,

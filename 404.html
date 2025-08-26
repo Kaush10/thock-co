@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>thock &amp; co.</title>
     <script>
-      // Redirect to root for SPA, handling /thock-co/ subdirectory
-      var root = window.location.origin + "/thock-co/";
-      var path = window.location.pathname.replace(/^\/thock-co\//, "");
-      window.location.replace(root + "#" + path + window.location.search + window.location.hash);
+      // Redirect to root for SPA, preserving route
+      window.location.replace(window.location.origin + "/#" + window.location.pathname + window.location.search + window.location.hash);
     </script>
   </head>
   <body>

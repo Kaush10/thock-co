@@ -16,12 +16,38 @@ import { LAYOUTS, TIERS, FAQ } from '../lib/pricingData';
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
 import { FAQCard } from '../components/FAQCard';
 import { CheckCircle, Truck, Clock, Award } from 'lucide-react';
+import { AlertTriangle, Lock } from 'lucide-react';
 import '../components/KeyboardPageCard.css';
 import { Check, MessageCircle, Phone, Instagram, ChevronDown } from 'lucide-react';
 import { VerticalGallery } from '../components/VerticalGallery';
 import { GlobeBanner } from '../components/GlobeBanner';
 
 export const BuildServicePage: React.FC = () => {
+  // Commission status logic
+  const COMMISSION_STATUSES = [
+    {
+      key: 'open',
+      label: 'open',
+      color: '#22c55e', // green
+  icon: <CheckCircle className="w-5 h-5 align-middle" color="#22c55e" />
+    },
+    {
+      key: 'limited',
+      label: 'limited',
+      color: '#f59e42', // orange
+  icon: <AlertTriangle className="w-5 h-5 align-middle" color="#f59e42" />
+    },
+    {
+      key: 'closed',
+      label: 'closed',
+      color: '#ef4444', // red
+  icon: <Lock className="w-5 h-5 align-middle" color="#ef4444" />
+    }
+  ];
+
+  // Change this index to display a different status:
+  const currentCommissionStatusIdx = 1; // 0=open, 1=limited, 2=closed
+  const currentCommissionStatus = COMMISSION_STATUSES[currentCommissionStatusIdx];
   // Theme-aware gradient for hero section
   const [theme, setTheme] = useState(getCurrentTheme());
   useEffect(() => {
@@ -215,8 +241,12 @@ export const BuildServicePage: React.FC = () => {
                   width: '100%',
                 }}
               >
-                <span className="text-xl font-semibold" style={{ color: 'var(--c-content)', letterSpacing: '0.01em' }}>commission status: open</span>
-                <CheckCircle className="w-8 h-8 text-green-400 ml-3" />
+                <span className="text-xl font-semibold" style={{ color: 'var(--c-content)', letterSpacing: '0.01em' }}>
+                  commission status: <span style={{ color: currentCommissionStatus.color, display: 'inline-flex', alignItems: 'center' }}>
+                    {currentCommissionStatus.label}
+                    <span style={{ marginLeft: '0.35em' }}>{currentCommissionStatus.icon}</span>
+                  </span>
+                </span>
               </div>
 
               {/* Pricing & Info (glass toggle restored via PricingInfoSwitcherCard) */}

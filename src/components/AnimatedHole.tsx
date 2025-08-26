@@ -328,7 +328,7 @@ export const AnimatedHole: React.FC<AnimatedHoleProps> = ({ isDark = true }) => 
   }, []);
 
   return (
-    <div className="relative w-full h-[400px]">
+  <div className="relative w-full" style={{ aspectRatio: '4 / 1', height: 'auto', minHeight: '200px', maxHeight: '600px' }}>
       <a-hole>
         <canvas className="js-canvas"></canvas>
         <div className="aura"></div>

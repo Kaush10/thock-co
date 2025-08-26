@@ -9,15 +9,15 @@
 }
 
 .rotatingText-adjective {
-  font-family: "Open Sans", sans-serif;
-  /* responsive font size that scales between mobile and desktop */
+  font-family: 'Reddit Mono', monospace;
+  font-weight: 200;
   font-size: clamp(20px, 6vw, 50px);
-  font-style: normal;
-  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-feature-settings: "kern" 1, "liga" 1;
   margin: 0;
   opacity: 0;
   text-align: center;
-  text-transform: uppercase;
   white-space: nowrap;
 }
 

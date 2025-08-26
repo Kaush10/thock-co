@@ -27,8 +27,8 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
       {/* Remove extra vertical space between heroes */}
       <div className={`${overflowXHiddenClass || ''} overflow-x-hidden w-full`}>
         {/* <HomeTierIntroCards isDark={isDark} /> -- now handled by ScrollHeroTiers */}
-        { <div className="w-full" style={{ height: '20vh' }}></div> }
-        <div className="w-full" style={{ position: 'relative', height: 400 }}>
+        <div className="w-full" style={{ height: '50vh' }}></div>
+        <div className="w-full" style={{ position: 'relative' }}>
           {/* @ts-ignore: custom element is injected at runtime */}
           <AnimatedHole />
         </div>

@@ -179,8 +179,8 @@ html.light, body.light {
   --secondary-highlight: #6b3f19; /* much darker brown for light mode */
 }
 .dark, :root:not(.light) {
-  --hero-gradient-from: #ff00cc;
-  --hero-gradient-to: #3333ff;
+  --hero-gradient-from: #ff00cc94;
+  --hero-gradient-to: #3333ff7b;
 }
 html.dark, body.dark, :root:not(.light) {
   --secondary-highlight: #ffa4dc; /* lighter pink for dark mode */

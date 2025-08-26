@@ -34,7 +34,7 @@ export const ScrollHeroTiers: React.FC<ScrollHeroTiersProps> = ({ isDark, topPad
 
   return (
     <div ref={componentRef} className="scroll-hero-container">
-      <div className="scroll-hero-sticky-content" style={{ paddingTop: topPadding, top: topOffset, position: 'sticky' }}>
+      <div className="scroll-hero-sticky-content">
         <div className="max-w-7xl mx-auto w-full">
           {/* Tier cards and rotating headline section */}
           <HomeTierIntroCards isDark={isDark} />

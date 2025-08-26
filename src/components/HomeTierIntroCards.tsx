@@ -15,7 +15,7 @@ const TIERS = [
       <PencilRuler className="mb-4" size={48} />
     ),
     keywords: ['tuned.', 'to.', 'perfection.'],
-    description: 'my dedication to the subtle details that elevate your build\'s sound and feel.'
+    description: 'my dedication to the individual components that define your typing experience. this tier is for perfecting your existing keyboard with mods, tuning, and expert craftsmanship, one detail at a time.'
   },
   {
     key: 'craft',
@@ -24,7 +24,7 @@ const TIERS = [
       <PocketKnife className="mb-4" size={48} />
     ),
     keywords: ['crafted.', 'for.', 'precision.'],
-    description: 'a hands-on approach to bringing your components together with care and expertise.'
+    description: 'my hands-on approach to assembly, bringing your chosen components together with meticulous care and technical precision. this tier is for turning a pile of parts into a cohesive, perfectly built keyboard.'
   },
   {
     key: 'vision',
@@ -33,7 +33,7 @@ const TIERS = [
       <Eye className="mb-4" size={48} />
     ),
     keywords: ['your.', 'curated.', 'dream.'],
-    description: 'a guided experience from a single idea to a one-of-a-kind creation.'
+    description: 'the ultimate personalized experience. from initial concept to a fully optimized keyboard, i handle everything. this tier is for clients who have a dream but not the time, ensuring a one-of-a-kind creation delivered to your desk.'
   }
 ];
 
@@ -75,14 +75,42 @@ export const HomeTierIntroCards: React.FC<HomeTierIntroCardsProps> = ({ isDark }
                   {isSelected ? (
                     <>
                       {tier.icon()}
-                      <span className="text-2xl font-bold text-interactive mb-2" style={{ letterSpacing: '0.04em' }}>{tier.title}</span>
-                      <span className="block mt-6 text-center text-base opacity-80 max-w-xs mx-auto" style={{ minHeight: 48 }}>{tier.description}</span>
+                      <span
+                        className="text-2xl text-interactive mb-2"
+                        style={{
+                          fontFamily: 'Reddit Mono, monospace',
+                          fontWeight: 700,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.04em',
+                          fontFeatureSettings: '"kern" 1, "liga" 1',
+                        }}
+                      >
+                        {tier.title}
+                      </span>
+                      <span
+                        className="block mt-6 text-center opacity-80 mx-auto"
+                        style={{
+                          minHeight: 48,
+                          width: '100%',
+                          maxWidth: '100%',
+                          fontSize: typeof window !== 'undefined' && window.innerWidth < 768 ? '0.65rem' : '1rem',
+                          ...(typeof window !== 'undefined' && window.innerWidth >= 768
+                            ? { width: '80%', maxWidth: '80%' }
+                            : {}),
+                        }}
+                      >
+                        {tier.description}
+                      </span>
                     </>
                   ) : (
                     <span className="tier-title-rotated font-bold text-interactive" style={{
                       writingMode: 'vertical-rl',
                       transform: 'rotate(180deg)',
+                      fontFamily: 'Reddit Mono, monospace',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
                       letterSpacing: '0.04em',
+                      fontFeatureSettings: '"kern" 1, "liga" 1',
                       fontSize: '1.5rem',
                       minWidth: '100%',
                       display: 'flex',

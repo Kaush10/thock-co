@@ -27,7 +27,15 @@ export const AmbienceStartCard: React.FC<AmbienceStartCardProps> = ({ isMobile, 
 
   // z-index 9999 ensures card is above bg grid and matches drawer
   return (
-    <div style={{ position: 'fixed', right: 0, top: '75px', minWidth: '16rem', zIndex: 9999 }}>
+    <div
+      style={{
+        position: 'fixed',
+        right: 0,
+        top: '75px',
+        minWidth: '16rem',
+        zIndex: 9999
+      }}
+    >
       <div
         className={`k-card-container glass-card menu-drawer-card rounded-b-xl p-4 mr-2 backdrop-blur-[16px] bg-white/10 menu-drawer-animate${animateOpen ? ' menu-drawer-animate-open' : ''}`}
         style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(2px)', textAlign: 'center' }}

@@ -2,7 +2,7 @@
 
 export const siteConfig = {
   music: {
-    src: '/audio/Spaces.mp3',
+  src: (import.meta as any).env.BASE_URL + 'audio/Spaces.mp3',
     autoPlay: true,
     loop: true,
     fadeInDuration: 3000,

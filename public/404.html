@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>thock &amp; co.</title>
+    <script>
+      // Redirect to root for SPA, handling /thock-co/ subdirectory
+      var root = window.location.origin + "/thock-co/";
+      var path = window.location.pathname.replace(/^\/thock-co\//, "");
+      window.location.replace(root + "#" + path + window.location.search + window.location.hash);
+    </script>
+  </head>
+  <body>
+    <noscript>
+      redirecting...
+    </noscript>
+  </body>
+</html>

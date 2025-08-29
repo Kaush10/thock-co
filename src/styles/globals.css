@@ -1,3 +1,19 @@
+.homepage-shimmer {
+  border: 2px solid var(--secondary-highlight);
+  box-shadow: 0 0 12px 2px var(--secondary-highlight), 0 2px 24px 0px var(--secondary-highlight);
+  transition: border-color 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.dark .homepage-shimmer {
+  border-color: #ff00aa7b !important; /* pink for dark mode */
+  box-shadow: 0 0 30px 0px #ff00aa7b, 0 0 60px 0px #ff00aa7b;
+}
+.light .homepage-shimmer {
+  border-color: #ad99769c !important; /* brown for light mode */
+  box-shadow: 0 0 30px 0px #ad99769c, 0 0px 60px 0px #ad99769c;
+}
+.theme-toggle-card.homepage-rounded {
+  border-radius: 2rem !important;
+}
 @media (max-width: 480px) {
   .navbar-glass {
   padding-left: 0.20rem !important;

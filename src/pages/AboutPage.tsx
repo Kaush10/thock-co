@@ -68,7 +68,7 @@ export const AboutPage: React.FC = () => {
                 <p className="text-center italic opacity-80">
                   my personal portfolio is coming soon at{' '}
                   <a 
-                    href="https://kaush.me" 
+                    href="https://..." 
                     className="text-interactive hover:underline inline-flex items-center gap-1"
                     target="_blank"
                     rel="noopener noreferrer"

@@ -120,6 +120,16 @@ export const VerticalGallery: React.FC = () => {
 
   // Carousel items
   const images = articles.slice(0, ITEM_COUNT);
+  // Fill empty slots with placeholders if not enough articles
+  const filledImages = [
+    ...images,
+    ...Array.from({ length: ITEM_COUNT - images.length }, (_, i) => ({
+      image: null,
+      title: null,
+      isPlaceholder: true,
+      key: `placeholder-${i}`
+    }))
+  ];
   const itemAngle = 360 / ITEM_COUNT;
 
   return (
@@ -164,7 +174,7 @@ export const VerticalGallery: React.FC = () => {
                 pointerEvents: 'auto',
               }}
             >
-              {images.map((img, i) => {
+              {filledImages.map((img, i) => {
                 // Add +90° offset so images are fully visible at the vertical center
                 const relAngle = ((i * itemAngle - angle + 90 + 540) % 360) - 180;
                 const transform = `translate(-50%, -50%) rotateX(${relAngle}deg) translateZ(${RADIUS}px)`;
@@ -182,7 +192,7 @@ export const VerticalGallery: React.FC = () => {
                 }
                 return (
                   <li
-                    key={img.image || i}
+                    key={img.key || img.image || i}
                     style={{
                       position: 'absolute',
                       left: '50%',
@@ -195,20 +205,27 @@ export const VerticalGallery: React.FC = () => {
                       maxHeight: 180,
                       borderRadius: BORDER_RADIUS,
                       overflow: 'hidden',
-                      background: 'var(--c-bg, #fff)',
-                      filter: 'brightness(0.95) saturate(0.9)',
+                      background: img.isPlaceholder ? '#23272f' : 'var(--c-bg, #fff)',
+                      filter: img.isPlaceholder ? 'none' : 'brightness(0.95) saturate(0.9)',
                       transform,
                       boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
                       transition: 'opacity 0.3s, box-shadow 0.3s',
                       opacity,
                       pointerEvents: pointerEvents as React.CSSProperties['pointerEvents'],
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    <img
-                      src={img.image}
-                      alt={img.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                    {img.isPlaceholder ? (
+                      <h2 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 500, textAlign: 'center' }}>your build here</h2>
+                    ) : (
+                      <img
+                        src={img.image}
+                        alt={img.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    )}
                   </li>
                 );
               })}

@@ -40,11 +40,6 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-2 text-sm mb-2 md:mb-0 whitespace-nowrap">
             <span>© 2025 thock & co.</span>
           </div>
-          <div className="flex items-center gap-2 text-sm mb-2 md:mb-0 whitespace-nowrap">
-            <span>made with</span>
-            <Heart size={14} className="text-red-400" />
-            <span>by thock & co.</span>
-          </div>
         </div>
         <div className="flex items-center gap-3 w-full justify-center md:justify-end">
           <a href="#" className="hover:text-interactive transition-colors">

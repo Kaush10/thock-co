@@ -256,45 +256,47 @@ export const BuildServicePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* How to Get Started */}
-              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
-                <div className="k-card-content-area">
-                  <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
-                  <p className="text-sm mb-6">
-                    let's chat!
-                  </p>
-                  <div className="flex items-center justify-center gap-6 mb-6">
-                    {contactMethods.map((method) => {
-                      const IconComponent = method.icon;
-                      return (
-                        <div
-                          key={method.id}
-                          className="relative"
-                          onMouseEnter={() => handleContactHover(method.id)}
-                          onMouseLeave={handleContactLeave}
-                        >
-                          <button className="p-3 rounded-lg glass-button hover:bg-interactive/20 transition-colors">
-                            <IconComponent className="w-6 h-6" />
-                          </button>
-                          {activeContact === method.id && (
-                            <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded whitespace-nowrap z-20">
-                              {method.info}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+              {/* How to Get Started (hidden) */}
+              {false && (
+                <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
+                  <div className="k-card-content-area">
+                    <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
+                    <p className="text-sm mb-6">
+                      let's chat!
+                    </p>
+                    <div className="flex items-center justify-center gap-6 mb-6">
+                      {contactMethods.map((method) => {
+                        const IconComponent = method.icon;
+                        return (
+                          <div
+                            key={method.id}
+                            className="relative"
+                            onMouseEnter={() => handleContactHover(method.id)}
+                            onMouseLeave={handleContactLeave}
+                          >
+                            <button className="p-3 rounded-lg glass-button hover:bg-interactive/20 transition-colors">
+                              <IconComponent className="w-6 h-6" />
+                            </button>
+                            {activeContact === method.id && (
+                              <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded whitespace-nowrap z-20">
+                                {method.info}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="text-center mb-4">
+                      <a href="mailto:info@thockandco.com" className="text-interactive hover:underline">
+                        al.ka@thockandco.com
+                      </a>
+                    </div>
+                    <p className="text-center text-sm opacity-80">
+                      build service form is still in development, so please reach out to me directly through the highlighted methods
+                    </p>
                   </div>
-                  <div className="text-center mb-4">
-                    <a href="mailto:info@thockandco.com" className="text-interactive hover:underline">
-                      al.ka@thockandco.com
-                    </a>
-                  </div>
-                  <p className="text-center text-sm opacity-80">
-                    build service form is still in development, so please reach out to me directly through the highlighted methods
-                  </p>
                 </div>
-              </div>
+              )}
 
               {/* Vertical Gallery: only visible below lg, below How to Get Started, above FAQ */}
               <div className="block lg:hidden">

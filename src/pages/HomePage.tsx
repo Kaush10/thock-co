@@ -30,20 +30,37 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
       <div className={`${overflowXHiddenClass || ''} overflow-x-hidden w-full`}>
         {/* <HomeTierIntroCards isDark={isDark} /> -- now handled by ScrollHeroTiers */}
         <div className="w-full" style={{ height: '50vh' }}></div>
-        {/* Insert button directly above the AnimatedHole, below the grid */}
-        <div className="w-full flex justify-center items-center mb-0" style={{ position: 'relative', zIndex: 2 }}>
-          <GlassCard
+        {/* Replace button with commission status card style, including full glass styling and interactive effect */}
+        <div className="w-full flex justify-center items-center" style={{ position: 'relative', zIndex: 2, marginBottom: 0 }}>
+          <div
+            className="homepage-cta-card fade-in-up px-8 py-6 rounded-[2.5rem] flex items-center justify-center w-[80%] lg:w-[45%] text-center gap-3 cursor-pointer"
+            style={{
+              background: 'color-mix(in srgb, var(--c-glass) 12%, transparent)',
+              border: '1.5px solid color-mix(in srgb, var(--c-light) 60%, transparent)',
+              backdropFilter: 'blur(8px) saturate(var(--saturation))',
+              WebkitBackdropFilter: 'blur(8px) saturate(var(--saturation))',
+              boxShadow:
+                'inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent), ' +
+                'inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), ' +
+                'inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), ' +
+                'inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), ' +
+                'inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), ' +
+                'inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), ' +
+                'inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), ' +
+                'inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), ' +
+                '0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), ' +
+                '0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent)',
+              // width is now handled by Tailwind classes
+            }}
             onClick={() => navigate('/build-service')}
-            reducedParallax={true}
-            className="theme-toggle-card homepage-rounded homepage-shimmer flex items-center justify-center transition-all duration-300 cursor-pointer w-full max-w-2xl h-20 md:w-3/4 sm:w-full bg-transparent"
           >
             <h2
               className={`text-lg font-subheading m-0 p-0 ${isDark ? 'text-white' : 'text-black'}`}
-              style={{ fontFamily: 'Reddit Mono, monospace', fontWeight: 400, textTransform: 'uppercase', letterSpacing: '0.04em' }}
+              style={{ fontFamily: 'Reddit Mono, monospace', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}
             >
               build your dream keyboard
             </h2>
-          </GlassCard>
+          </div>
         </div>
         <div className="w-full" style={{ position: 'relative', zIndex: 1 }}>
           {/* @ts-ignore: custom element is injected at runtime */}

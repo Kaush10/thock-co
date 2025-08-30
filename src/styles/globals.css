@@ -851,3 +851,12 @@ body::after {
   }
 }
 
+.homepage-cta-card {
+  transition: box-shadow 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1), border-color 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.homepage-cta-card:hover, .homepage-cta-card:focus {
+  transform: scale(1.04);
+  box-shadow: 0 8px 32px 0px color-mix(in srgb, var(--c-light) 40%, transparent), 0 2px 24px 0px color-mix(in srgb, var(--c-dark) 12%, transparent);
+  border-color: color-mix(in srgb, var(--c-light) 80%, transparent);
+}
+

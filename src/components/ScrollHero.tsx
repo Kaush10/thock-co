@@ -91,9 +91,7 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
             cursorRef.current?.classList.add('is-blinking');
           }, 150); // Resume blinking after 150ms of no scrolling
 
-          // Finish typing before scroll ends
-          const endBuffer = 0.09; // fraction of scroll reserved after typing finishes
-          const charIndex = Math.floor(Math.min(1, self.progress / (1 - endBuffer)) * textLength);
+          const charIndex = Math.floor(self.progress * textLength);
           
           charSpans.forEach((span, i) => {
             span.style.color = i < charIndex ? textColor : 'transparent';
@@ -154,7 +152,16 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
               </div>
             </div>
 
-            {/* Right Column - Visual removed (blank card) */}
+            {/* Right Column - Visual */}
+            <div className="hidden lg:flex justify-center lg:justify-end">
+              <div className="w-full max-w-sm h-[28rem] transform rotate-3">
+                <div className="k-card-container w-full h-full" data-tilt onClick={handleCardClick}>
+                  <div className="k-card-content-area flex items-center justify-center h-full">
+                    <h2 className="text-2xl font-normal opacity-70 text-center">animation coming soon</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

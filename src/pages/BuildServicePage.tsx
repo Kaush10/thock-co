@@ -190,6 +190,7 @@ export const BuildServicePage: React.FC = () => {
                 >
                   <GlobeBanner containerHeight={heroTextHeight ? Math.round(heroTextHeight * 0.7) : heroTextHeight}
                     containerWidth={heroTextHeight ? Math.round(heroTextHeight * 0.7) : undefined}
+                    glowMarker={{ lat: 40.1106, lng: -88.2073 }}
                   />
                 </div>
               )}

@@ -53,6 +53,8 @@ export interface GlobeBannerProps {
   pointerCoords?: { lat: number; lng: number };
   containerHeight?: number; // height in px to use for desktop sizing
   containerWidth?: number; // width in px to use for desktop sizing
+  /** Always-visible glowing marker at a fixed lat/lng, independent of the click-popup pointer */
+  glowMarker?: { lat: number; lng: number; color?: string };
 }
 
 // Helper: convert lat/lng to cartesian coordinates on unit sphere
@@ -100,14 +102,14 @@ const fragmentShader = `
     }
 `;
   const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lng + 180) * (Math.PI / 180);
+  const theta = (180 - lng) * (Math.PI / 180);
   const x = Math.sin(phi) * Math.cos(theta);
   const y = Math.cos(phi);
   const z = Math.sin(phi) * Math.sin(theta);
   return { x, y, z };
 }
 
-export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, containerHeight, containerWidth }) => {
+export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, containerHeight, containerWidth, glowMarker }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvas3DRef = useRef<HTMLCanvasElement>(null);
   const canvas2DRef = useRef<HTMLCanvasElement>(null);
@@ -117,6 +119,7 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
     let renderer: any, scene: any, camera: any, rayCaster: any, controls: any;
     let overlayCtx: any;
     let pointer: any, globe: any, globeMesh: any, mapMaterial: any;
+    let glowDot: any, glowHalo: any, glowTweens: any[] = [];
     let earthTexture: any;
     let clock: any;
     let popupVisible = false;
@@ -137,7 +140,11 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       renderer.setPixelRatio(2);
       scene = new THREE.Scene();
       camera = new THREE.OrthographicCamera(-1.1, 1.1, 1.1, -1.1, 0, 3);
-      camera.position.z = 1.1;
+      // Default camera position (azimuth 0) faces ~90°E (India). Rotate the
+      // starting position to ~10°W (West Africa) so auto-rotation reaches
+      // North America sooner.
+      const startAzimuth = -100 * (Math.PI / 180);
+      camera.position.set(Math.sin(startAzimuth) * 1.1, 0, Math.cos(startAzimuth) * 1.1);
       rayCaster = new THREE.Raycaster();
       rayCaster.far = 1.15;
       clock = new THREE.Clock();
@@ -150,6 +157,7 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
           earthTexture.repeat.set(1, 1);
           createGlobe();
           createPointer();
+          createGlowMarker();
           createPopupTimelines();
           addCanvasEvents();
           updateSize();
@@ -215,6 +223,42 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
         pointer.position.set(x, y, z);
         mapMaterial.uniforms.u_pointer.value = new THREE.Vector3(x, y, z);
       }
+    }
+
+    // A separate, always-on glowing marker — independent of the click-popup
+    // pointer above so it isn't affected by popupOpenTl/popupCloseTl tweens.
+    function createGlowMarker() {
+      if (!glowMarker) return;
+      const { x, y, z } = latLngToCartesian(glowMarker.lat, glowMarker.lng);
+      const color = glowMarker.color ?? '#ff00aa';
+
+      const dotGeometry = new THREE.SphereGeometry(0.022, 16, 16);
+      const dotMaterial = new THREE.MeshBasicMaterial({ color });
+      glowDot = new THREE.Mesh(dotGeometry, dotMaterial);
+      glowDot.position.set(x, y, z);
+      scene.add(glowDot);
+
+      const haloGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+      const haloMaterial = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.45,
+      });
+      glowHalo = new THREE.Mesh(haloGeometry, haloMaterial);
+      glowHalo.position.set(x, y, z);
+      scene.add(glowHalo);
+
+      glowTweens.push(
+        gsap.to(glowHalo.scale, {
+          x: 1.6,
+          y: 1.6,
+          z: 1.6,
+          duration: 1.1,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+        })
+      );
     }
 
     function createPopupTimelines() {
@@ -372,6 +416,7 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
     window.addEventListener('resize', updateSize);
     return () => {
       window.removeEventListener('resize', updateSize);
+      glowTweens.forEach((tween) => tween.kill());
     };
   }, [pointerCoords]);
 

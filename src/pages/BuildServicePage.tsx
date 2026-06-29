@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // Returns 'dark' or 'light' based on current system or browser theme
 function getCurrentTheme() {
   if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -61,14 +61,16 @@ export const BuildServicePage: React.FC = () => {
 
 
   const { handleCardClick } = useGlassCardEffect();
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
 
-  // Initialize VanillaTilt on all .k-card-container elements
+  // Initialize VanillaTilt, scoped to this page's own cards rather than the whole document
   useEffect(() => {
     const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    if (typeof VanillaTilt !== 'undefined') {
+    if (typeof VanillaTilt !== 'undefined' && cardsContainerRef.current) {
+      const cards = cardsContainerRef.current.querySelectorAll('.k-card-container');
       if (isTouchDevice) {
         // On mobile: disable all tilt and clickback
-        VanillaTilt.init(document.querySelectorAll('.k-card-container'), {
+        VanillaTilt.init(cards, {
           max: 0, // disables tilt and clickback
           speed: 500,
           perspective: 1800,
@@ -80,7 +82,7 @@ export const BuildServicePage: React.FC = () => {
         // TODO: Add custom mobile tap/click animation here if desired
       } else {
         // On desktop: normal settings (or your preferred values)
-        VanillaTilt.init(document.querySelectorAll('.k-card-container'), {
+        VanillaTilt.init(cards, {
           max: 3.25, // 25% of original
           speed: 500,
           perspective: 1800,
@@ -91,6 +93,9 @@ export const BuildServicePage: React.FC = () => {
           reverse: true
         });
       }
+      return () => {
+        cards.forEach((card: any) => card.vanillaTilt?.destroy());
+      };
     }
   }, []);
 
@@ -196,7 +201,7 @@ export const BuildServicePage: React.FC = () => {
         {/* Padding between hero and cards section */}
         <div className="h-10 md:h-16" />
 
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6" ref={cardsContainerRef}>
           {/* Desktop: Left 1/3, Right 2/3. Mobile: stacked (to be reworked later) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Left Column: 1/3 width on desktop */}

@@ -166,6 +166,7 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       controls.minPolarAngle = 0.4 * Math.PI;
       controls.maxPolarAngle = 0.4 * Math.PI;
       controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.6; // default is 2.0 — slowed down considerably
       let timestamp: number;
       controls.addEventListener('start', () => {
         timestamp = Date.now();

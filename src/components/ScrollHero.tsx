@@ -70,13 +70,15 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
       if (charSpans.length === 0) return;
 
       const textLength = charSpans.length;
-      
+
       charSpans.forEach(span => {
         span.style.color = 'transparent';
       });
-      
+
       // Start with blinking cursor
       cursorRef.current.classList.add('is-blinking');
+
+      let lastCharIndex = 0;
 
       st = ScrollTrigger.create({
         trigger: componentRef.current,
@@ -92,10 +94,18 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
           }, 150); // Resume blinking after 150ms of no scrolling
 
           const charIndex = Math.floor(self.progress * textLength);
-          
-          charSpans.forEach((span, i) => {
-            span.style.color = i < charIndex ? textColor : 'transparent';
-          });
+
+          // Only touch the spans whose state actually changed this frame
+          if (charIndex > lastCharIndex) {
+            for (let i = lastCharIndex; i < charIndex; i++) {
+              charSpans[i].style.color = textColor;
+            }
+          } else if (charIndex < lastCharIndex) {
+            for (let i = charIndex; i < lastCharIndex; i++) {
+              charSpans[i].style.color = 'transparent';
+            }
+          }
+          lastCharIndex = charIndex;
 
           const safeIndex = Math.min(charIndex, textLength - 1);
           const currentChr = charSpans[safeIndex];

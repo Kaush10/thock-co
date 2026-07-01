@@ -185,20 +185,22 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
     ];
 
     // ── Tune these to change the feel of the animation ───────────────────────
-    const slowDuration = 3.5;   // seconds for the long (left/right) edge sweep
-    const fastDuration = 0.9;   // seconds for the short (top/bottom) edge sweep
-    // Ease pairs must be complementary so velocity is continuous at corners:
-    //   power2.in  / power2.out  — gentle S, moderate punch   (original)
-    //   power3.in  / power3.out  — stronger acceleration, snappier corners
-    //   circ.in    / circ.out    — circular, very snappy arrival
-    //   expo.in    / expo.out    — dramatic slow-start then blast
-    //   sine.in    / sine.out    — soft and organic
-    const fastEase = 'circ.in';
-    const slowEase = 'circ.out';
+    const edgeDuration = 2.5;  // seconds per edge sweep (same for all edges)
+    // The ease decelerates into the corner, so motion visually settles before
+    // the tween fully completes — giving a "done" feel before the image changes.
+    // Options to try:
+    //   'power3.out'  — strong deceleration, snappy settle  (current)
+    //   'expo.out'    — very dramatic slow-down at the end
+    //   'circ.out'    — circular, abrupt stop
+    //   'sine.inOut'  — smooth S-curve, softer feel
+    const edgeEase = 'power3.out';
     // ─────────────────────────────────────────────────────────────────────────
 
+    // Two-stage (fast/slow) animation commented out — see git history to restore.
+    // const slowDuration = 3.5; const fastDuration = 0.9;
+    // const fastEase = 'circ.in'; const slowEase = 'circ.out';
+
     let edgeIdx = 0;
-    let isSlow = false; // top/bottom are short edges (fast), left/right are long edges (slow)
     let alive = true;
     let tween: gsap.core.Tween | null = null;
     let hoverTween: gsap.core.Tween | null = null;
@@ -211,20 +213,17 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
       if (!alive) return;
       const [ex, ey] = edges[edgeIdx];
 
-      // Image changes at the START of each fast (transition) sweep
-      if (!isSlow) {
-        setSlideIdx(prev => (prev + 1) % BUILD_IMAGES.length);
-      }
+      // New image at the start of every edge
+      setSlideIdx(prev => (prev + 1) % BUILD_IMAGES.length);
 
       tween = gsap.to(obj, {
         rx: ex,
         ry: ey,
-        duration: isSlow ? slowDuration : fastDuration,
-        ease: isSlow ? slowEase : fastEase,
+        duration: edgeDuration,
+        ease: edgeEase,
         onUpdate: () => applyTransform(obj.rx, obj.ry),
         onComplete: () => {
           edgeIdx = (edgeIdx + 1) % edges.length;
-          isSlow = !isSlow;
           runEdge();
         },
       });

@@ -171,8 +171,8 @@ export const BuildServicePage: React.FC = () => {
                   Custom Keyboard Build Service
                 </h1>
                 <h2 className="text-xl md:text-2xl font-semibold opacity-90 mb-6 max-w-xl" style={{ color: '#fff' }}>
-                  Currently based in <br />
-                  <span className="underline">Urbana-Champaign, IL</span>
+                  <span className="text-sm md:text-base font-normal">Currently based in</span> <br />
+                  <span className="font-normal">Urbana-Champaign, IL</span>
                 </h2>
                 {/* Commission status removed from hero section */}
               </div>

@@ -113,12 +113,13 @@ export const PricingInfoSwitcherCard: React.FC = () => {
       <div ref={measureRef}>
         <TierSwitcherGlass value={tierIdx} onChange={(idx) => { setTierIdx(idx); setCategoryIdx(0); }} className="mb-6" />
         {/* Tier Title and Description (always above toggle bar) */}
-        <div className="flex justify-between items-center py-2 border-b border-white/10">
+        <div className="flex justify-between items-center py-2">
           <h2 className="text-xl font-semibold m-0 p-0">{tier.label}</h2>
           {/* No single price, so show payment info or leave blank */}
           <span className="text-xs font-bold text-interactive">{tier.payment}</span>
         </div>
-        <div className="mb-6 text-center text-base opacity-80">{tier.description}</div>
+        <div className="mt-3 px-4 py-3 rounded-xl text-center text-base opacity-80" style={{ background: 'rgba(255,255,255,0.06)' }}>{tier.description}</div>
+        <div className="my-5 border-b border-white/10" />
         {/* Essentials toggle bar as subheading (always below title/desc) */}
         <div className="mb-2">{essentialsToggleBar}</div>
         {/* Services */}

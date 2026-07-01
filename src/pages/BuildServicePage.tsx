@@ -46,7 +46,7 @@ export const BuildServicePage: React.FC = () => {
   ];
 
   // Change this index to display a different status:
-  const currentCommissionStatusIdx = 1; // 0=open, 1=limited, 2=closed
+  const currentCommissionStatusIdx = 2; // 0=open, 1=limited, 2=closed
   const currentCommissionStatus = COMMISSION_STATUSES[currentCommissionStatusIdx];
   // Theme-aware gradient for hero section
   const [theme, setTheme] = useState(getCurrentTheme());

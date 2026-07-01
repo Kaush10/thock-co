@@ -4,25 +4,35 @@ import { CheckCircle, Truck, Clock, Award, ChevronDown } from 'lucide-react';
 
 export const FAQCard: React.FC = () => {
   const ICONS: Record<string, React.ReactNode> = {
-    'check-circle': <CheckCircle className="inline w-5 h-5 mr-2 text-green-400 dark:text-green-300" />,
-    'truck': <Truck className="inline w-5 h-5 mr-2 text-blue-400 dark:text-blue-300" />,
-    'clock': <Clock className="inline w-5 h-5 mr-2 text-yellow-400 dark:text-yellow-300" />,
-    'award': <Award className="inline w-5 h-5 mr-2 text-pink-400 dark:text-pink-300" />,
+    'check-circle': <CheckCircle className="inline w-4 h-4" />,
+    'truck':        <Truck        className="inline w-4 h-4" />,
+    'clock':        <Clock        className="inline w-4 h-4" />,
+    'award':        <Award        className="inline w-4 h-4" />,
   };
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   return (
     <>
       <h3 className="text-xl font-semibold accent-text mb-4">Frequently Asked Questions</h3>
-      {/* General Info content below heading, themed */}
-      <ul className="space-y-3 mb-6">
+      {/* Info boxes */}
+      <div className="flex flex-col gap-3 mb-6">
         {GENERAL_INFO.map((info) => (
-          <li key={info.label} className="flex items-start gap-2">
-            <span>{ICONS[info.icon]}</span>
-            <span className="text-sm font-semibold text-interactive">{info.label}:</span>
-            <span className="text-sm text-theme-body text-right flex-1">{info.value}</span>
-          </li>
+          <div
+            key={info.label}
+            className="flex items-start gap-3 px-4 py-3 rounded-xl"
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <span style={{ color: 'var(--interactive-highlight)', flexShrink: 0, marginTop: 2 }}>
+              {ICONS[info.icon]}
+            </span>
+            <div className="flex items-center justify-between w-full gap-4">
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--interactive-highlight)' }}>
+                {info.label}
+              </span>
+              <span className="text-sm opacity-75 text-right">{info.value}</span>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
       <ul className="divide-y divide-white/10">
         {FAQ.map((item, idx) => (
           <li key={item.q} className="py-3">

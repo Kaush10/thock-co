@@ -86,9 +86,9 @@ export const TIERS = [
 ];
 
 export const GENERAL_INFO = [
-  { icon: 'truck', label: 'Shipping', value: 'Client is responsible for shipping costs (both ways). Please ensure all parts are securely packaged.' },
-  { icon: 'clock', label: 'Turnaround', value: 'Tier 1 & 2: 3-7 business days after parts received. Tier 3: 2-4 weeks (or longer if sourcing rare parts).' },
-  { icon: 'award', label: 'Quality Assurance', value: 'Every build undergoes rigorous testing for functionality, acoustics, and aesthetics.' }
+  { icon: 'truck', label: 'Shipping', value: 'N/A' },
+  { icon: 'clock', label: 'Turnaround', value: 'N/A' },
+  { icon: 'award', label: 'Quality Assurance', value: 'I test every build thoroughly and provide extra switches when applicable.' }
 ];
 
 export const FAQ = [

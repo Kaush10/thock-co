@@ -28,7 +28,6 @@ export const VerticalGallery: React.FC = () => {
   }, []);
 
   const carouselRef = useRef<HTMLUListElement>(null);
-  const shineRef = useRef<HTMLDivElement>(null);
   const [angle, setAngle] = useState(0);
 
   useEffect(() => {
@@ -38,10 +37,6 @@ export const VerticalGallery: React.FC = () => {
         const next = (prev + 0.08) % 360;
         if (carouselRef.current) {
           carouselRef.current.style.transform = `rotateX(${next}deg)`;
-        }
-        // Shine overlay stays fixed (no rotation)
-        if (shineRef.current) {
-          shineRef.current.style.transform = 'translate(-50%, -50%)';
         }
         return next;
       });
@@ -86,43 +81,16 @@ export const VerticalGallery: React.FC = () => {
     />
   );
 
-  // Shine overlay: single, large, masked to vertical ellipse (over image stack only)
-  const shineOverlay = (
-    <div
-      ref={shineRef}
-      id="carousel-light-overlay"
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        width: 300,
-        height: 460,
-        transform: 'translate(-50%, -50%)',
-        pointerEvents: 'none',
-        borderRadius: '50% / 40%', // vertical ellipse
-        background:
-          'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.01) 60%, transparent 100%)',
-        mixBlendMode: 'screen',
-        filter: 'brightness(1.7)',
-        zIndex: 3,
-        maskImage: 'ellipse(50% 40% at 50% 50%)',
-        WebkitMaskImage: 'ellipse(50% 40% at 50% 50%)',
-      }}
-    />
-  );
+  // Shine is now applied per-item (see inside the <li>) so it only
+  // lights the image tiles and never bleeds into the gaps between them.
 
-  // Carousel items
-  const images = articles.slice(0, ITEM_COUNT);
-  // Fill empty slots with placeholders if not enough articles
-  const filledImages = [
-    ...images,
-    ...Array.from({ length: ITEM_COUNT - images.length }, (_, i) => ({
-      image: null,
-      title: null,
-      isPlaceholder: true,
-      key: `placeholder-${i}`
-    }))
-  ];
+  // Carousel items — cycle through available articles to fill the wheel.
+  // Once enough real builds exist this naturally becomes a straight slice.
+  const filledImages = articles.length > 0
+    ? Array.from({ length: ITEM_COUNT }, (_, i) => articles[i % articles.length])
+    : Array.from({ length: ITEM_COUNT }, (_, i) => ({
+        image: null, title: null, isPlaceholder: true, key: `placeholder-${i}`
+      }));
   const itemAngle = 360 / ITEM_COUNT;
 
   return (
@@ -149,7 +117,6 @@ export const VerticalGallery: React.FC = () => {
             WebkitMaskImage: `linear-gradient(to bottom, transparent 0%, ${bgColor === 'rgb(24, 28, 36)' ? 'black' : 'white'} 14%, ${bgColor === 'rgb(24, 28, 36)' ? 'black' : 'white'} 86%, transparent 100%)`,
           }}
         >
-          {shineOverlay}
           {/* Carousel */}
           <div className="carousel-container" style={{ position: 'absolute', inset: 0, perspective: 1200, pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
             <ul
@@ -219,6 +186,15 @@ export const VerticalGallery: React.FC = () => {
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                     )}
+                    {/* Per-item spotlight — stays on the tile, never bleeds into gaps */}
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      pointerEvents: 'none',
+                      background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.21) 0%, transparent 70%)',
+                      mixBlendMode: 'screen',
+                      zIndex: 2,
+                    }} />
                   </li>
                 );
               })}

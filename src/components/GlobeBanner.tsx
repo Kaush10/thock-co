@@ -434,7 +434,8 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       }}
     >
       <canvas id="globe-3d" ref={canvas3DRef} style={{ display: 'block', position: 'absolute', top: 0, left: 0 }} />
-      <canvas id="globe-2d-overlay" ref={canvas2DRef} style={{ display: 'block', position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }} />
+      {/* 2D overlay canvas (connector line to popup) — disabled alongside the popup */}
+      <canvas id="globe-2d-overlay" ref={canvas2DRef} style={{ display: 'none', position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }} />
       {/* Coordinate popup disabled — appears off-screen at certain aspect ratios */}
       <div id="globe-popup-overlay" style={{ display: 'none', position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}>
         <div className="globe-popup" ref={popupRef} style={{
@@ -453,10 +454,4 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       </div>
     </div>
   );
-    console.log('GlobeBanner: useEffect running');
-      console.log('GlobeBanner: initScene called');
-      console.log('GlobeBanner: loading earth texture...');
-          console.log('GlobeBanner: earth texture loaded');
-      console.log('GlobeBanner: createGlobe called');
-      console.log('GlobeBanner: createPointer called');
 };

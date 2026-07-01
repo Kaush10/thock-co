@@ -325,6 +325,3 @@ export const BuildServicePage: React.FC = () => {
   );
 };
 
-// --- HorizontalCarousel Component ---
-
-// --- HorizontalCarousel Component ---please re

@@ -3,7 +3,7 @@ import './ScrollHero.css';
 import './KeyboardPageCard.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,7 +31,6 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   const cursorRef = useRef<HTMLSpanElement>(null);
   const slideCardRef = useRef<HTMLDivElement>(null);
   const trailCanvasRef = useRef<HTMLCanvasElement>(null);
-  const { handleCardClick } = useGlassCardEffect();
 
   useEffect(() => {
     // Page-level VanillaTilt init: covers all [data-tilt] elements on the home page,
@@ -185,8 +184,18 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
       [-max, -max],  // left edge end:   TL
     ];
 
-    const slowDuration = 3.5;  // edge sweep while image shows (tune this)
-    const fastDuration = 0.9;  // edge sweep during image transition (tune this)
+    // ── Tune these to change the feel of the animation ───────────────────────
+    const slowDuration = 3.5;   // seconds for the long (left/right) edge sweep
+    const fastDuration = 0.9;   // seconds for the short (top/bottom) edge sweep
+    // Ease pairs must be complementary so velocity is continuous at corners:
+    //   power2.in  / power2.out  — gentle S, moderate punch   (original)
+    //   power3.in  / power3.out  — stronger acceleration, snappier corners
+    //   circ.in    / circ.out    — circular, very snappy arrival
+    //   expo.in    / expo.out    — dramatic slow-start then blast
+    //   sine.in    / sine.out    — soft and organic
+    const fastEase = 'circ.in';
+    const slowEase = 'circ.out';
+    // ─────────────────────────────────────────────────────────────────────────
 
     let edgeIdx = 0;
     let isSlow = false; // top/bottom are short edges (fast), left/right are long edges (slow)
@@ -211,7 +220,7 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
         rx: ex,
         ry: ey,
         duration: isSlow ? slowDuration : fastDuration,
-        ease: isSlow ? 'power2.out' : 'power2.in',
+        ease: isSlow ? slowEase : fastEase,
         onUpdate: () => applyTransform(obj.rx, obj.ry),
         onComplete: () => {
           edgeIdx = (edgeIdx + 1) % edges.length;

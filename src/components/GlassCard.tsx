@@ -1,8 +1,5 @@
 import { useTiltCard } from '../hooks/useTiltCard';
 
-declare const VanillaTilt: any;
-
-
 
 interface GlassCardProps {
   children: React.ReactNode;

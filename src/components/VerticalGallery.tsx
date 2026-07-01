@@ -1,10 +1,3 @@
-// Helper to get theme background color
-function getThemeBg() {
-  if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return '#181c24';
-  }
-  return '#fff';
-}
 import React, { useRef, useEffect, useState } from 'react';
 // Returns 'dark' or 'light' based on current system or browser theme
 function getCurrentTheme() {

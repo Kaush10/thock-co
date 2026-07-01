@@ -14,7 +14,7 @@ export const LiquidButton: React.FC<LiquidButtonProps> = ({
   className = '',
   showAnimation = false 
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
+
   const [showHammerAnimation, setShowHammerAnimation] = useState(false);
 
   const [springProps, api] = useSpring(() => ({
@@ -28,7 +28,6 @@ export const LiquidButton: React.FC<LiquidButtonProps> = ({
   }));
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
     api.start({
       transform: 'scale(1.05) translateY(-2px)',
       background: 'rgba(147, 112, 219, 0.1)',
@@ -44,7 +43,6 @@ export const LiquidButton: React.FC<LiquidButtonProps> = ({
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
     api.start({
       transform: 'scale(1) translateY(0px)',
       background: 'var(--glass-bg)',

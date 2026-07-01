@@ -160,6 +160,10 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
     const card = slideCardRef.current;
     if (!card) return;
 
+    // Disable the CSS `transition: transform` from k-card-container so it doesn't
+    // fight GSAP's per-frame transform updates (which caused flickering).
+    card.style.transition = 'none';
+
     const perspective = 1800;
     const scale = 1.03;
     const max = 10;      // auto-animation tilt range

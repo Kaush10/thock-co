@@ -15,8 +15,12 @@ export const PageWipe: React.FC<PageWipeProps> = ({ isDark }) => {
       if (timerRef.current) clearTimeout(timerRef.current);
       setDirection(dir);
       setWipeKey(k => k + 1);
+      document.documentElement.classList.add('page-wiping');
       // 900ms animation + 2 × 90ms stagger + buffer
-      timerRef.current = setTimeout(() => setWipeKey(0), 1200);
+      timerRef.current = setTimeout(() => {
+        setWipeKey(0);
+        document.documentElement.classList.remove('page-wiping');
+      }, 1200);
     };
     window.addEventListener('page-wipe', handler);
     return () => {

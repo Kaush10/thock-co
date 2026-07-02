@@ -117,6 +117,7 @@ export const VerticalGallery: React.FC = () => {
           {/* Carousel */}
           <div className="carousel-container" style={{ position: 'absolute', inset: 0, perspective: 1200, pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
             <ul
+              ref={carouselRef}
               className="carousel"
               style={{
                 width: '100%',
@@ -133,7 +134,7 @@ export const VerticalGallery: React.FC = () => {
             >
               {filledImages.map((img, i) => {
                 // Add +90° offset so images are fully visible at the vertical center
-                const relAngle = ((i * itemAngle - angle + 90 + 540) % 360) - 180;
+                const relAngle = ((i * itemAngle - angleRef.current + 90 + 540) % 360) - 180;
                 const transform = `translate(-50%, -50%) rotateX(${relAngle}deg) translateZ(${RADIUS}px)`;
                 // Only show images within ±90° of the front (viewer)
                 const fadeZone = 30; // degrees to start fading

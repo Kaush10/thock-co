@@ -38,6 +38,33 @@ transform: translateY(-05%);
   }
 }
 
+/* Used by ScrollHeroTiers: GSAP's ScrollTrigger `pin` fully owns this
+   element's positioning, so it deliberately has no position: sticky —
+   mixing native sticky with GSAP pin on the same element is what caused
+   the fast-scroll hitch. */
+.scroll-hero-tiers-sticky-content {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 1.5rem;
+  transform: translateY(-05%);
+}
+
+@media (max-width: 1023px) {
+  .scroll-hero-tiers-sticky-content {
+    height: 100vh;
+    padding: 0 1rem;
+    transform: translateY(-05%);
+  }
+  .scroll-hero-tiers-sticky-content .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
 /* Animation setup */
 .scroll-text-reveal {
   white-space: pre-wrap; /* Use pre-wrap to respect newlines and wrap text */

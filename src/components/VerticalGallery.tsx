@@ -29,6 +29,7 @@ export const VerticalGallery: React.FC = () => {
 
   const carouselRef = useRef<HTMLUListElement>(null);
   const angleRef = useRef(0);
+  const itemAngle = 360 / ITEM_COUNT;
 
   useEffect(() => {
     let running = true;
@@ -88,7 +89,6 @@ export const VerticalGallery: React.FC = () => {
     : Array.from({ length: ITEM_COUNT }, (_, i) => ({
         image: null, title: null, isPlaceholder: true, key: `placeholder-${i}`
       }));
-  const itemAngle = 360 / ITEM_COUNT;
 
   return (
     <div className="w-full flex justify-center items-center pb-6">
@@ -136,18 +136,6 @@ export const VerticalGallery: React.FC = () => {
                 // Add +90° offset so images are fully visible at the vertical center
                 const relAngle = ((i * itemAngle - angleRef.current + 90 + 540) % 360) - 180;
                 const transform = `translate(-50%, -50%) rotateX(${relAngle}deg) translateZ(${RADIUS}px)`;
-                // Only show images within ±90° of the front (viewer)
-                const fadeZone = 30; // degrees to start fading
-                let opacity = 0;
-                let pointerEvents = 'none';
-                if (Math.abs(relAngle) <= 90) {
-                  pointerEvents = 'auto';
-                  if (Math.abs(relAngle) > 90 - fadeZone) {
-                    opacity = Math.max(0, (90 - Math.abs(relAngle)) / fadeZone);
-                  } else {
-                    opacity = 1;
-                  }
-                }
                 return (
                   <li
                     key={`item-${i}`}
@@ -167,9 +155,7 @@ export const VerticalGallery: React.FC = () => {
                       filter: img.isPlaceholder ? 'none' : 'brightness(0.95) saturate(0.9)',
                       transform,
                       boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
-                      transition: 'opacity 0.3s, box-shadow 0.3s',
-                      opacity,
-                      pointerEvents: pointerEvents as React.CSSProperties['pointerEvents'],
+                      opacity: 1,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',

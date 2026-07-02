@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
 import { Footer } from './components/Footer';
@@ -62,10 +62,16 @@ function AppContent() {
           <Route path="/build-service" element={<BuildServicePage />} />
           <Route path="/about" element={<AboutPage />} />
         </Routes>
-        <Footer />
+        <ConditionalFooter />
       </div>
     </Router>
   );
+}
+
+function ConditionalFooter() {
+  const location = useLocation();
+  if (location.pathname === '/') return null;
+  return <Footer />;
 }
 
 export default function App() {

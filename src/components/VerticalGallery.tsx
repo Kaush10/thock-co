@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react'; // useState kept for theme/bgColor
 // Returns 'dark' or 'light' based on current system or browser theme
 function getCurrentTheme() {
   if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -28,18 +28,15 @@ export const VerticalGallery: React.FC = () => {
   }, []);
 
   const carouselRef = useRef<HTMLUListElement>(null);
-  const [angle, setAngle] = useState(0);
+  const angleRef = useRef(0);
 
   useEffect(() => {
     let running = true;
     const animate = () => {
-      setAngle(prev => {
-        const next = (prev + 0.08) % 360;
-        if (carouselRef.current) {
-          carouselRef.current.style.transform = `rotateX(${next}deg)`;
-        }
-        return next;
-      });
+      angleRef.current = (angleRef.current + 0.08) % 360;
+      if (carouselRef.current) {
+        carouselRef.current.style.transform = `rotateX(${angleRef.current}deg)`;
+      }
       if (running) requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);

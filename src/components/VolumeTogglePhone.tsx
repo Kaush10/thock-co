@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 // Utility to detect phone
 function isPhone() {
@@ -15,20 +15,33 @@ interface VolumeTogglePhoneProps {
   className?: string;
 }
 
-export const VolumeTogglePhone: React.FC<VolumeTogglePhoneProps> = ({ muted, onToggle, className = '' }) => {
-  // Vibration animation state (real time, like matrix)
-  const [animationTime, setAnimationTime] = useState(0);
-  const animationRef = useRef<number>();
+const DOT_POSITIONS = [
+  { left: 0, top: 0 }, { left: 12, top: 0 }, { left: 24, top: 0 },
+  { left: 0, top: 12 }, { left: 12, top: 12 }, { left: 24, top: 12 },
+  { left: 0, top: 24 }, { left: 12, top: 24 }, { left: 24, top: 24 },
+];
 
-  // Theme colors
+export const VolumeTogglePhone: React.FC<VolumeTogglePhoneProps> = ({ muted, onToggle, className = '' }) => {
+  const animationRef = useRef<number>();
+  const spanRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const mutedRef = useRef(muted);
+  mutedRef.current = muted;
+
   const isDark = !document.documentElement.classList.contains('light');
   const onColor = isDark ? '#FF00AA' : '#b89c70';
   const offColor = isDark ? '#333' : '#ccc';
 
   useEffect(() => {
     let running = true;
-    const animate = () => {
-      setAnimationTime(performance.now() / 1000); // use seconds for smoother animation
+    const animate = (t: number) => {
+      const time = t / 1000;
+      spanRefs.current.forEach((span, i) => {
+        if (!span) return;
+        const { top } = DOT_POSITIONS[i];
+        const phaseOffset = i * 0.2;
+        const vibrationY = !mutedRef.current ? Math.sin(time * 2.5 + phaseOffset) * 2.0 : 0;
+        span.style.top = (top + vibrationY) + 'px';
+      });
       if (running) animationRef.current = requestAnimationFrame(animate);
     };
     animationRef.current = requestAnimationFrame(animate);
@@ -38,50 +51,40 @@ export const VolumeTogglePhone: React.FC<VolumeTogglePhoneProps> = ({ muted, onT
     };
   }, []);
 
-  // Dot positions for 3x3 grid
-  const dotPositions = [
-    { left: 0, top: 0 }, { left: 12, top: 0 }, { left: 24, top: 0 },
-    { left: 0, top: 12 }, { left: 12, top: 12 }, { left: 24, top: 12 },
-    { left: 0, top: 24 }, { left: 12, top: 24 }, { left: 24, top: 24 },
-  ];
-
-  // When muted: static 3x3 grid, no vibration, no X shape
-  // When unmuted: all dots vibrate
-  const getDotStyle = (i: number) => {
-  let { left, top } = dotPositions[i];
-  // Diagonal wave: offset each dot by its index for a true wave
-  const phaseOffset = i * 0.2; // 0, 0.5, 1.0, ...
-  const amplitude = 2.0; // px
-  const speed = 2.5; // radians/sec
-  const vibrationY = !muted ? Math.sin(animationTime * speed + phaseOffset) * amplitude : 0;
-    return {
-      left,
-      top: top + vibrationY,
-      background: muted ? offColor : onColor,
-      transition: muted ? 'all 0.4s cubic-bezier(.8, .5, .2, 1.4)' : 'none',
-      position: 'absolute' as const,
-      width: 5,
-      height: 5,
-      borderRadius: '50%',
-      display: 'block',
-    };
-  };
+  // Update dot colors when muted state changes (not in RAF — only on toggle)
+  useEffect(() => {
+    spanRefs.current.forEach(span => {
+      if (!span) return;
+      span.style.background = muted ? offColor : onColor;
+      span.style.transition = muted ? 'all 0.4s cubic-bezier(.8,.5,.2,1.4)' : 'none';
+    });
+  }, [muted, onColor, offColor]);
 
   return (
     <button
       aria-label={muted ? 'Unmute' : 'Mute'}
       className={`volume-toggle-phone ${className}`}
-      style={{
-        width: 30, height: 30, position: 'relative', background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-block',
-      }}
+      style={{ width: 30, height: 30, position: 'relative', background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-block' }}
       onClick={onToggle}
     >
-      {[...Array(9)].map((_, i) => (
-        <span key={i} style={getDotStyle(i)} />
+      {DOT_POSITIONS.map(({ left }, i) => (
+        <span
+          key={i}
+          ref={el => { spanRefs.current[i] = el; }}
+          style={{
+            position: 'absolute',
+            left,
+            top: DOT_POSITIONS[i].top,
+            width: 5,
+            height: 5,
+            borderRadius: '50%',
+            display: 'block',
+            background: muted ? offColor : onColor,
+          }}
+        />
       ))}
     </button>
   );
 };
 
-// Export device check for use in VolumeControl
 export { isPhone };

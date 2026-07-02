@@ -376,7 +376,6 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
                         className="absolute inset-0 w-full h-full object-cover"
                         style={{
                           opacity: i === 0 ? 1 : 0,
-                          transition: 'opacity 0.8s ease-in-out',
                         }}
                       />
                     ))}

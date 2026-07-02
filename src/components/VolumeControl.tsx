@@ -111,7 +111,6 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [revealProgress, setRevealProgress] = useState(0); // For smooth reveal animation
-  const [animationTime, setAnimationTime] = useState(0); // For vibration animation timing
   // ...existing code...
   const revealAnimationRef = useRef<number>();
   const hoverDelayRef = useRef<NodeJS.Timeout>();
@@ -292,7 +291,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
         }
       }
     }
-  }, [isHovered, isDragging, volume, setupCanvas, revealProgress, animationTime, volumeIcon]);
+  }, [isHovered, isDragging, volume, setupCanvas, revealProgress, volumeIcon]);
 
   // Handle mouse interactions
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -378,7 +377,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
   // Main drawing effect - simplified to prevent conflicts
   useEffect(() => {
     drawControl();
-  }, [isHovered, isDragging, volume, revealProgress, animationTime, drawControl]);
+  }, [isHovered, isDragging, volume, revealProgress, drawControl]);
 
   // Handle reveal animation on hover with delay and proper cleanup
   useEffect(() => {
@@ -476,7 +475,6 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     const updateVibration = () => {
       // Always update and redraw when not hovered to show line (vibrating or static)
       if (!isHovered && !isDragging) {
-        setAnimationTime(Date.now());
         drawControl(); // Force redraw to show line
       }
       vibrationAnimationId = requestAnimationFrame(updateVibration);

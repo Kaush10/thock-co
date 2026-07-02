@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { useLayoutEffect } from 'react';
 import { TierSwitcherGlass } from './TierSwitcherGlass';
 import { TIERS, LAYOUTS } from '../lib/pricingData';
 import { LayoutSwitcherGlass } from './LayoutSwitcherGlass';
@@ -14,45 +13,36 @@ const TIER_INDEX_MAP = [
 
 
 export const PricingInfoSwitcherCard: React.FC = () => {
-  // Animate maxHeight for smooth expand/contract with bounce
-  const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
-  const [pendingHeight, setPendingHeight] = useState<number | undefined>(undefined);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [tierIdx, setTierIdx] = useState(0); // 0: basic, 1: standard, 2: premium
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [tierIdx, setTierIdx] = useState(0);
   const [layoutKey, setLayoutKey] = useState(LAYOUTS[0].key);
-  const [categoryIdx, setCategoryIdx] = useState(0); // for Essentials tier only
-  // Callback ref to measure height before update
-  const measureRef = (node: HTMLDivElement | null) => {
-    if (node) {
-      setPendingHeight(node.getBoundingClientRect().height);
-      contentRef.current = node;
-    }
-  };
+  const [categoryIdx, setCategoryIdx] = useState(0);
 
-  // Animate after DOM updates
+  // Animate maxHeight directly on the wrapper DOM node — no state needed
+  const prevHeightRef = useRef<number | undefined>(undefined);
   useEffect(() => {
-    if (!contentRef.current) return;
-    if (pendingHeight === undefined) return;
-    const startHeight = pendingHeight;
-    const targetHeight = contentRef.current.scrollHeight;
-    setMaxHeight(startHeight);
+    const wrapper = wrapperRef.current;
+    const content = contentRef.current;
+    if (!wrapper || !content) return;
+    const startHeight = prevHeightRef.current ?? content.scrollHeight;
+    const targetHeight = content.scrollHeight;
+    prevHeightRef.current = targetHeight;
+    wrapper.style.maxHeight = startHeight + 'px';
     let startTime: number | null = null;
     const duration = 320;
+    let rafId: number;
     function animate(time: number) {
       if (startTime === null) startTime = time;
-      const elapsed = time - startTime;
-      const t = Math.min(elapsed / duration, 1);
-      const ease = t < 1 ? 1 - Math.pow(1 - t, 2.2) : 1;
-      const newHeight = startHeight + (targetHeight - startHeight) * ease;
-      setMaxHeight(newHeight);
-      if (t < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setMaxHeight(targetHeight);
-      }
+      const t = Math.min((time - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 2.2);
+      wrapper!.style.maxHeight = (startHeight + (targetHeight - startHeight) * ease) + 'px';
+      if (t < 1) { rafId = requestAnimationFrame(animate); }
+      else { wrapper!.style.maxHeight = targetHeight + 'px'; }
     }
-    requestAnimationFrame(animate);
-  }, [pendingHeight, tierIdx, layoutKey, categoryIdx]);
+    rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
+  }, [tierIdx, layoutKey, categoryIdx]);
   const tier = TIERS.find(t => t.key === TIER_INDEX_MAP[tierIdx]);
 
   if (!tier) return null;
@@ -107,10 +97,11 @@ export const PricingInfoSwitcherCard: React.FC = () => {
 
   return (
     <div
+      ref={wrapperRef}
       className="pricing-expand-bounce"
-      style={maxHeight ? { maxHeight, transition: 'max-height 0.32s cubic-bezier(.34,1.56,.64,1)' } : undefined}
+      style={{ overflow: 'hidden' }}
     >
-      <div ref={measureRef}>
+      <div ref={contentRef}>
         <TierSwitcherGlass value={tierIdx} onChange={(idx) => { setTierIdx(idx); setCategoryIdx(0); }} className="mb-6" />
         {/* Tier Title and Description (always above toggle bar) */}
         <div className="flex justify-between items-center py-2">

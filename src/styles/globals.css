@@ -1,3 +1,17 @@
+/* Page wipe transition — forward: right→left, backward: left→right */
+@keyframes page-wipe {
+  0%   { transform: translateX(100%); }
+  40%  { transform: translateX(0%); }
+  75%  { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes page-wipe-reverse {
+  0%   { transform: translateX(-100%); }
+  40%  { transform: translateX(0%); }
+  75%  { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
 .homepage-shimmer {
   border: 2px solid var(--secondary-highlight);
   box-shadow: 0 0 12px 2px var(--secondary-highlight), 0 2px 24px 0px var(--secondary-highlight);
@@ -681,7 +695,7 @@ body::after {
   border-bottom: 1px solid var(--glass-border);
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 10000;
 }
 
 .light .navbar-glass {

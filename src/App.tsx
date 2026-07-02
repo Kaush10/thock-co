@@ -10,6 +10,7 @@ import { AboutPage } from './pages/AboutPage';
 import ArticlePage from './pages/ArticlePage'; // Import the new ArticlePage
 import { useAmbientAudio } from './hooks/useAmbientAudio';
 import { SiteConfigProvider, useSiteConfig } from './context/SiteConfigContext';
+import { PageWipe } from './components/PageWipe';
 import './styles/globals.css';
 
 
@@ -49,6 +50,7 @@ function AppContent() {
 
   return (
     <Router>
+      <PageWipe isDark={isDark} />
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Navbar isDark={isDark} onThemeToggle={handleThemeToggle} />

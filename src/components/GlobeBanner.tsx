@@ -114,6 +114,8 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
   const canvas3DRef = useRef<HTMLCanvasElement>(null);
   const canvas2DRef = useRef<HTMLCanvasElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const glowDotRef = useRef<any>(null);
+  const glowHaloRef = useRef<any>(null);
 
   useEffect(() => {
     let renderer: any, scene: any, camera: any, rayCaster: any, controls: any;
@@ -230,13 +232,15 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
     function createGlowMarker() {
       if (!glowMarker) return;
       const { x, y, z } = latLngToCartesian(glowMarker.lat, glowMarker.lng);
-      const color = glowMarker.color ?? '#ff00aa';
+      const cssAccent = getComputedStyle(document.documentElement).getPropertyValue('--interactive-highlight').trim();
+      const color = glowMarker.color ?? (cssAccent || '#FF00AA');
 
       const dotGeometry = new THREE.SphereGeometry(0.022, 16, 16);
       const dotMaterial = new THREE.MeshBasicMaterial({ color });
       glowDot = new THREE.Mesh(dotGeometry, dotMaterial);
       glowDot.position.set(x, y, z);
       scene.add(glowDot);
+      glowDotRef.current = glowDot;
 
       const haloGeometry = new THREE.SphereGeometry(0.05, 16, 16);
       const haloMaterial = new THREE.MeshBasicMaterial({
@@ -247,6 +251,7 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       glowHalo = new THREE.Mesh(haloGeometry, haloMaterial);
       glowHalo.position.set(x, y, z);
       scene.add(glowHalo);
+      glowHaloRef.current = glowHalo;
 
       glowTweens.push(
         gsap.to(glowHalo.scale, {
@@ -419,6 +424,20 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       glowTweens.forEach((tween) => tween.kill());
     };
   }, [pointerCoords]);
+
+  useEffect(() => {
+    if (!glowMarker) return;
+    const update = () => {
+      const accent = getComputedStyle(document.documentElement)
+        .getPropertyValue('--interactive-highlight').trim() || '#FF00AA';
+      const color = new (THREE as any).Color(accent);
+      if (glowDotRef.current) glowDotRef.current.material.color.set(color);
+      if (glowHaloRef.current) glowHaloRef.current.material.color.set(color);
+    };
+    const observer = new MutationObserver(update);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, [glowMarker]);
 
   return (
     <div

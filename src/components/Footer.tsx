@@ -1,13 +1,28 @@
 
 import { Instagram, MessageCircle, Mail, Heart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { dispatchPageWipe, PAGE_WIPE_COVER_MS } from '../context/PageWipeContext';
+
+const WIPED_PAGES = ['/', '/about', '/keyboards', '/build-service'];
 
 export const Footer: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const handleLinkClick = () => {
     // Simulate click sound
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
     audio.volume = 0.1;
     audio.play().catch(() => {});
+  };
+
+  const handleWipedLink = (e: React.MouseEvent, to: string) => {
+    handleLinkClick();
+    if (WIPED_PAGES.includes(to) && to !== location.pathname) {
+      e.preventDefault();
+      dispatchPageWipe(location.pathname, to);
+      setTimeout(() => navigate(to), PAGE_WIPE_COVER_MS);
+    }
   };
 
   return (
@@ -17,14 +32,14 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-6 mb-2 md:mb-0 whitespace-nowrap">
             <Link
               to="/about"
-              onClick={handleLinkClick}
+              onClick={(e) => handleWipedLink(e, '/about')}
               className="text-sm hover:text-interactive transition-colors"
             >
               about me
             </Link>
             <Link
               to="/build-service"
-              onClick={handleLinkClick}
+              onClick={(e) => handleWipedLink(e, '/build-service')}
               className="text-sm hover:text-interactive transition-colors"
             >
               build services

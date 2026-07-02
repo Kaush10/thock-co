@@ -2,6 +2,8 @@
 import { Sun, Moon } from 'lucide-react';
 import './menu-drawer-card.css';
 import { Link, useLocation } from 'react-router-dom';
+import { dispatchPageWipe, PAGE_WIPE_COVER_MS } from '../context/PageWipeContext';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { VolumeControl } from './VolumeControl';
@@ -20,6 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onThemeToggle
 }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const navItems = [
     { id: 'about', path: '/about', label: 'about me' },
     { id: 'keyboards', path: '/keyboards', label: 'keyboards' },
@@ -72,6 +75,16 @@ export const Navbar: React.FC<NavbarProps> = ({
     }
   }, [menuVisible, menuOpen]);
 
+  const WIPED_PAGES = ['/', '/about', '/keyboards', '/build-service'];
+  const handleNavItemClick = (e: React.MouseEvent, path: string) => {
+    handleNavClick();
+    if (WIPED_PAGES.includes(path) && path !== location.pathname) {
+      e.preventDefault();
+      dispatchPageWipe(location.pathname, path);
+      setTimeout(() => navigate(path), PAGE_WIPE_COVER_MS);
+    }
+  };
+
   const handleNavClick = () => {
     // Simulate click sound
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
@@ -103,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Logo, shifts right when hamburger is present on desktop */}
         <Link
           to="/"
-          onClick={handleNavClick}
+          onClick={(e) => handleNavItemClick(e, '/')}
           className="logo-text hover:opacity-80 transition-opacity text-xl sm:text-xl"
           style={{ marginLeft: '0.5rem' }}
         >
@@ -116,7 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Link
               key={item.id}
               to={item.path}
-              onClick={handleNavClick}
+              onClick={(e) => handleNavItemClick(e, item.path)}
               className={`text-sm transition-all duration-300 hover:text-interactive ${
                 location.pathname === item.path ? 'text-interactive' : ''
               }`}
@@ -138,7 +151,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Link
                   key={item.id}
                   to={item.path}
-                  onClick={handleNavClick}
+                  onClick={(e) => handleNavItemClick(e, item.path)}
                   className={`block py-2 pl-2 text-base transition-all duration-300 hover:text-interactive ${
                     location.pathname === item.path ? 'text-interactive' : ''
                   }`}

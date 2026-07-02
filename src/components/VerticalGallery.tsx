@@ -152,7 +152,7 @@ export const VerticalGallery: React.FC = () => {
                 }
                 return (
                   <li
-                    key={img.key || img.image || i}
+                    key={`item-${i}`}
                     style={{
                       position: 'absolute',
                       left: '50%',

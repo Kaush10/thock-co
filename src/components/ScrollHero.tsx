@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import './ScrollHero.css';
 import './KeyboardPageCard.css';
 import gsap from 'gsap';
@@ -25,7 +25,8 @@ const BUILD_IMAGES = [
 ];
 
 export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
-  const [slideIdx, setSlideIdx] = useState(0);
+  const slideIdxRef = useRef(0);
+  const slideImgRefs = useRef<(HTMLImageElement | null)[]>([]);
   const componentRef = useRef<HTMLDivElement>(null);
   const textContainerRef = useRef<HTMLParagraphElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
@@ -213,8 +214,11 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
       if (!alive) return;
       const [ex, ey] = edges[edgeIdx];
 
-      // New image at the start of every edge
-      setSlideIdx(prev => (prev + 1) % BUILD_IMAGES.length);
+      // Advance image directly via DOM refs — avoids React re-render mid-animation
+      const imgs = slideImgRefs.current;
+      if (imgs[slideIdxRef.current]) imgs[slideIdxRef.current]!.style.opacity = '0';
+      slideIdxRef.current = (slideIdxRef.current + 1) % BUILD_IMAGES.length;
+      if (imgs[slideIdxRef.current]) imgs[slideIdxRef.current]!.style.opacity = '1';
 
       tween = gsap.to(obj, {
         rx: ex,
@@ -366,11 +370,12 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
                     {BUILD_IMAGES.map((src, i) => (
                       <img
                         key={src}
+                        ref={el => { slideImgRefs.current[i] = el; }}
                         src={src}
                         alt=""
                         className="absolute inset-0 w-full h-full object-cover"
                         style={{
-                          opacity: i === slideIdx ? 1 : 0,
+                          opacity: i === 0 ? 1 : 0,
                           transition: 'opacity 0.8s ease-in-out',
                         }}
                       />

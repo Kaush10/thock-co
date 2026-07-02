@@ -33,8 +33,11 @@ export const PageWipe: React.FC<PageWipeProps> = ({ isDark }) => {
 
   const accent = getComputedStyle(document.documentElement)
     .getPropertyValue('--interactive-highlight').trim() || (isDark ? '#FF00AA' : '#b89c70');
+  // Dark mode's wipe panel uses a duller pink so it doesn't read as
+  // full-saturation neon against the black/grey panels beside it.
+  const wipeAccent = isDark ? '#8f0d63' : accent;
   const panels = isDark
-    ? [accent, '#2a2a2a', '#000000']
+    ? [wipeAccent, '#2a2a2a', '#000000']
     : [accent, '#c8c8c8', '#eef2f4'];
 
   const animName = direction === 'forward' ? 'page-wipe' : 'page-wipe-reverse';

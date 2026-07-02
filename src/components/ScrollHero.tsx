@@ -187,14 +187,14 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
 
     // ── Tune these to change the feel of the animation ───────────────────────
     const edgeDuration = 2.5;  // seconds per edge sweep (same for all edges)
-    // The ease decelerates into the corner, so motion visually settles before
-    // the tween fully completes — giving a "done" feel before the image changes.
-    // Options to try:
-    //   'power3.out'  — strong deceleration, snappy settle  (current)
-    //   'expo.out'    — very dramatic slow-down at the end
-    //   'circ.out'    — circular, abrupt stop
-    //   'sine.inOut'  — smooth S-curve, softer feel
-    const edgeEase = 'power3.out';
+    // Each edge is split into two chained tweens: a short exponential ramp-up
+    // from rest, then a longer power3 deceleration into the corner (the snappy
+    // settle from before). Tune the fractions to shift how much of the edge is
+    // spent ramping up vs. settling down.
+    const rampFrac = 0.25;   // portion of edgeDuration spent ramping up
+    const rampDistFrac = 0.12; // portion of the edge's distance covered during the ramp
+    const rampEase = 'power2.in';
+    const decelEase = 'power3.out';
     // ─────────────────────────────────────────────────────────────────────────
 
     // Two-stage (fast/slow) animation commented out — see git history to restore.
@@ -220,15 +220,29 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
       slideIdxRef.current = (slideIdxRef.current + 1) % BUILD_IMAGES.length;
       if (imgs[slideIdxRef.current]) imgs[slideIdxRef.current]!.style.opacity = '1';
 
+      const startRx = obj.rx;
+      const startRy = obj.ry;
+      const rampRx = startRx + (ex - startRx) * rampDistFrac;
+      const rampRy = startRy + (ey - startRy) * rampDistFrac;
+
       tween = gsap.to(obj, {
-        rx: ex,
-        ry: ey,
-        duration: edgeDuration,
-        ease: edgeEase,
+        rx: rampRx,
+        ry: rampRy,
+        duration: edgeDuration * rampFrac,
+        ease: rampEase,
         onUpdate: () => applyTransform(obj.rx, obj.ry),
         onComplete: () => {
-          edgeIdx = (edgeIdx + 1) % edges.length;
-          runEdge();
+          tween = gsap.to(obj, {
+            rx: ex,
+            ry: ey,
+            duration: edgeDuration * (1 - rampFrac),
+            ease: decelEase,
+            onUpdate: () => applyTransform(obj.rx, obj.ry),
+            onComplete: () => {
+              edgeIdx = (edgeIdx + 1) % edges.length;
+              runEdge();
+            },
+          });
         },
       });
     }

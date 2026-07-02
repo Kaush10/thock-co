@@ -35,7 +35,7 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
         {/* Replace button with commission status card style, including full glass styling and interactive effect */}
         <div className="w-full flex justify-center items-center" style={{ position: 'relative', zIndex: 2, marginBottom: '4rem' }}>
           <div
-            className="homepage-cta-card fade-in-up px-8 py-6 rounded-[2.5rem] flex items-center justify-center w-[80%] lg:w-[45%] text-center gap-3 cursor-pointer"
+            className="homepage-cta-card fade-in-up px-8 py-12 rounded-[2.5rem] flex items-center justify-center w-[80%] lg:w-[45%] text-center gap-3 cursor-pointer"
             style={{
               background: 'color-mix(in srgb, var(--c-glass) 12%, transparent)',
               border: '1.5px solid color-mix(in srgb, var(--c-light) 60%, transparent)',
@@ -57,8 +57,8 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
             onClick={() => { dispatchPageWipe('/', '/build-service'); setTimeout(() => navigate('/build-service'), PAGE_WIPE_COVER_MS); }}
           >
             <h2
-              className={`text-lg font-subheading m-0 p-0 ${isDark ? 'text-white' : 'text-black'}`}
-              style={{ fontFamily: 'Reddit Mono, monospace', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}
+              className={`font-subheading m-0 p-0 ${isDark ? 'text-white' : 'text-black'}`}
+              style={{ fontFamily: 'Reddit Mono, monospace', fontSize: '2.25rem', fontWeight: 300, textTransform: 'uppercase', letterSpacing: 'normal' }}
             >
               build your dream keyboard
             </h2>
@@ -72,6 +72,7 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
               style={{
                 position: 'absolute',
                 inset: '10%',
+                transform: 'translateY(15px)',
                 background: '#fff',
                 filter: 'blur(40px)',
                 opacity: 0.5,
@@ -89,6 +90,7 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
               style={{
                 position: 'absolute',
                 inset: '10%',
+                transform: 'translateY(15px)',
                 background: '#fff',
                 filter: 'blur(40px)',
                 opacity: 0.5,
@@ -97,6 +99,23 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
                 zIndex: 2,
               }}
             />
+            {/* TEMP label — remove once final artwork is confirmed */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#000',
+                fontWeight: 700,
+                fontSize: '2rem',
+                pointerEvents: 'none',
+                zIndex: 3,
+              }}
+            >
+              [TEMP ASSET]
+            </div>
           </div>
         </div>
         <div className="w-full" style={{ position: 'relative', zIndex: 1 }}>

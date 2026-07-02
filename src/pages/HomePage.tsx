@@ -35,7 +35,7 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
         {/* Replace button with commission status card style, including full glass styling and interactive effect */}
         <div className="w-full flex justify-center items-center" style={{ position: 'relative', zIndex: 2, marginBottom: '4rem' }}>
           <div
-            className="homepage-cta-card fade-in-up px-8 py-12 rounded-[2.5rem] flex items-center justify-center w-[80%] lg:w-[45%] text-center gap-3 cursor-pointer"
+            className="homepage-cta-card fade-in-up px-8 py-12 rounded-lg flex items-center justify-center w-[80%] lg:w-[45%] text-center gap-3 cursor-pointer"
             style={{
               background: 'color-mix(in srgb, var(--c-glass) 12%, transparent)',
               border: '1.5px solid color-mix(in srgb, var(--c-light) 60%, transparent)',
@@ -58,7 +58,7 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
           >
             <h2
               className={`font-subheading m-0 p-0 ${isDark ? 'text-white' : 'text-black'}`}
-              style={{ fontFamily: 'Reddit Mono, monospace', fontSize: '2.25rem', fontWeight: 300, textTransform: 'uppercase', letterSpacing: 'normal' }}
+              style={{ fontFamily: 'Reddit Mono, monospace', fontSize: '1.6875rem', fontWeight: 300, textTransform: 'uppercase', letterSpacing: 'normal' }}
             >
               build your dream keyboard
             </h2>

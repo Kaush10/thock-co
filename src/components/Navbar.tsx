@@ -1,5 +1,4 @@
 
-import { Sun, Moon } from 'lucide-react';
 import './menu-drawer-card.css';
 import { Link, useLocation } from 'react-router-dom';
 import { navigateWithWipe } from '../context/PageWipeContext';
@@ -7,24 +6,21 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { VolumeControl } from './VolumeControl';
-import { GlassCard } from './GlassCard';
 import { HamburgerToggle } from './HamburgerToggle';
 
 interface NavbarProps {
   isDark: boolean;
-  onThemeToggle: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   isDark,
-  onThemeToggle
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const navItems = [
     { id: 'about', path: '/about', label: 'about me' },
-    { id: 'keyboards', path: '/keyboards', label: 'keyboards' },
-    { id: 'build-service', path: '/build-service', label: 'build service' }
+    { id: 'builds', path: '/builds', label: 'builds' },
+    { id: 'commissions', path: '/commissions', label: 'commissions' }
   ];
   const [menuOpen, setMenuOpen] = useState(false); // controls menu open state
   const [menuVisible, setMenuVisible] = useState(false); // controls mounting
@@ -56,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     }
   }, [menuVisible, menuOpen]);
 
-  const WIPED_PAGES = ['/', '/about', '/keyboards', '/build-service'];
+  const WIPED_PAGES = ['/', '/about', '/builds', '/commissions'];
   const handleNavItemClick = (e: React.MouseEvent, path: string) => {
     handleNavClick();
     if (WIPED_PAGES.includes(path) && path !== location.pathname) {
@@ -140,14 +136,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Right Controls */}
         <div className="flex items-center gap-4 ml-auto">
           <VolumeControl />
-          <GlassCard
-            onClick={onThemeToggle}
-            ariaLabel={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-            className="theme-toggle-card w-10 h-10 flex items-center justify-center"
-            exaggerated={true}
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </GlassCard>
         </div>
       </div>
     </nav>

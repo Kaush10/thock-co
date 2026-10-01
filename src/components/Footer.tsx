@@ -1,9 +1,10 @@
 
-import { Instagram, MessageCircle, Mail } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
+import { emailUrl, instagramUrl } from '../config/siteConfig';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { navigateWithWipe } from '../context/PageWipeContext';
 
-const WIPED_PAGES = ['/', '/about', '/keyboards', '/build-service'];
+const WIPED_PAGES = ['/', '/about', '/builds', '/commissions'];
 
 export const Footer: React.FC = () => {
   const navigate = useNavigate();
@@ -37,32 +38,29 @@ export const Footer: React.FC = () => {
               about me
             </Link>
             <Link
-              to="/build-service"
-              onClick={(e) => handleWipedLink(e, '/build-service')}
+              to="/builds"
+              onClick={(e) => handleWipedLink(e, '/builds')}
               className="text-sm hover:text-interactive transition-colors"
             >
-              build services
+              builds
             </Link>
             <Link
-              to="/contact"
-              onClick={handleLinkClick}
+              to="/commissions"
+              onClick={(e) => handleWipedLink(e, '/commissions')}
               className="text-sm hover:text-interactive transition-colors"
             >
-              questions? say hi
+              commissions
             </Link>
           </div>
           <div className="flex items-center gap-2 text-sm mb-2 md:mb-0 whitespace-nowrap">
-            <span>© 2025 thock & co.</span>
+            <span>© {new Date().getFullYear()} thock&co.</span>
           </div>
         </div>
         <div className="flex items-center gap-3 w-full justify-center md:justify-end">
-          <a href="#" aria-label="Instagram" className="hover:text-interactive transition-colors">
+          <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-interactive transition-colors">
             <Instagram size={18} />
           </a>
-          <a href="#" aria-label="Discord" className="hover:text-interactive transition-colors">
-            <MessageCircle size={18} />
-          </a>
-          <a href="#" aria-label="Email" className="hover:text-interactive transition-colors">
+          <a href={emailUrl} aria-label="Email" className="hover:text-interactive transition-colors">
             <Mail size={18} />
           </a>
         </div>

@@ -1,7 +1,7 @@
 import { prefersReducedMotion } from '../lib/motion';
 
 // Ordered left→right: navigating to a higher index = forward (right→left sweep)
-const PAGE_ORDER = ['/', '/about', '/keyboards', '/build-service'];
+const PAGE_ORDER = ['/', '/about', '/builds', '/commissions'];
 
 export function dispatchPageWipe(fromPath: string, toPath: string) {
   const from = PAGE_ORDER.indexOf(fromPath);

@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { useTilt } from '../hooks/useTilt';
+import { instagramUrl } from '../config/siteConfig';
 import '../components/KeyboardPageCard.css';
-import { ExternalLink, Instagram, Youtube, Linkedin } from 'lucide-react';
+import { Instagram, Youtube, Linkedin } from 'lucide-react';
 
 
 export const AboutPage: React.FC = () => {
@@ -20,20 +21,8 @@ export const AboutPage: React.FC = () => {
               </h1>
               <div className="space-y-6 text-lg leading-relaxed">
                 <p>hey there, i'm kaush.</p>
-                <p>i started building custom mechanical keyboards when i was 17. at the time, the difference in sound and feel from a prebuilt was mind-blowing, and i was completely captivated by the creative tinkering process. i've since fallen in love with the sensory experience tied to each type of switch—from the deep thock of a heavy linear to the crisp responsivness of a tactile. to me, a keyboard isn't just a tool; it's a personal extension of your craft.</p>
-                <p>thock&co. is my dedication to that idea. my goal is to hear what you want from your build and then, like an engineer and an artist, solve the problem of how to make it sound that way—be it with foams, tape, or meticulously tuned stabilizers. every build i create is a chance to not only experience a new combination of parts but to bring someone's personal vision to life in the most magical way possible.</p>
-                <p className="text-center italic opacity-80">
-                  my personal portfolio is coming soon at{' '}
-                  <a 
-                    href="https://..." 
-                    className="text-interactive hover:underline inline-flex items-center gap-1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    kaush.me
-                    <ExternalLink size={16} />
-                  </a>
-                </p>
+                <p>i started building custom mechanical keyboards when i was 17. at the time, the difference in sound and feel from a prebuilt was mind-blowing, and i was completely captivated by the creative tinkering process. i've since fallen in love with the sensory experience tied to each type of switch—from the deep thock of a heavy linear to the crisp responsiveness of a tactile. to me, a keyboard isn't just a tool; it's a personal extension of your craft.</p>
+                <p>thock&co. is where that lives. every board here is one i built for myself: a new combination of parts, and a new puzzle in how to make it sound a certain way, whether that's foam, tape, or carefully tuned stabilizers. once in a while, i build one for someone else too.</p>
               </div>
             </div>
           </div>
@@ -42,7 +31,7 @@ export const AboutPage: React.FC = () => {
             <div className="k-card-content-area p-8 flex justify-center">
               <div className="flex flex-wrap justify-center gap-4">
                 <a aria-label="Instagram"
-                  href="https://instagram.com/kaush.me"
+                  href={instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="glass-card rounded-full p-3 flex items-center justify-center shadow"

@@ -1,37 +1,13 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
-import { siteConfig } from '../config/siteConfig';
+import React, { createContext, useContext } from 'react';
 
-interface SiteConfigContextProps {
-  isDark: boolean;
-  setIsDark: (val: boolean) => void;
-  themeVars: Record<string, string>;
-}
+// The site is dark-only for now. Components still read `isDark` so a light
+// theme can come back later without touching each of them.
+const SiteConfigContext = createContext({ isDark: true });
 
-const SiteConfigContext = createContext<SiteConfigContextProps | undefined>(undefined);
-
-export const SiteConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDark, setIsDark] = useState(() => {
-    const savedTheme = localStorage.getItem('thock-theme');
-    return savedTheme ? savedTheme === 'dark' : siteConfig.theme.default === 'dark';
-  });
-
-  const themeVars = useMemo(
-    () => (isDark ? siteConfig.theme.darkVars : siteConfig.theme.lightVars),
-    [isDark]
-  );
-
-  const value = useMemo(
-    () => ({ isDark, setIsDark, themeVars }),
-    [isDark, themeVars]
-  );
-
-  return (
-    <SiteConfigContext.Provider value={value}>{children}</SiteConfigContext.Provider>
-  );
-};
+export const SiteConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <SiteConfigContext.Provider value={{ isDark: true }}>{children}</SiteConfigContext.Provider>
+);
 
 export function useSiteConfig() {
-  const ctx = useContext(SiteConfigContext);
-  if (!ctx) throw new Error('useSiteConfig must be used within a SiteConfigProvider');
-  return ctx;
+  return useContext(SiteConfigContext);
 }

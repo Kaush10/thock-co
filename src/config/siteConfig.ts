@@ -1,9 +1,12 @@
-// Centralized site-wide configuration for thock&co
+// Site-wide settings for thock&co.
 
 export const siteConfig = {
+  contact: {
+    instagram: 'kaushrajesh',
+    email: 'kaushrajesh04@gmail.com',
+  },
   theme: {
-    default: 'dark',
-    darkVars: {
+    vars: {
       '--c-glass': '#bbbbbc',
       '--c-light': '#fff',
       '--c-dark': '#000',
@@ -12,19 +15,10 @@ export const siteConfig = {
       '--c-bg': '#1b1b1d',
       '--glass-reflex-dark': '2',
       '--glass-reflex-light': '0.3',
-      '--saturation': '150%'
+      '--saturation': '150%',
     },
-    lightVars: {
-      '--c-glass': '#bbbbbc',
-      '--c-light': '#fff',
-      '--c-dark': '#000',
-      '--c-content': '#224',
-      '--c-action': '#0052f5',
-      '--c-bg': '#E8E8E9',
-      '--glass-reflex-dark': '1',
-      '--glass-reflex-light': '1',
-      '--saturation': '150%'
-    }
   },
-  // Add more global config as needed
 };
+
+export const instagramUrl = `https://instagram.com/${siteConfig.contact.instagram}`;
+export const emailUrl = `mailto:${siteConfig.contact.email}`;

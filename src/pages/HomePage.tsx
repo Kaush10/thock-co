@@ -2,7 +2,6 @@ import { ScrollHero } from '../components/ScrollHero';
 import { AnimatedHole } from '../components/AnimatedHole';
 import { useNavigate } from 'react-router-dom';
 import { navigateWithWipe } from '../context/PageWipeContext';
-import { ScrollHeroTiers } from '../components/ScrollHeroTiers';
 import keyboardBlank from '../assets/stuff/keyboard blank.png';
 
 
@@ -18,13 +17,12 @@ it's something i've always believed defines our connection to the world.
 
 to me, a keyboard is the most personal interface for interacting with our digital world... and even beyond that, it's a sensory experience—a beautiful fusion of sound and feel. 
 
-at thock & co., my mission is to transform your vision into a typing masterpiece that delivers unparalleled aesthetics and intensely gratifying feel.  `;
+thock&co. is where i keep the boards i've built: what went into each one, and what it sounds like.`;
 
   return (
     <div className="px-6 pt-0">
       {/* Remove top padding so ScrollHero is flush with top */}
       <ScrollHero bodyText={bodyText} isDark={isDark} />
-      <ScrollHeroTiers isDark={isDark} />
       {/* Remove extra vertical space between heroes */}
       <div className={`${overflowXHiddenClass || ''} overflow-x-hidden w-full`}>
         <div className="w-full" style={{ height: '50vh' }}></div>
@@ -50,13 +48,13 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
                 '0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent)',
               // width is now handled by Tailwind classes
             }}
-            onClick={() => navigateWithWipe('/', '/build-service', navigate)}
+            onClick={() => navigateWithWipe('/', '/commissions', navigate)}
           >
             <h2
               className={`font-subheading m-0 p-0 ${isDark ? 'text-white' : 'text-black'}`}
               style={{ fontFamily: 'Reddit Mono, monospace', fontSize: '1.6875rem', fontWeight: 300, textTransform: 'uppercase', letterSpacing: 'normal' }}
             >
-              build your dream keyboard
+              ask about a build
             </h2>
           </div>
         </div>

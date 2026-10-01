@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
 import { Footer } from './components/Footer';
@@ -8,10 +8,11 @@ import { HomePage } from './pages/HomePage';
 // Pages other than the homepage load on first visit. The build service page
 // alone pulls in three.js for its globe.
 const KeyboardsPage = lazy(() => import('./pages/KeyboardsPage').then((m) => ({ default: m.KeyboardsPage })));
-const BuildServicePage = lazy(() => import('./pages/BuildServicePage').then((m) => ({ default: m.BuildServicePage })));
+const CommissionsPage = lazy(() => import('./pages/CommissionsPage').then((m) => ({ default: m.CommissionsPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const ArticlePage = lazy(() => import('./pages/ArticlePage'));
 import { SiteConfigProvider, useSiteConfig } from './context/SiteConfigContext';
+import { siteConfig } from './config/siteConfig';
 import { PageWipe } from './components/PageWipe';
 import { RouteMeta } from './components/RouteMeta';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -19,35 +20,15 @@ import './styles/globals.css';
 
 
 function AppContent() {
-  const { isDark, setIsDark, themeVars } = useSiteConfig();
+  const { isDark } = useSiteConfig();
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    const body = window.document.body;
-    // Remove both classes from both elements
-    root.classList.remove('light', 'dark');
-    body.classList.remove('light', 'dark');
-    // Add correct class to both elements
-    const themeClass = isDark ? 'dark' : 'light';
-    root.classList.add(themeClass);
-    body.classList.add(themeClass);
-    Object.entries(themeVars).forEach(([key, value]) => {
-      body.style.setProperty(key, value);
-    });
-    // Safari repaint hack
-    body.classList.add('theme-repaint-hack');
-    void body.offsetHeight;
-    const originalDisplay = body.style.display;
-    body.style.display = 'none';
-    void body.offsetHeight;
-    body.style.display = originalDisplay;
-    setTimeout(() => {
-      body.classList.remove('theme-repaint-hack');
-    }, 50);
-    localStorage.setItem('thock-theme', themeClass);
-  }, [isDark, themeVars]);
-
-  const handleThemeToggle = () => setIsDark(!isDark);
+    const root = document.documentElement;
+    root.classList.add('dark');
+    document.body.classList.add('dark');
+    Object.entries(siteConfig.theme.vars).forEach(([key, value]) => document.body.style.setProperty(key, value));
+    localStorage.removeItem('thock-theme');
+  }, []);
 
   return (
     <Router>
@@ -56,15 +37,19 @@ function AppContent() {
       <ScrollToTop />
       <a href="#main" className="skip-link">skip to content</a>
       <div className="min-h-screen flex flex-col">
-        <Navbar isDark={isDark} onThemeToggle={handleThemeToggle} />
+        <Navbar isDark={isDark} />
         {/* Only apply overflow-x-hidden to content below hero on homepage */}
         <main id="main" className="flex-1">
         <Suspense fallback={<div className="min-h-screen" />}>
         <Routes>
           <Route path="/" element={<HomePage isDark={isDark} overflowXHiddenClass="overflow-x-hidden-except-hero" />} />
-          <Route path="/keyboards" element={<KeyboardsPage />} />
-          <Route path="/keyboards/:slug" element={<ArticlePage />} />
-          <Route path="/build-service" element={<BuildServicePage />} />
+          <Route path="/builds" element={<KeyboardsPage />} />
+          <Route path="/builds/:slug" element={<ArticlePage />} />
+          <Route path="/commissions" element={<CommissionsPage />} />
+          {/* Old addresses from when the site was a build service */}
+          <Route path="/keyboards" element={<Navigate to="/builds" replace />} />
+          <Route path="/keyboards/:slug" element={<OldBuildRedirect />} />
+          <Route path="/build-service" element={<Navigate to="/commissions" replace />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
@@ -74,6 +59,11 @@ function AppContent() {
       </div>
     </Router>
   );
+}
+
+function OldBuildRedirect() {
+  const { slug } = useParams();
+  return <Navigate to={`/builds/${slug}`} replace />;
 }
 
 function ConditionalFooter() {

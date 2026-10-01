@@ -10,16 +10,18 @@ const SITE_NAME = 'thock&co.';
 export type PageMeta = { title: string; description: string };
 
 const DEFAULT: PageMeta = {
-  title: `${SITE_NAME} | custom keeb build service`,
-  description:
-    'Premium custom keyboard build service based in Urbana-Champaign, IL. Crafting the perfect keystroke experience with meticulous attention to detail.',
+  title: `${SITE_NAME} | kaush's keyboard builds`,
+  description: "Custom mechanical keyboards built by Kaush in Champaign, IL: the parts, the photos, and how each one sounds.",
 };
 
 const STATIC_PAGES: Record<string, PageMeta> = {
   '/': DEFAULT,
   '/about': { title: `about | ${SITE_NAME}`, description: DEFAULT.description },
-  '/keyboards': { title: `keyboards | ${SITE_NAME}`, description: DEFAULT.description },
-  '/build-service': { title: `build service | ${SITE_NAME}`, description: DEFAULT.description },
+  '/builds': { title: `builds | ${SITE_NAME}`, description: DEFAULT.description },
+  '/commissions': {
+    title: `commissions | ${SITE_NAME}`,
+    description: "Kaush isn't taking orders, but ideas are always welcome. Message him for a quote.",
+  },
 };
 
 export const NOT_FOUND: PageMeta = {
@@ -29,13 +31,22 @@ export const NOT_FOUND: PageMeta = {
 
 /** Every path that should exist as a real file in the build. */
 export function allPaths(): string[] {
-  return [...Object.keys(STATIC_PAGES), ...articles.map((a) => `/keyboards/${a.slug}`)];
+  return [...Object.keys(STATIC_PAGES), ...articles.map((a) => `/builds/${a.slug}`)];
+}
+
+/** Addresses from when the site was a build service, and where they live now. */
+export function redirects(): Record<string, string> {
+  return {
+    '/keyboards': '/builds',
+    '/build-service': '/commissions',
+    ...Object.fromEntries(articles.map((a) => [`/keyboards/${a.slug}`, `/builds/${a.slug}`])),
+  };
 }
 
 export function metaFor(path: string): PageMeta {
   const clean = path !== '/' ? path.replace(/\/+$/, '') : path;
   if (STATIC_PAGES[clean]) return STATIC_PAGES[clean];
-  const build = articles.find((a) => `/keyboards/${a.slug}` === clean);
+  const build = articles.find((a) => `/builds/${a.slug}` === clean);
   if (build) return { title: `${build.title} | ${SITE_NAME}`, description: build.snippet };
   return NOT_FOUND;
 }

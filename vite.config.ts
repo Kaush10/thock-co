@@ -3,7 +3,7 @@ import tailwind from "tailwindcss";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { defineConfig, type Plugin } from "vite";
-import { allPaths, metaFor, NOT_FOUND, SITE_URL, type PageMeta } from "./src/routes";
+import { allPaths, metaFor, NOT_FOUND, redirects, SITE_URL, type PageMeta } from "./src/routes";
 
 // GitHub Pages serves each route as a folder, redirecting /about to /about/.
 const pageUrl = (path: string) => `${SITE_URL}${path === "/" ? "/" : `${path}/`}`;
@@ -47,6 +47,15 @@ function routeFiles(): Plugin {
         writeFileSync(file, withMeta(html, metaFor(path), path));
       }
       writeFileSync(join(outDir, "404.html"), withMeta(html, NOT_FOUND, null));
+      // Old addresses: a tiny page that forwards to the new one (GitHub Pages can't send real redirects).
+      for (const [from, to] of Object.entries(redirects())) {
+        const file = join(outDir, from, "index.html");
+        mkdirSync(dirname(file), { recursive: true });
+        writeFileSync(
+          file,
+          `<!doctype html><meta charset="utf-8"><title>moved</title><link rel="canonical" href="${pageUrl(to)}"><meta http-equiv="refresh" content="0; url=${to}/"><a href="${to}/">this page moved</a>\n`,
+        );
+      }
       const urls = allPaths().map((path) => `  <url><loc>${pageUrl(path)}</loc></url>`).join("\n");
       writeFileSync(
         join(outDir, "sitemap.xml"),

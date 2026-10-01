@@ -24,7 +24,7 @@ function BuildTile({ build, feature, wide }: { build: Build; feature: boolean; w
       />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-1 p-3.5 sm:flex-row sm:items-end sm:justify-between sm:gap-4 md:p-5">
-        <h3 className={feature ? 't-heading' : 't-subheading'}>
+        <h3 className={`${feature ? 't-heading' : 't-subheading'} !text-white/60`}>
           {build.title}
         </h3>
         <span className="t-caption shrink-0 !text-bone/70">{build.built}</span>

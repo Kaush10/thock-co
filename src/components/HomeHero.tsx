@@ -6,27 +6,78 @@ import { photoProps } from '../lib/photo';
 import { prefersReducedMotion } from '../lib/motion';
 import { LedText } from '../system';
 
-const INTRO = `to touch and to feel is deeply human. it's something i've always believed defines our connection to the world.
+const LEAD = [
+  "to touch and to feel is deeply human. it's something i've always believed defines our connection to the world.",
+  'to me, a keyboard is the most personal interface we have with the digital world, and beyond that a sensory experience: a fusion of sound and feel.',
+];
+const TYPED = "thock&co. is where i keep the boards i've built: what went into each one, and what it sounds like.";
+const INTRO = [...LEAD, TYPED].join('\n\n');
 
-to me, a keyboard is the most personal interface we have with the digital world, and beyond that a sensory experience: a fusion of sound and feel.
-
-thock&co. is where i keep the boards i've built: what went into each one, and what it sounds like.`;
-
-const TYPE_MS = 2200; // the whole intro types out in about this long
 const SLIDE_MS = 2500; // one edge of the card's tilt loop, one photo
 
-/** Types `text` out once, in steps, the way an LED panel fills. */
-function useTyped(text: string) {
-  const [shown, setShown] = useState(() => (prefersReducedMotion() ? text.length : 0));
+// The key to the right of each letter, for the one slip the typist makes.
+const ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+const NEIGHBOUR: Record<string, string> = Object.fromEntries(
+  ROWS.flatMap((row) => row.split('').map((ch, i) => [ch, row[i + 1] ?? row[i - 1]])),
+);
+
+type Step = { text: string; wait: number };
+
+/**
+ * A script for typing `target` like a person: uneven speed, short bursts,
+ * pauses at punctuation and between some words, and one slip that gets
+ * backspaced. Seeded, so it types the same way every visit.
+ */
+function typingScript(target: string): Step[] {
+  let seed = 11;
+  const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const between = (min: number, max: number) => min + rand() * (max - min);
+  const steps: Step[] = [];
+  let text = '';
+  let burst = 0;
+  let slipped = false;
+  for (let i = 0; i < target.length; i++) {
+    const ch = target[i];
+    const prev = target[i - 1] ?? '';
+    let wait = burst > 0 ? between(24, 42) : between(42, 110);
+    burst = burst > 0 ? burst - 1 : rand() < 0.07 ? Math.round(between(3, 7)) : 0;
+    if (prev === ',' || prev === ':') wait += between(180, 280);
+    else if (prev === '.') wait += between(320, 460);
+    else if (prev === ' ' && rand() < 0.12) wait += between(160, 380);
+
+    if (!slipped && i > target.length * 0.5 && /[a-z]/.test(ch) && /[a-z]/.test(prev) && rand() < 0.2) {
+      slipped = true;
+      steps.push({ text: text + NEIGHBOUR[ch], wait });
+      steps.push({ text, wait: between(300, 420) }); // notice, backspace
+      wait = between(110, 170);
+    }
+    text += ch;
+    steps.push({ text, wait });
+  }
+  return steps;
+}
+
+/** Plays a typing script once. Returns the text typed so far and whether it's finished. */
+function useHumanTyping(target: string) {
+  const reduced = prefersReducedMotion();
+  const [state, setState] = useState(() => ({ text: reduced ? target : '', done: reduced }));
   useEffect(() => {
-    if (shown >= text.length) return;
-    const perStep = Math.max(1, Math.round(text.length / (TYPE_MS / 16)));
-    const id = setInterval(() => setShown((n) => Math.min(text.length, n + perStep)), 16);
-    return () => clearInterval(id);
-    // Only start once; `shown` advancing shouldn't restart the timer.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text]);
-  return shown;
+    if (reduced) return;
+    const steps = typingScript(target);
+    let i = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const next = () => {
+      const step = steps[i++];
+      if (!step) return setState((s) => ({ ...s, done: true }));
+      timer = setTimeout(() => {
+        setState({ text: step.text, done: false });
+        next();
+      }, step.wait);
+    };
+    timer = setTimeout(next, 700);
+    return () => clearTimeout(timer);
+  }, [target, reduced]);
+  return state;
 }
 
 /**
@@ -131,29 +182,8 @@ function SlideCard({ onSlide }: { onSlide: (index: number) => void }) {
 }
 
 export function HomeHero() {
-  const shown = useTyped(INTRO);
+  const typed = useHumanTyping(TYPED);
   const [slide, setSlide] = useState(0);
-  const done = shown >= INTRO.length;
-  const paragraphs = INTRO.split('\n\n');
-
-  // Split the reveal across paragraphs, keeping the unrevealed text in place
-  // (transparent) so nothing reflows as it types.
-  let offset = 0;
-  const rendered = paragraphs.map((paragraph, p) => {
-    const start = offset;
-    offset += paragraph.length + 2;
-    const visible = Math.max(0, Math.min(paragraph.length, shown - start));
-    const typingHere = !done && shown >= start && shown < start + paragraph.length + 2;
-    return (
-      <p key={p}>
-        {paragraph.slice(0, visible)}
-        {(typingHere || (done && p === paragraphs.length - 1)) && (
-          <span aria-hidden className="ml-0.5 inline-block h-[1.05em] w-[0.5em] translate-y-[0.15em] bg-signal shadow-[0_0_10px_var(--signal)] led-blink" />
-        )}
-        <span className="text-transparent">{paragraph.slice(visible)}</span>
-      </p>
-    );
-  });
 
   const current = builds[slide];
   return (
@@ -161,7 +191,18 @@ export function HomeHero() {
       <div className="scrim">
         <h1 className="t-display">thock&co.</h1>
         <div aria-hidden className="t-lead mt-7 max-w-[34rem] space-y-4">
-          {rendered}
+          {LEAD.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          {/* Only the last sentence types. The rest of it waits, invisible, so nothing reflows. */}
+          <p>
+            {typed.text}
+            <span
+              aria-hidden
+              className={`ml-0.5 inline-block h-[1.05em] w-[0.5em] translate-y-[0.15em] bg-signal shadow-[0_0_10px_var(--signal)] ${typed.done ? 'led-blink' : ''}`}
+            />
+            <span className="text-transparent">{TYPED.slice(typed.text.length)}</span>
+          </p>
         </div>
         <p className="sr-only">{INTRO}</p>
         <a href="#boards" className="t-small mt-9 inline-flex items-center gap-3 text-ash transition-colors hover:text-bone">

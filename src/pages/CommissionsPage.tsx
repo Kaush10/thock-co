@@ -63,7 +63,7 @@ function Steps() {
           </span>
           <div className="pt-1.5">
             <h3 className="t-body text-bone">{step.title}</h3>
-            <p className="t-small mt-1 text-ash">{step.body}</p>
+            <p className="t-small mt-1 text-ash/60">{step.body}</p>
           </div>
         </li>
       ))}
@@ -101,10 +101,7 @@ export const CommissionsPage: React.FC = () => (
       </aside>
 
       <section id="request" aria-labelledby="request-title" className="scroll-mt-24">
-        <div className="scrim mb-6">
-          <h2 id="request-title" className="t-heading">start a request</h2>
-          <p className="t-body mt-2 text-ash">pick what fits and skip what doesn't. it writes the message for you.</p>
-        </div>
+        <h2 id="request-title" className="t-heading scrim mb-6">start a request</h2>
         <RequestBuilder />
       </section>
     </div>

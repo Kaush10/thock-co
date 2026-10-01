@@ -173,14 +173,11 @@ export function MessageComposer() {
         </label>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
-          <p id="say-hi-hint" className="t-small text-ash">
-            {text.length > 0 ? (
+          <p id="say-hi-hint" className="t-small text-ash/70">
+            {text.length > 0 && (
               <>
-                press <Kbd>enter</Kbd> to send it.{' '}
-                <span className="tabular-nums text-ash/70">{text.length} / {MAX}</span>
+                <Kbd>enter</Kbd> sends it. <span className="tabular-nums">{text.length} / {MAX}</span>
               </>
-            ) : (
-              'type on your keyboard or tap the keys.'
             )}
           </p>
           <div className="flex flex-wrap gap-3">

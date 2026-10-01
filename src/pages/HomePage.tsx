@@ -18,11 +18,9 @@ export const HomePage: React.FC<HomePageProps> = () => (
       <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
         <div className="scrim">
           <h2 id="boards-title" className="t-heading">
-            the boards
+            my boards
           </h2>
-          <p className="t-body mt-3 max-w-[46ch] text-ash">
-            every keyboard i've built, with its photos, its parts and how it sounds.
-          </p>
+          <p className="t-body mt-2 text-ash">photos, parts and a sound test for each.</p>
         </div>
         <Link to="/builds" className="t-small text-ash underline decoration-white/20 underline-offset-4 transition-colors hover:text-bone">
           all {builds.length} builds
@@ -32,19 +30,9 @@ export const HomePage: React.FC<HomePageProps> = () => (
     </section>
 
     <section aria-labelledby="say-hi-title" className="relative px-5 pt-16 md:px-8 md:pt-24">
-      <div className="scrim relative z-10 mx-auto mb-10 max-w-[36rem] text-center md:mb-12">
-        <h2 id="say-hi-title" className="t-heading">
-          say hi
-        </h2>
-        <p className="t-body mt-3 text-ash">
-          anything you type shows up on the display, and goes to me as an email or a dm. after a
-          commission?{' '}
-          <Link to="/commissions" className="text-bone underline decoration-white/25 underline-offset-4 hover:decoration-signal">
-            start a request
-          </Link>
-          .
-        </p>
-      </div>
+      <h2 id="say-hi-title" className="sr-only">
+        say hi
+      </h2>
       <div className="relative z-10 mx-auto max-w-[75rem]">
         <MessageComposer />
       </div>

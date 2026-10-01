@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AnimatedHole } from '../components/AnimatedHole';
-import { BuildWall } from '../components/BuildWall';
+import { BuildWallCompact } from '../components/BuildWall';
 import { HomeHero } from '../components/HomeHero';
 import { MessageComposer } from '../components/MessageComposer';
 import { builds } from '../data/builds';
@@ -14,7 +14,7 @@ export const HomePage: React.FC<HomePageProps> = () => (
   <div className="overflow-x-clip">
     <HomeHero />
 
-    <section id="boards" aria-labelledby="boards-title" className="mx-auto max-w-[75rem] scroll-mt-20 px-5 py-16 md:px-8 md:py-24">
+    <section id="boards" aria-labelledby="boards-title" className="mx-auto max-w-[75rem] scroll-mt-16 px-5 py-12 md:px-8 md:py-10">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
         <div className="scrim">
           <h2 id="boards-title" className="t-heading">
@@ -26,7 +26,7 @@ export const HomePage: React.FC<HomePageProps> = () => (
           all {builds.length} builds
         </Link>
       </div>
-      <BuildWall builds={builds} />
+      <BuildWallCompact builds={builds} />
     </section>
 
     <section aria-labelledby="say-hi-title" className="relative px-5 pt-16 md:px-8 md:pt-24">

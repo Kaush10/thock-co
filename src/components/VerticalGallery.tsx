@@ -1,11 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'; // useState kept for theme/bgColor
-// Returns 'dark' or 'light' based on current system or browser theme
-function getCurrentTheme() {
-  if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
-}
+import React, { useRef, useEffect, useState } from 'react';
 import { articles } from '../data/articles';
 
 // Gallery config (match pen and stuff spec)
@@ -13,19 +6,10 @@ const ITEM_COUNT = 10;
 const ITEM_SIZE = 155;
 const GAP = 0.20; // percent of item size
 const RADIUS = Math.round((ITEM_SIZE + ITEM_SIZE * GAP) / (2 * Math.sin(Math.PI / ITEM_COUNT)));
-const CONTAINER_WIDTH = 240;
 const CONTAINER_HEIGHT = 680;
 const BORDER_RADIUS = 12;
 
 export const VerticalGallery: React.FC = () => {
-  // Theme-aware background (self-contained, no external CSS)
-  const [theme, setTheme] = useState(getCurrentTheme());
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e: MediaQueryListEvent) => setTheme(e.matches ? 'dark' : 'light');
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
 
   const carouselRef = useRef<HTMLUListElement>(null);
   const angleRef = useRef(0);
@@ -64,31 +48,16 @@ export const VerticalGallery: React.FC = () => {
   }, []);
 
 
-  // Shadow overlay (theme-aware)
-  const shadowOverlay = (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
-        borderRadius: BORDER_RADIUS,
-        background:
-          'linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.65) 100%)',
-        zIndex: 2,
-      }}
-    />
-  );
 
   // Shine is now applied per-item (see inside the <li>) so it only
   // lights the image tiles and never bleeds into the gaps between them.
 
   // Carousel items — cycle through available articles to fill the wheel.
   // Once enough real builds exist this naturally becomes a straight slice.
-  const filledImages = articles.length > 0
-    ? Array.from({ length: ITEM_COUNT }, (_, i) => articles[i % articles.length])
-    : Array.from({ length: ITEM_COUNT }, (_, i) => ({
-        image: null, title: null, isPlaceholder: true, key: `placeholder-${i}`
-      }));
+  const filledImages: { image?: string; title?: string; isPlaceholder: boolean }[] =
+    articles.length > 0
+      ? Array.from({ length: ITEM_COUNT }, (_, i) => ({ ...articles[i % articles.length], isPlaceholder: false }))
+      : Array.from({ length: ITEM_COUNT }, () => ({ isPlaceholder: true }));
 
   return (
     <div className="w-full flex justify-center items-center pb-6">

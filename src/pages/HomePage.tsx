@@ -1,10 +1,8 @@
 import { ScrollHero } from '../components/ScrollHero';
-import { HomeTierIntroCards } from '../components/HomeTierIntroCards';
 import { AnimatedHole } from '../components/AnimatedHole';
 import { useNavigate } from 'react-router-dom';
 import { dispatchPageWipe, PAGE_WIPE_COVER_MS } from '../context/PageWipeContext';
 import { ScrollHeroTiers } from '../components/ScrollHeroTiers';
-import { GlassCard } from '../components/GlassCard';
 import keyboardBlank from '../assets/stuff/keyboard blank.png';
 
 
@@ -26,10 +24,9 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
     <div className="px-6 pt-0">
       {/* Remove top padding so ScrollHero is flush with top */}
       <ScrollHero bodyText={bodyText} isDark={isDark} />
-      <ScrollHeroTiers isDark={isDark} topPadding="2.5rem" topOffset="12rem" />
+      <ScrollHeroTiers isDark={isDark} />
       {/* Remove extra vertical space between heroes */}
       <div className={`${overflowXHiddenClass || ''} overflow-x-hidden w-full`}>
-        {/* <HomeTierIntroCards isDark={isDark} /> -- now handled by ScrollHeroTiers */}
         <div className="w-full" style={{ height: '50vh' }}></div>
         {/* Replace button with commission status card style, including full glass styling and interactive effect */}
         <div className="w-full flex justify-center items-center" style={{ position: 'relative', zIndex: 2, marginBottom: '4rem' }}>

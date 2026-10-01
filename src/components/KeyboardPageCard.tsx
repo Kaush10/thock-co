@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useTilt } from '../hooks/useTilt';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 import './KeyboardPageCard.css';
 import { Article } from '../data/articles';
@@ -9,51 +9,13 @@ interface KeyboardPageCardProps {
   onReadMore?: () => void;
 }
 
-// Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
-declare const VanillaTilt: any;
 
 export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review, onReadMore }) => {
 
   const cardRef = React.useRef<HTMLDivElement>(null);
   const { handleCardClick } = useGlassCardEffect();
 
-  useEffect(() => {
-    // Robust touch detection
-    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
-    if (typeof VanillaTilt !== 'undefined' && cardRef.current) {
-      if (isTouchDevice) {
-        // On mobile: disable all tilt and clickback
-        VanillaTilt.init(cardRef.current, {
-          max: 0, // disables tilt and clickback
-          speed: 500,
-          perspective: 1800,
-          glare: false,
-          scale: 1,
-          reset: true,
-          reverse: true
-        });
-        // TODO: Add custom mobile tap/click animation here if desired
-      } else {
-        // On desktop: normal settings
-        VanillaTilt.init(cardRef.current, {
-          max: 7,
-          speed: 500,
-          perspective: 1800,
-          glare: true,
-          "max-glare": 0.1,
-          scale: 1.03,
-          reset: true,
-          reverse: true
-        });
-      }
-    }
-    return () => {
-      if (cardRef.current && (cardRef.current as any).vanillaTilt) {
-        (cardRef.current as any).vanillaTilt.destroy();
-      }
-    };
-  }, []);
+  useTilt(cardRef, 'normal');
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     handleCardClick(e);
@@ -63,7 +25,7 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review, onRe
     <div
       ref={cardRef}
       className="k-card-container"
-      data-tilt
+
       onClick={handleClick}
     >
       <div className="k-card-content-area">

@@ -1,7 +1,9 @@
 import { useCallback, useRef } from 'react';
+import type { TiltOptions } from 'vanilla-tilt';
 
-// Base64 encoded WAV file for the click sound
-const clickSound = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+// vanilla-tilt keeps its resolved options on `element.vanillaTilt.settings`,
+// which its type definitions don't declare.
+type TiltedElement = HTMLElement & { vanillaTilt?: { settings: TiltOptions } };
 
 export const useGlassCardEffect = () => {
   const isAnimating = useRef(false);
@@ -12,10 +14,7 @@ export const useGlassCardEffect = () => {
     }
 
     const card = event.currentTarget;
-    const audio = new Audio(clickSound);
-    audio.play();
-
-    const tiltInstance = (card as any).vanillaTilt;
+    const tiltInstance = (card as TiltedElement).vanillaTilt;
     const perspective = tiltInstance?.settings.perspective ?? 1800;
     const scale       = tiltInstance?.settings.scale       ?? 1.03;
     const max         = tiltInstance?.settings.max         ?? 14;
@@ -33,9 +32,6 @@ export const useGlassCardEffect = () => {
     const exaggeratedRotateX = rotateX * 1.4;
     const exaggeratedRotateY = rotateY * 1.4;
 
-    // Pause VanillaTilt if present so its mousemove listener doesn't fight the bounce
-    tiltInstance?.pause();
-
     // Manually set the transform to the exaggerated state
     card.style.transform = `perspective(${perspective}px) rotateX(${exaggeratedRotateX}deg) rotateY(${exaggeratedRotateY}deg) scale3d(${scale}, ${scale}, ${scale})`;
     card.style.transition = `transform 0.1s ease-out`;
@@ -48,7 +44,6 @@ export const useGlassCardEffect = () => {
       setTimeout(() => {
         isAnimating.current = false;
         card.style.transition = '';
-        tiltInstance?.resume();
         // For GSAP-driven cards: clear the inline transition so GSAP regains full control
         card.style.transform = '';
       }, 150);

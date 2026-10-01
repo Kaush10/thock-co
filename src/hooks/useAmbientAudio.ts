@@ -20,7 +20,7 @@ export const useAmbientAudio = (
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0);
-  const fadeIntervalRef = useRef<NodeJS.Timeout>();
+  const fadeIntervalRef = useRef<ReturnType<typeof setTimeout>>();
 
 
 

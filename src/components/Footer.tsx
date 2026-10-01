@@ -1,5 +1,5 @@
 
-import { Instagram, MessageCircle, Mail, Heart } from 'lucide-react';
+import { Instagram, MessageCircle, Mail } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { dispatchPageWipe, PAGE_WIPE_COVER_MS } from '../context/PageWipeContext';
 

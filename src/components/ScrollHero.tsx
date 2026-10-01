@@ -7,8 +7,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
-declare const VanillaTilt: any;
 
 interface ScrollHeroProps {
   bodyText: string;
@@ -31,45 +29,11 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   const textContainerRef = useRef<HTMLParagraphElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
   const slideCardRef = useRef<HTMLDivElement>(null);
-  const trailCanvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    // Page-level VanillaTilt init: covers all [data-tilt] elements on the home page,
-    // including GlassCard instances in ScrollHeroTiers (which have no init of their own).
-    // Note: the slideshow card intentionally has no data-tilt — it's driven by GSAP instead.
-    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    if (typeof VanillaTilt !== 'undefined') {
-      if (isTouchDevice) {
-        // On mobile: disable tilt and clickback
-        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-          max: 0, // disables tilt and clickback
-          speed: 500,
-          perspective: 1800,
-          glare: false,
-          scale: 1,
-          reset: true,
-          reverse: true
-        });
-        // TODO: Add custom mobile tap/click animation here if desired
-      } else {
-        // On desktop: normal settings
-        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-          max: 7,
-          speed: 500,
-          perspective: 1800,
-          glare: true,
-          "max-glare": 0.1,
-          scale: 1.03,
-          reset: true,
-          reverse: true
-        });
-      }
-    }
-  }, []);
 
   useEffect(() => {
     let st: ScrollTrigger | undefined;
-    let scrollTimeout: NodeJS.Timeout;
+    let scrollTimeout: ReturnType<typeof setTimeout>;
 
     if (componentRef.current && textContainerRef.current && cursorRef.current) {
       // Set the container's height to be the animation scroll distance + 1 screen height
@@ -271,82 +235,11 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
     card.addEventListener('mousemove', onMouseMove);
     card.addEventListener('mouseleave', onMouseLeave);
 
-    // Trail: single solid pink bar tracing the card border via lineDash on a roundRect path.
-    // Corners handled automatically. Glow clipped to border band via destination-out.
-    const canvas = trailCanvasRef.current;
-    const ctx = canvas?.getContext('2d') ?? null;
-    const PINK      = '#ff00cc';
-    const THICKNESS = 14;  // bar width in px
-    const BAR_LEN   = 50;  // length of the solid bar along the perimeter
-    const CARD_R    = 24;  // must match CSS border-radius
-
-    // Maps current GSAP animation state → distance along the card perimeter (px).
-    function perimDist(w: number, h: number, perim: number): number {
-      const hw = THICKNESS / 2;
-      const r  = Math.max(0, CARD_R - hw);
-      const sw = (w - 2*hw) - 2*r;
-      const sh = (h - 2*hw) - 2*r;
-      const ca = (Math.PI * r) / 2;
-      const segs  = [sw + ca, sh + ca, sw + ca, sh + ca];
-      const cumul = [0, segs[0], segs[0]+segs[1], segs[0]+segs[1]+segs[2]];
-      const norm  = (v: number) => Math.max(0, Math.min(1, (v + max) / (2 * max)));
-      const e  = edgeIdx % 4;
-      const ep = (e < 2) ? norm(e === 0 ? obj.ry : obj.rx)
-                         : 1 - norm(e === 2 ? obj.ry : obj.rx);
-      return (cumul[e] + ep * segs[e]) % perim;
-    }
-
-    // TRAIL DISABLED — canvas hidden in JSX, rAF never starts. Re-enable by removing the early return and unhiding the canvas.
-    let rafId = 0;
-    function drawTrail() {
-      if (true) return; // disabled
-      if (!alive || !canvas || !ctx) return;
-
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      if (canvas.width !== w) canvas.width = w;
-      if (canvas.height !== h) canvas.height = h;
-      ctx.clearRect(0, 0, w, h);
-
-      const hw    = THICKNESS / 2;
-      const r     = Math.max(0, CARD_R - hw);
-      const pw    = w - 2 * hw;
-      const ph    = h - 2 * hw;
-      const perim = 2 * (pw + ph - 4 * r) + 2 * Math.PI * r;
-      const dist  = perimDist(w, h, perim);
-
-      const borderPath = new Path2D();
-      borderPath.roundRect(hw, hw, pw, ph, r);
-
-      ctx.save();
-      ctx.strokeStyle = PINK;
-      ctx.lineWidth   = THICKNESS;
-      ctx.lineCap     = 'butt';
-      ctx.shadowBlur  = 0;
-      ctx.setLineDash([BAR_LEN, Math.max(1, perim - BAR_LEN)]);
-      ctx.lineDashOffset = BAR_LEN - dist;
-      ctx.stroke(borderPath);
-      ctx.restore();
-
-      // Clip from bleeding into the image interior
-      ctx.save();
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = 'rgba(0,0,0,1)';
-      const innerPath = new Path2D();
-      innerPath.roundRect(THICKNESS, THICKNESS, w - 2*THICKNESS, h - 2*THICKNESS, Math.max(0, CARD_R - THICKNESS));
-      ctx.fill(innerPath);
-      ctx.restore();
-
-      rafId = requestAnimationFrame(drawTrail);
-    }
-    rafId = requestAnimationFrame(drawTrail);
-
     const startTimer = setTimeout(runEdge, 100);
 
     return () => {
       alive = false;
       clearTimeout(startTimer);
-      cancelAnimationFrame(rafId);
       tween?.kill();
       hoverTween?.kill();
       card.removeEventListener('mousemove', onMouseMove);
@@ -380,7 +273,6 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
                 <div ref={slideCardRef} className="k-card-container w-full h-full overflow-hidden">
                   <div className="k-card-content-area p-0 h-full relative">
                     {/* Trail canvas — disabled until border animation is finalised */}
-                    <canvas ref={trailCanvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 20, display: 'none' }} />
                     {BUILD_IMAGES.map((src, i) => (
                       <img
                         key={src}

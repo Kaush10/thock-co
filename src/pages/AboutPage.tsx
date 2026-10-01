@@ -1,62 +1,19 @@
-import { useRef, useEffect } from 'react';
-import { GlassCard } from '../components/GlassCard';
+import { useRef } from 'react';
+import { useTilt } from '../hooks/useTilt';
 import '../components/KeyboardPageCard.css';
-import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 import { ExternalLink, Instagram, Youtube, Linkedin } from 'lucide-react';
 
-// Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
-declare const VanillaTilt: any;
 
 export const AboutPage: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const { handleCardClick } = useGlassCardEffect();
 
-  useEffect(() => {
-    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    if (typeof VanillaTilt !== 'undefined' && cardRef.current) {
-      if (isTouchDevice) {
-        // On mobile: disable all tilt and clickback
-        VanillaTilt.init(cardRef.current, {
-          max: 0, // disables tilt and clickback
-          speed: 500,
-          perspective: 1800,
-          glare: false,
-          scale: 1.,
-          reset: true,
-          reverse: true
-        });
-        // TODO: Add custom mobile tap/click animation here if desired
-      } else {
-        // On desktop: normal settings (or your preferred values)
-        VanillaTilt.init(cardRef.current, {
-          max: 1.75, // 25% of original
-          speed: 500,
-          perspective: 1800,
-          glare: true,
-          "max-glare": 0.1,
-          scale: 1.0075, // 25% of original scale
-          reset: true,
-          reverse: true
-        });
-      }
-    }
-    return () => {
-      if (cardRef.current && (cardRef.current as any).vanillaTilt) {
-        (cardRef.current as any).vanillaTilt.destroy();
-      }
-    };
-  }, []);
-
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Custom clickback: reduce pushback intensity by 50%
-    // ...existing code...
-  };
+  useTilt(cardRef, 'faint');
 
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 px-6 py-12 flex flex-col items-center justify-start">
         <div className="max-w-4xl w-full mx-auto flex flex-col">
-          <div ref={cardRef} className="k-card-container" data-tilt onClick={handleClick}>
+          <div ref={cardRef} className="k-card-container">
             <div className="k-card-content-area p-12 fade-in-up">
               <h1 className="text-4xl font-bold accent-text mb-8 text-center page-header">
                 about thock&co.
@@ -118,5 +75,5 @@ export const AboutPage: React.FC = () => {
       </div>
     </div>
   );
-// ...existing code...
+
 };

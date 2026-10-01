@@ -41,12 +41,9 @@ const fragmentShader = `
         gl_FragColor = vec4(color, dot * vOpacity);
     }
 `;
-// @ts-ignore
 import gsap from 'gsap';
-// @ts-ignore
 import * as THREE from 'three';
-// @ts-ignore
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Props: coordinates to show pointer (lat, lng)
 export interface GlobeBannerProps {
@@ -59,48 +56,6 @@ export interface GlobeBannerProps {
 
 // Helper: convert lat/lng to cartesian coordinates on unit sphere
 function latLngToCartesian(lat: number, lng: number) {
-// Vertex shader from pen
-const vertexShader = `
-    uniform sampler2D u_map_tex;
-    uniform float u_dot_size;
-    uniform float u_time_since_click;
-    uniform vec3 u_pointer;
-    #define PI 3.14159265359
-    varying float vOpacity;
-    varying vec2 vUv;
-    void main() {
-        vUv = uv;
-        float visibility = step(.2, texture2D(u_map_tex, uv).r);
-        gl_PointSize = visibility * u_dot_size;
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        vOpacity = (1. / length(mvPosition.xyz) - .7);
-        vOpacity = clamp(vOpacity, .03, 1.);
-        float t = u_time_since_click - .1;
-        t = max(0., t);
-        float max_amp = .15;
-        float dist = 1. - .5 * length(position - u_pointer);
-        float damping = 1. / (1. + 20. * t);
-        float delta = max_amp * damping * sin(5. * t * (1. + 2. * dist) - PI);
-        delta *= 1. - smoothstep(.8, 1., dist);
-        vec3 pos = position;
-        pos *= (1. + delta);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.);
-    }
-`;
-
-// Fragment shader from pen
-const fragmentShader = `
-    uniform sampler2D u_map_tex;
-    varying float vOpacity;
-    varying vec2 vUv;
-    void main() {
-        vec3 color = texture2D(u_map_tex, vUv).rgb;
-        color -= .2 * length(gl_PointCoord.xy - vec2(.5));
-        float dot = 1. - smoothstep(.38, .4, length(gl_PointCoord.xy - vec2(.5)));
-        if (dot < 0.5) discard;
-        gl_FragColor = vec4(color, dot * vOpacity);
-    }
-`;
   const phi = (90 - lat) * (Math.PI / 180);
   const theta = (180 - lng) * (Math.PI / 180);
   const x = Math.sin(phi) * Math.cos(theta);
@@ -125,7 +80,8 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
     let earthTexture: any;
     let clock: any;
     let popupVisible = false;
-    let pointerPos: any;
+    let frame = 0;
+    let disposed = false;
     let dragged = false;
     let popupOpenTl: any, popupCloseTl: any;
     let mouse: any = new THREE.Vector2(-1, -1);
@@ -155,6 +111,10 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       new THREE.TextureLoader().load(
         'https://ksenia-k.com/img/earth-map-colored.png',
         (mapTex: any) => {
+          if (disposed) {
+            mapTex.dispose();
+            return;
+          }
           earthTexture = mapTex;
           earthTexture.repeat.set(1, 1);
           createGlobe();
@@ -192,12 +152,11 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
         vertexShader,
         fragmentShader,
         uniforms: {
-          u_map_tex: { type: 't', value: earthTexture },
-          u_dot_size: { type: 'f', value: 0 },
-          u_pointer: { type: 'v3', value: new THREE.Vector3(0, 0, 1) },
+          u_map_tex: { value: earthTexture },
+          u_dot_size: { value: 0 },
+          u_pointer: { value: new THREE.Vector3(0, 0, 1) },
           u_time_since_click: { value: 0 },
         },
-        alphaTest: false,
         transparent: true,
       });
       globe = new THREE.Points(globeGeometry, mapMaterial);
@@ -320,7 +279,7 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
       }
       controls.update();
       renderer.render(scene, camera);
-      requestAnimationFrame(render);
+      frame = requestAnimationFrame(render);
     }
 
     function updateOverlayGraphic() {
@@ -420,8 +379,18 @@ export const GlobeBanner: React.FC<GlobeBannerProps> = ({ pointerCoords, contain
     initScene();
     window.addEventListener('resize', updateSize);
     return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
       window.removeEventListener('resize', updateSize);
       glowTweens.forEach((tween) => tween.kill());
+      controls?.dispose();
+      scene?.traverse((object: any) => {
+        object.geometry?.dispose();
+        object.material?.dispose();
+      });
+      earthTexture?.dispose();
+      renderer?.dispose();
+      document.body.style.cursor = '';
     };
   }, [pointerCoords]);
 

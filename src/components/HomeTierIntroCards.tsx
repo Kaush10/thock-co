@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { GlassCard } from './GlassCard';
 import { RotatingHeadline } from './RotatingHeadline';
 import { PencilRuler, PocketKnife, Eye } from 'lucide-react';
 

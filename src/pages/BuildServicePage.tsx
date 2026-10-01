@@ -1,24 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-// Returns 'dark' or 'light' based on current system or browser theme
-function getCurrentTheme() {
-  if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
-}
+import { useTilt } from '../hooks/useTilt';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
-// Since vanilla-tilt is loaded via a script tag, we need to declare it for TypeScript
-declare const VanillaTilt: any;
 
 
 
-import { LAYOUTS, TIERS, FAQ } from '../lib/pricingData';
 import { PricingInfoSwitcherCard } from '../components/PricingInfoSwitcherCard';
 import { FAQCard } from '../components/FAQCard';
-import { CheckCircle, Truck, Clock, Award } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { AlertTriangle, Lock } from 'lucide-react';
 import '../components/KeyboardPageCard.css';
-import { Check, MessageCircle, Phone, Instagram, ChevronDown } from 'lucide-react';
+import { MessageCircle, Phone, Instagram } from 'lucide-react';
 import { VerticalGallery } from '../components/VerticalGallery';
 import { GlobeBanner } from '../components/GlobeBanner';
 
@@ -48,14 +39,6 @@ export const BuildServicePage: React.FC = () => {
   // Change this index to display a different status:
   const currentCommissionStatusIdx = 2; // 0=open, 1=limited, 2=closed
   const currentCommissionStatus = COMMISSION_STATUSES[currentCommissionStatusIdx];
-  // Theme-aware gradient for hero section
-  const [theme, setTheme] = useState(getCurrentTheme());
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e) => setTheme(e.matches ? 'dark' : 'light');
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
   const [activeContact, setActiveContact] = useState<string | null>(null);
 
 
@@ -63,41 +46,7 @@ export const BuildServicePage: React.FC = () => {
   const { handleCardClick } = useGlassCardEffect();
   const cardsContainerRef = useRef<HTMLDivElement>(null);
 
-  // Initialize VanillaTilt, scoped to this page's own cards rather than the whole document
-  useEffect(() => {
-    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    if (typeof VanillaTilt !== 'undefined' && cardsContainerRef.current) {
-      const cards = cardsContainerRef.current.querySelectorAll('.k-card-container');
-      if (isTouchDevice) {
-        // On mobile: disable all tilt and clickback
-        VanillaTilt.init(cards, {
-          max: 0, // disables tilt and clickback
-          speed: 500,
-          perspective: 1800,
-          glare: false,
-          scale: 1.0,
-          reset: true,
-          reverse: true
-        });
-        // TODO: Add custom mobile tap/click animation here if desired
-      } else {
-        // On desktop: normal settings (or your preferred values)
-        VanillaTilt.init(cards, {
-          max: 3.25, // 25% of original
-          speed: 500,
-          perspective: 1800,
-          glare: true,
-          "max-glare": 0.05, // 25% of original glare
-          scale: 1.00125, // 25% of original scale
-          reset: true,
-          reverse: true
-        });
-      }
-      return () => {
-        cards.forEach((card: any) => card.vanillaTilt?.destroy());
-      };
-    }
-  }, []);
+  useTilt(cardsContainerRef, 'subtle', '.k-card-container');
 
   const contactMethods = [
     {
@@ -212,7 +161,7 @@ export const BuildServicePage: React.FC = () => {
                 <VerticalGallery />
               </div>
               {/* Notes */}
-              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
+              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick}>
                 <div className="k-card-content-area">
                   <h3 className="text-xl font-semibold accent-text mb-4">notes</h3>
                   <div className="space-y-4 text-sm leading-relaxed">
@@ -264,7 +213,7 @@ export const BuildServicePage: React.FC = () => {
 
               {/* How to Get Started (hidden) */}
               {false && (
-                <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
+                <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick}>
                   <div className="k-card-content-area">
                     <h3 className="text-xl font-semibold accent-text mb-4">how to get started</h3>
                     <p className="text-sm mb-6">
@@ -310,7 +259,7 @@ export const BuildServicePage: React.FC = () => {
               </div>
 
               {/* FAQ Card (now includes general info at top, with glass/parallax effects) */}
-              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick} data-tilt>
+              <div className="k-card-container fade-in-up" style={{ boxShadow: 'none' }} onClick={handleCardClick}>
                 <div className="k-card-content-area">
                   <FAQCard />
                 </div>

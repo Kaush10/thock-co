@@ -13,7 +13,7 @@ export const KeyboardsPage: React.FC = () => {
     return [...articles].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, []);
 
-  const handleCardClick = (slug: string, index: number) => {
+  const handleCardClick = (index: number) => {
     const cardElement = cardRefs.current[index];
     if (cardElement) {
       // The hook expects a MouseEvent, so we can create a partial one.
@@ -33,7 +33,7 @@ export const KeyboardsPage: React.FC = () => {
           {sortedArticles.map((article, index) => (
             <div 
               key={article.id}
-              onClick={() => handleCardClick(article.slug, index)}
+              onClick={() => handleCardClick(index)}
               ref={el => cardRefs.current[index] = el}
               className="w-full max-w-full"
             >

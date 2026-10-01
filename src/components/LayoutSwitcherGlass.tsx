@@ -28,9 +28,6 @@ export const LayoutSwitcherGlass: React.FC<{
 
   // Use labels from LAYOUTS in pricingData
   const labels = LAYOUTS.map(l => l.label);
-  const N = labels.length;
-  const widthPercent = 100 / N;
-  const leftPercent = `${value * widthPercent}%`;
 
   return (
     <fieldset

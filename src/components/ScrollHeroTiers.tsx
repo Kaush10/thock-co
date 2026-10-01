@@ -6,11 +6,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface ScrollHeroTiersProps {
   isDark: boolean;
-  topPadding?: string;
-  topOffset?: string;
 }
 
-export const ScrollHeroTiers: React.FC<ScrollHeroTiersProps> = ({ isDark, topPadding = '2.5rem', topOffset = '12rem' }) => {
+export const ScrollHeroTiers: React.FC<ScrollHeroTiersProps> = ({ isDark }) => {
   const componentRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const easeRef = useRef<HTMLDivElement>(null);

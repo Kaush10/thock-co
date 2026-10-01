@@ -20,6 +20,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm run typecheck
+
       - run: npm run build
 
       - uses: peaceiris/actions-gh-pages@v4

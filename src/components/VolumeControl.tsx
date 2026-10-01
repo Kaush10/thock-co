@@ -13,12 +13,6 @@ interface VolumeControlProps {
   className?: string;
 }
 
-// Device check
-const phone = typeof window !== 'undefined' && (
-  /iphone|ipod|android.*mobile|windows phone|blackberry|bb10|mini|mobile|mobi|phone/i.test(navigator.userAgent.toLowerCase()) ||
-  (window.innerWidth < 600 && 'ontouchstart' in window)
-);
-
 export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) => {
   // Device check
   const phone = typeof window !== 'undefined' && isPhone();
@@ -68,7 +62,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
   }
   // Touch state
   const [isTouching, setIsTouching] = useState(false);
-  const inactivityTimer = useRef<NodeJS.Timeout | null>(null);
+  const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTouchTime = useRef<number>(0);
   // Helper: collapse matrix after inactivity
   const startInactivityTimer = useCallback(() => {
@@ -113,7 +107,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
   const [revealProgress, setRevealProgress] = useState(0); // For smooth reveal animation
   // ...existing code...
   const revealAnimationRef = useRef<number>();
-  const hoverDelayRef = useRef<NodeJS.Timeout>();
+  const hoverDelayRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Volume icon pattern (9x9 grid) - based on attached examples
   const volumeIcon = [
@@ -355,7 +349,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     updateVolumeFromTouch(e);
   }, [isTouching]);
 
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+  const handleTouchEnd = useCallback(() => {
     setIsTouching(false);
     setIsDragging(false);
     startInactivityTimer();

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mockup: build page</title>
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  .page { max-width: 1320px; margin: 0 auto; padding: 64px 36px 96px; }
+  .pager { display: flex; justify-content: space-between; margin-bottom: 26px; font-family: var(--mono); font-size: 14px; }
+  .pager a { color: var(--ash); text-decoration: none; display: inline-flex; gap: 10px; align-items: center; }
+  .pager a:hover { color: var(--bone); }
+  .pager kbd { font-family: var(--mono); font-size: 11px; border: 1px solid #3a3a3f; border-bottom-width: 3px; border-radius: 6px; padding: 1px 6px; color: var(--ash); }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 48px; align-items: start; }
+  .shot { position: relative; border-radius: 28px; overflow: hidden; aspect-ratio: 3 / 4; max-height: 860px; background: var(--graphite); }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .side { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 34px; }
+  .side h1 { font-family: var(--display); font-weight: 400; font-size: 84px; line-height: 0.9; letter-spacing: -0.01em; }
+  .side .sub { margin-top: 14px; color: var(--ash); line-height: 1.6; }
+
+  .sound { background: #070708; border-radius: 22px; padding: 22px 22px 18px; box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 30px 80px rgba(255, 0, 170, 0.08); }
+  .sound svg { width: 100%; height: auto; display: block; margin: 6px 0 18px; }
+  .sound .controls { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; }
+  .sound .keycap { width: 150px; height: 64px; border-radius: 12px; }
+  .sound .keycap::before { inset: 6px 8px 11px; border-radius: 9px; }
+  .sound .keycap .legend { font-size: 13px; display: inline-flex; gap: 8px; align-items: center; }
+  .sound .note { color: var(--ash); font-size: 13px; line-height: 1.5; font-family: var(--mono); }
+  .sound .time { font-family: var(--mono); font-size: 13px; color: var(--ash); }
+  .sound .time b { color: var(--signal); font-weight: 400; }
+  .sound .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .sound .top h2 { font-family: var(--mono); font-weight: 400; font-size: 15px; }
+
+  .ledger { font-family: var(--mono); font-size: 15px; display: grid; gap: 12px; }
+  .ledger div { display: flex; align-items: baseline; gap: 10px; }
+  .ledger dt { color: var(--ash); }
+  .ledger .lead { flex: 1; height: 1px; background-image: radial-gradient(circle, #46464b 1.2px, transparent 1.4px); background-size: 7px 3px; background-repeat: repeat-x; transform: translateY(-3px); }
+  .ledger dd { color: var(--bone); text-align: right; }
+
+  .film { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
+  .film button { border: 0; padding: 0; background: none; border-radius: 18px; overflow: hidden; aspect-ratio: 3 / 4; cursor: pointer; opacity: 0.55; transition: opacity 200ms, transform 200ms; }
+  .film button.on { opacity: 1; box-shadow: 0 0 0 2px var(--signal); }
+  .film button:hover { opacity: 1; transform: translateY(-4px); }
+  .film img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .notes { display: grid; grid-template-columns: 1fr 520px; gap: 48px; margin-top: 72px; }
+  .notes h2 { font-family: var(--display); font-weight: 400; font-size: 34px; }
+  .notes p { color: #c9c9cc; line-height: 1.75; font-size: 17px; max-width: 62ch; }
+  .notes p + p { margin-top: 16px; }
+</style>
+</head>
+<body class="grid-bg">
+<span class="mock-tag">mockup c: a build page with its sound test</span>
+<main class="page">
+  <nav class="pager">
+    <a href="#"><kbd>←</kbd> nuphy 65</a>
+    <a href="#">azoth <kbd>→</kbd></a>
+  </nav>
+
+  <section class="hero">
+    <div class="shot"><img id="shot" src="../../public/builds/bauer-lite/cover-1600.webp" alt="bauer lite" /></div>
+
+    <aside class="side">
+      <div>
+        <h1>bauer<br>lite</h1>
+        <p class="sub">a 65% aluminium board, built august 2025.</p>
+      </div>
+
+      <div class="sound">
+        <div class="top"><h2>sound test</h2><span class="time"><b>0:07</b> / 0:18</span></div>
+        <svg id="wave"></svg>
+        <div class="controls">
+          <button class="keycap is-signal"><span class="legend">❚❚ space</span></button>
+          <p class="note">recorded on a desk mat, typing at about 90 wpm.</p>
+        </div>
+      </div>
+
+      <dl class="ledger">
+        <div><dt>case</dt><span class="lead"></span><dd>bauer lite, e-white</dd></div>
+        <div><dt>plate</dt><span class="lead"></span><dd>polycarbonate</dd></div>
+        <div><dt>switches</dt><span class="lead"></span><dd>linear, 63.5g, lubed</dd></div>
+        <div><dt>keycaps</dt><span class="lead"></span><dd>pbt, cherry profile</dd></div>
+        <div><dt>stabilizers</dt><span class="lead"></span><dd>screw-in, clipped and lubed</dd></div>
+        <div><dt>mods</dt><span class="lead"></span><dd>pe foam, tape</dd></div>
+      </dl>
+    </aside>
+  </section>
+
+  <div class="film" id="film"></div>
+
+  <section class="notes">
+    <h2>notes</h2>
+    <div>
+      <p>placeholder notes. this is where the story of the build goes: why these parts, what went wrong, and what you'd change next time.</p>
+      <p>a second paragraph for anything about tuning the sound, the stabilizers, or how it feels after a few months of use.</p>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import { fakeTyping, drawWave } from './dots.js';
+drawWave(document.getElementById('wave'), fakeTyping(7, 1, 60), { progress: 0.39, rows: 15, gap: 8, r: 2.4 });
+const photos = ['cover', '1', '2', '3'];
+const film = document.getElementById('film');
+photos.forEach((p, i) => {
+  const b = document.createElement('button');
+  b.className = i === 0 ? 'on' : '';
+  b.innerHTML = `<img src="../../public/builds/bauer-lite/${p}-640.webp" alt="" />`;
+  b.onclick = () => { document.getElementById('shot').src = `../../public/builds/bauer-lite/${p}-1600.webp`; [...film.children].forEach((c) => c.className = ''); b.className = 'on'; };
+  film.appendChild(b);
+});
+</script>
+</body>
+</html>

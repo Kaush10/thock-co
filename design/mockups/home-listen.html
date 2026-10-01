@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mockup: listen row</title>
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  body { min-height: 100vh; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 72px 32px 96px; }
+  .intro { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+  .intro h2 { font-family: var(--display); font-weight: 400; font-size: 44px; letter-spacing: -0.01em; }
+  .intro p { max-width: 34ch; color: var(--ash); line-height: 1.6; }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 0;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--graphite);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 40px 120px rgba(255, 0, 170, 0.07);
+    min-height: 470px;
+  }
+  .photo { position: relative; overflow: hidden; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 320ms ease, transform 900ms cubic-bezier(.2,.7,.1,1); }
+  .photo img.swap { opacity: 0; transform: scale(1.04); }
+  .photo .count { position: absolute; left: 22px; bottom: 18px; font-family: var(--mono); font-size: 13px; color: rgba(255,255,255,0.8); mix-blend-mode: difference; }
+
+  .readout { padding: 40px 40px 34px; display: flex; flex-direction: column; gap: 28px; }
+  .readout h3 { font-family: var(--display); font-weight: 400; font-size: 54px; line-height: 0.95; }
+  .readout .sub { font-family: var(--mono); color: var(--ash); font-size: 14px; margin-top: 10px; }
+  .scope { background: #0a0a0b; border-radius: 16px; padding: 18px 16px 14px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); }
+  .scope svg { width: 100%; height: auto; display: block; }
+  .scope .meta { display: flex; justify-content: space-between; margin-top: 10px; font-family: var(--mono); font-size: 12px; color: var(--ash); }
+  .scope .meta b { color: var(--signal); font-weight: 400; }
+  .specs { display: grid; grid-template-columns: auto 1fr; gap: 10px 18px; font-family: var(--mono); font-size: 14px; }
+  .specs dt { color: var(--ash); }
+  .specs dd { color: var(--bone); }
+  .readout a { margin-top: auto; font-family: var(--mono); font-size: 14px; color: var(--bone); text-decoration: none; border-bottom: 1px solid var(--signal); align-self: flex-start; padding-bottom: 2px; }
+
+  .row { display: flex; justify-content: center; gap: 22px; margin-top: 46px; perspective: 900px; }
+  .row .keycap { width: 128px; height: 104px; }
+  .row .keycap .num { position: absolute; top: 14px; left: 18px; font-family: var(--mono); font-size: 11px; color: #8c8984; }
+  .row .keycap.is-signal .num { color: #5a0038; }
+  .hint { text-align: center; margin-top: 34px; }
+</style>
+</head>
+<body class="grid-bg">
+<span class="mock-tag">mockup a: the listening row (replaces the tiers)</span>
+<main class="wrap">
+  <div class="intro">
+    <h2>the boards</h2>
+    <p>six keyboards i've built. press a key to hear one.</p>
+  </div>
+
+  <section class="stage">
+    <div class="photo"><img id="photo" alt="" /><span class="count" id="count"></span></div>
+    <div class="readout">
+      <div>
+        <h3 id="name"></h3>
+        <p class="sub" id="sub"></p>
+      </div>
+      <div class="scope">
+        <svg id="wave"></svg>
+        <div class="meta"><span id="state">playing</span><span><b id="time">0:00</b> / 0:18</span></div>
+      </div>
+      <dl class="specs" id="specs"></dl>
+      <a href="#">see the whole build</a>
+    </div>
+  </section>
+
+  <div class="row" id="row"></div>
+  <p class="label hint">keys 1–6 work too</p>
+</main>
+
+<script type="module">
+import { fakeTyping, drawWave } from './dots.js';
+
+const boards = [
+  { slug: 'bauer-lite', name: 'bauer lite', sub: 'built 2025, 65% aluminium', switches: 'linear, lubed', caps: 'pbt cherry', mods: 'pe foam, tape' },
+  { slug: 'azoth', name: 'azoth', sub: 'built 2024, 75% gasket', switches: 'linear, lubed', caps: 'gmk-style abs', mods: 'case foam' },
+  { slug: 'azoth-dev', name: 'azoth dev', sub: 'built 2024, 75%', switches: 'tactile', caps: 'pbt', mods: 'tape mod' },
+  { slug: 'azoth-gmk', name: 'azoth gmk', sub: 'built 2024, 75%', switches: 'linear', caps: 'gmk', mods: 'pe foam' },
+  { slug: 'neo-ergo', name: 'neo ergo', sub: 'built 2025, alice layout', switches: 'linear, lubed', caps: 'pbt', mods: 'force break' },
+  { slug: 'nuphy65', name: 'nuphy 65', sub: 'built 2025, 65%', switches: 'tactile', caps: 'pbt', mods: 'stab tune' },
+];
+
+const row = document.getElementById('row');
+const keys = boards.map((b, i) => {
+  const k = document.createElement('button');
+  k.className = 'keycap';
+  k.innerHTML = `<span class="num">${i + 1}</span><span class="legend">${b.name.replace(' ', '<br>')}</span>`;
+  k.onclick = () => select(i);
+  row.appendChild(k);
+  return k;
+});
+
+let current = -1, raf = 0, start = 0;
+function select(i) {
+  if (i === current) return;
+  current = i;
+  keys.forEach((k, j) => k.classList.toggle('is-signal', j === i));
+  keys[i].classList.add('is-down');
+  setTimeout(() => keys[i].classList.remove('is-down'), 130);
+  const b = boards[i];
+  const img = document.getElementById('photo');
+  img.classList.add('swap');
+  setTimeout(() => { img.src = `../../public/builds/${b.slug}/cover-1600.webp`; img.onload = () => img.classList.remove('swap'); }, 160);
+  document.getElementById('count').textContent = `${i + 1} of ${boards.length}`;
+  document.getElementById('name').textContent = b.name;
+  document.getElementById('sub').textContent = b.sub;
+  document.getElementById('specs').innerHTML = `<dt>switches</dt><dd>${b.switches}</dd><dt>keycaps</dt><dd>${b.caps}</dd><dt>mods</dt><dd>${b.mods}</dd>`;
+  const values = fakeTyping(i + 3, 1, 44);
+  cancelAnimationFrame(raf); start = performance.now();
+  const tick = (now) => {
+    const p = Math.min(1, (now - start) / 6000);
+    drawWave(document.getElementById('wave'), values, { progress: p, gap: 10, rows: 11 });
+    document.getElementById('time').textContent = `0:${String(Math.floor(p * 18)).padStart(2, '0')}`;
+    if (p < 1) raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
+addEventListener('keydown', (e) => { const n = Number(e.key); if (n >= 1 && n <= boards.length) select(n - 1); });
+select(1);
+// freeze for the screenshot partway through playback
+setTimeout(() => { cancelAnimationFrame(raf); drawWave(document.getElementById('wave'), fakeTyping(4, 1, 44), { progress: 0.42, gap: 10, rows: 11 }); document.getElementById('time').textContent = '0:07'; }, 900);
+</script>
+</body>
+</html>

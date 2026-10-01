@@ -1,13 +1,6 @@
 // Centralized site-wide configuration for thock&co
 
 export const siteConfig = {
-  music: {
-  src: (import.meta as any).env.BASE_URL + 'audio/Spaces.mp3',
-    autoPlay: true,
-    loop: true,
-    fadeInDuration: 3000,
-    volume: 0.6,
-  },
   theme: {
     default: 'dark',
     darkVars: {

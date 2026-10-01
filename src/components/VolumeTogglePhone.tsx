@@ -1,14 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 
-// Utility to detect phone
-function isPhone() {
-  const ua = navigator.userAgent.toLowerCase();
-  const isMobile =
-    /iphone|ipod|android.*mobile|windows phone|blackberry|bb10|mini|mobile|mobi|phone/i.test(ua) ||
-    (window.innerWidth < 600 && 'ontouchstart' in window);
-  return isMobile;
-}
-
 interface VolumeTogglePhoneProps {
   muted: boolean;
   onToggle: () => void;
@@ -87,4 +78,3 @@ export const VolumeTogglePhone: React.FC<VolumeTogglePhoneProps> = ({ muted, onT
   );
 };
 
-export { isPhone };

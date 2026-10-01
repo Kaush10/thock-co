@@ -4,7 +4,6 @@ import { siteConfig } from '../config/siteConfig';
 interface SiteConfigContextProps {
   isDark: boolean;
   setIsDark: (val: boolean) => void;
-  music: typeof siteConfig.music;
   themeVars: Record<string, string>;
 }
 
@@ -22,7 +21,7 @@ export const SiteConfigProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   );
 
   const value = useMemo(
-    () => ({ isDark, setIsDark, music: siteConfig.music, themeVars }),
+    () => ({ isDark, setIsDark, themeVars }),
     [isDark, themeVars]
   );
 

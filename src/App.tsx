@@ -8,17 +8,13 @@ import { KeyboardsPage } from './pages/KeyboardsPage';
 import { BuildServicePage } from './pages/BuildServicePage';
 import { AboutPage } from './pages/AboutPage';
 import ArticlePage from './pages/ArticlePage'; // Import the new ArticlePage
-import { useAmbientAudio } from './hooks/useAmbientAudio';
 import { SiteConfigProvider, useSiteConfig } from './context/SiteConfigContext';
 import { PageWipe } from './components/PageWipe';
 import './styles/globals.css';
 
 
 function AppContent() {
-  const { isDark, setIsDark, music, themeVars } = useSiteConfig();
-
-  // Initialize ambient audio with config
-  useAmbientAudio(music.src, music);
+  const { isDark, setIsDark, themeVars } = useSiteConfig();
 
   useEffect(() => {
     const root = window.document.documentElement;

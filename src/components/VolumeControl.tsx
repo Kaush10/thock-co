@@ -1,65 +1,44 @@
-import { VolumeTogglePhone, isPhone } from './VolumeTogglePhone';
-
-// Extend Window interface for custom property
-declare global {
-  interface Window {
-    __thock_user_interacted?: boolean;
-  }
-}
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useSyncExternalStore } from 'react';
+import { VolumeTogglePhone } from './VolumeTogglePhone';
+import { setAmbientVolume, toggleAmbient, useAmbient } from '../lib/ambient';
 import './VolumeControl.css';
 
 interface VolumeControlProps {
   className?: string;
 }
 
+const COARSE = '(pointer: coarse)';
+
+function useCoarsePointer() {
+  return useSyncExternalStore(
+    (onChange) => {
+      const query = window.matchMedia(COARSE);
+      query.addEventListener('change', onChange);
+      return () => query.removeEventListener('change', onChange);
+    },
+    () => window.matchMedia(COARSE).matches,
+  );
+}
+
+/** Ambient music control: a dot toggle on touch screens, the dot-matrix slider elsewhere. */
 export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) => {
-  // Device check
-  const phone = typeof window !== 'undefined' && isPhone();
-
-  // Mute state for phone toggle
-  const [muted, setMuted] = useState(() => {
-    // Always use localStorage for initial mute state, default to unmuted if not set
-    const saved = localStorage.getItem('thock-muted');
-    if (saved === null) {
-      localStorage.setItem('thock-muted', 'false');
-      return false;
-    }
-    return saved === 'true';
-  });
-  // Always initialize user interaction flag on mount for phone
-  useEffect(() => {
-    if (phone && typeof window !== 'undefined') {
-      window.__thock_user_interacted = false;
-    }
-  }, [phone]);
-  useEffect(() => {
-    localStorage.setItem('thock-muted', muted ? 'true' : 'false');
-    window.dispatchEvent(new CustomEvent('thock-mute-change'));
-  }, [muted, phone]);
-
-  if (phone) {
-    // Only show the toggle on phone
-    // Track if user has interacted (for iOS autoplay restrictions)
-    if (typeof window !== 'undefined' && !window.__thock_user_interacted) {
-      window.__thock_user_interacted = false;
-    }
-    const handlePhoneToggle = () => {
-      // Mark user as having interacted
-      if (typeof window !== 'undefined') {
-        window.__thock_user_interacted = true;
-      }
-      setMuted(m => !m);
-    };
+  const { on } = useAmbient();
+  if (useCoarsePointer()) {
     return (
       <div className={`volume-control ${className}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-        <VolumeTogglePhone
-          muted={muted}
-          onToggle={handlePhoneToggle}
-        />
+        <VolumeTogglePhone muted={!on} onToggle={toggleAmbient} />
       </div>
     );
   }
+  return <VolumeSlider className={className} />;
+};
+
+const VolumeSlider: React.FC<VolumeControlProps> = ({ className = '' }) => {
+  const ambient = useAmbient();
+  // The slider shows 0 while the music is off, and remembers the real level for later.
+  const volume = ambient.on ? ambient.volume : 0;
+  const setVolume = setAmbientVolume;
+
   // Touch state
   const [isTouching, setIsTouching] = useState(false);
   const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -93,43 +72,12 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     };
   }, []);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [volume, setVolume] = useState(() => {
-    const savedVolume = localStorage.getItem('thock-volume');
-    if (savedVolume) {
-      return parseFloat(savedVolume);
-    } else {
-      localStorage.setItem('thock-volume', '51');
-      return 51;
-    }
-  });
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [revealProgress, setRevealProgress] = useState(0); // For smooth reveal animation
-  // ...existing code...
   const revealAnimationRef = useRef<number>();
   const hoverDelayRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Volume icon pattern (9x9 grid) - based on attached examples
-  const volumeIcon = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 0, 1, 1, 0, 0],
-    [1, 1, 1, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 0, 0, 1, 1, 1, 0],
-    [0, 1, 1, 0, 0, 0, 1, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
-  ];
-
-  // Remove: Load volume from localStorage on mount (handled by useState initializer)
-
-  // Save volume to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('thock-volume', volume.toString());
-    // Dispatch custom event for same-tab updates
-    window.dispatchEvent(new CustomEvent('thock-volume-change'));
-  }, [volume]);
 
   // Setup canvas with high DPI support
   const setupCanvas = useCallback(() => {
@@ -285,7 +233,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
         }
       }
     }
-  }, [isHovered, isDragging, volume, setupCanvas, revealProgress, volumeIcon]);
+  }, [isHovered, isDragging, volume, setupCanvas, revealProgress]);
 
   // Handle mouse interactions
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -387,8 +335,7 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     const shouldDelay = false; // Remove delay entirely for now
     
     const startAnimation = () => {
-      // ...existing code...
-      
+          
       const startTime = Date.now();
       let startProgress: number;
       let isExpanding: boolean;
@@ -496,8 +443,16 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
     return () => window.removeEventListener('resize', handleResize);
   }, [drawControl]);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') setVolume((ambient.on ? volume : 0) + 10);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') setVolume(volume - 10);
+    else if (e.key === 'Enter' || e.key === ' ') toggleAmbient();
+    else return;
+    e.preventDefault();
+  };
+
   return (
-    <div className={`volume-control ${className}`}>
+    <div className={`volume-control ${className}`} title="ambient music">
       <canvas
         ref={canvasRef}
         className="volume-canvas"
@@ -507,8 +462,16 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({ className = '' }) 
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        // Prevent scrolling on iOS Safari
         tabIndex={0}
+        role="slider"
+        aria-label="Ambient music volume"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={volume}
+        aria-valuetext={ambient.on ? `${volume}%` : 'off'}
+        onKeyDown={handleKeyDown}
+        onFocus={() => setIsHovered(true)}
+        onBlur={() => setIsHovered(false)}
       />
     </div>
   );

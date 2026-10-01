@@ -14,6 +14,47 @@ const COLORS: [name: string, value: string, role: string][] = [
   ['ember', '#8f0d63', 'signal at rest'],
 ];
 
+// Candidate keycap legend faces, compared on real keycaps. Loaded from Google Fonts in dev only.
+const LEGEND_FONTS: [label: string, family: string, weight: number][] = [
+  ['reddit mono (current)', "'Reddit Mono', monospace", 400],
+  ['matrix sans print', "'Matrix Sans Print', monospace", 400],
+  ['varela round', "'Varela Round', sans-serif", 400],
+  ['michroma', "'Michroma', sans-serif", 400],
+  ['dm sans', "'DM Sans', sans-serif", 500],
+  ['chakra petch', "'Chakra Petch', sans-serif", 500],
+];
+
+function useLegendFonts() {
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Michroma&family=DM+Sans:wght@500&family=Chakra+Petch:wght@500&display=swap';
+    document.head.appendChild(link);
+    return () => link.remove();
+  }, []);
+}
+
+function LegendRow({ family, weight, corner }: { family: string; weight: number; corner: boolean }) {
+  const style = { fontFamily: family, fontWeight: weight };
+  // Top-left legends: align the label to the cap's corner instead of its centre.
+  const place = corner ? '!place-items-start !px-3.5 !pt-2.5 text-left' : '!p-0';
+  const legend = (text: string, sub?: string) => (
+    <span style={style} className="block leading-tight">
+      {sub && corner && <span className="block opacity-60">{text}</span>}
+      {sub ? (corner ? sub : text) : text}
+    </span>
+  );
+  return (
+    <div className="flex flex-nowrap items-end gap-4">
+      <Keycap className={`!h-16 !w-16 text-base ${place}`}>{legend('q')}</Keycap>
+      <Keycap className={`!h-16 !w-16 text-sm ${place}`}>{legend('!', '1')}</Keycap>
+      <Keycap variant="dark" className={`!h-16 !w-28 text-xs ${place}`}>{legend('shift')}</Keycap>
+      <Keycap variant="signal" className={`!h-16 !w-32 text-sm ${place}`}>{legend('enter')}</Keycap>
+      <Keycap className={`!h-16 !w-44 text-sm ${place}`}>{legend('send as email')}</Keycap>
+    </div>
+  );
+}
+
 /** A stand-in typing recording, synthesised so the sound test can be tried before real ones exist. */
 function useSynthTyping() {
   const [url, setUrl] = useState<string>();
@@ -59,6 +100,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export const SystemPage: React.FC = () => {
   const synth = useSynthTyping();
+  useLegendFonts();
   return (
     <div className="mx-auto max-w-6xl px-8 pb-32 pt-28 font-body text-bone">
       <h1 className="font-display text-display-xl">system</h1>
@@ -123,6 +165,19 @@ export const SystemPage: React.FC = () => {
           keys in sentences look like this: press <Kbd>space</Kbd> to play, <Kbd>←</Kbd> <Kbd>→</Kbd> to
           change boards.
         </p>
+      </Section>
+
+      <Section title="keycap legends">
+        <div className="space-y-10">
+          {LEGEND_FONTS.map(([label, family, weight], i) => (
+            <div key={label} id={`legend-${i}`} className="space-y-4">
+              <p className="font-mono text-sm text-ash">{label}</p>
+              <LegendRow family={family} weight={weight} corner={false} />
+              <LegendRow family={family} weight={weight} corner />
+            </div>
+          ))}
+          <p className="font-mono text-label text-ash">first row: centred legends. second row: top-left, like printed keycaps.</p>
+        </div>
       </Section>
 
       <Section title="status">

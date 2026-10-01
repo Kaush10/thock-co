@@ -4,7 +4,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { LAYOUT_65 } from './Keyboard';
 
 // The home page's keyboard, rendered in three.js: a graphite case with
-// Cherry-profile caps in the site's two-tone colourway, floating over the hole.
+// softly rounded Cherry-profile caps in the site's two-tone colourway, floating over the hole.
 // Keys go down and glow pink as they're typed or tapped. One unit (u) is one
 // key pitch; the board is 16u by 5u.
 
@@ -16,6 +16,8 @@ const CAP: Record<Variant, { face: string; ink: string }> = {
   signal: { face: '#ff1aa8', ink: '#3b0024' },
 };
 const SIGNAL = new THREE.Color('#ff00aa');
+// The hole below glows violet; light from it should match, not fight it.
+const HOLE = new THREE.Color('#a24bff');
 
 // Cherry profile: each row has its own height, and its top tilts toward you
 // on the upper rows and away on the lower ones. `slope` is rise per unit
@@ -27,7 +29,7 @@ const SCULPT = [
   { h: 0.4, slope: 0.07 },
   { h: 0.4, slope: 0.07 },
 ];
-const GAP = 0.055; // between neighbouring caps
+const GAP = 0.085; // between neighbouring caps
 const PLATE_Y = 0.4; // where the caps sit
 const CASE_H = 0.52;
 const CASE_MARGIN = 0.5; // case wall around the keys
@@ -70,15 +72,16 @@ function capGeometry(units: number, row: number) {
   const topY = (x: number, z: number) =>
     h + slope * (z - zTop) - dish * (1 - Math.min(1, (x / (tw / 2)) ** 2));
 
-  const seg = 5;
+  const seg = 8;
   const rings: Ring[] = [];
   const ring = (w: number, d: number, r: number, cz: number, y: (x: number, z: number) => number) =>
     rings.push(roundedRect(w, d, r, seg, cz).map(([x, z]) => [x, y(x, z), z]));
 
-  ring(bw, bd, 0.075, 0, () => 0);
-  ring(tw + 0.07, td + 0.07, 0.13, zTop, (x, z) => topY(x, z) - 0.06);
-  ring(tw, td, 0.11, zTop, topY);
-  for (const s of [0.74, 0.46, 0.2]) ring(tw * s, td * s, 0.11 * s, zTop, topY);
+  // Generous corner radii: soft, pebble-like caps rather than a literal render.
+  ring(bw, bd, 0.17, 0, () => 0);
+  ring(tw + 0.08, td + 0.08, 0.24, zTop, (x, z) => topY(x, z) - 0.07);
+  ring(tw, td, 0.21, zTop, topY);
+  for (const s of [0.74, 0.46, 0.2]) ring(tw * s, td * s, 0.21 * s, zTop, topY);
 
   const positions: number[] = [];
   const uvs: number[] = [];
@@ -174,22 +177,6 @@ function roundedShape(w: number, d: number, r: number, path: THREE.Path = new TH
   return path;
 }
 
-/** Soft pink light spilling out from under the case. */
-function glowTexture() {
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = 256;
-  const ctx = canvas.getContext('2d')!;
-  const gradient = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
-  gradient.addColorStop(0, 'rgba(255, 0, 170, 1)');
-  gradient.addColorStop(0.45, 'rgba(255, 0, 170, 0.45)');
-  gradient.addColorStop(1, 'rgba(255, 0, 170, 0)');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, 256, 256);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
-}
-
 type KeyMesh = {
   id: string;
   mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>;
@@ -215,8 +202,8 @@ function buildScene(renderer: THREE.WebGLRenderer) {
   // Case: a bevelled graphite frame around the plate.
   const outerW = BOARD_W + CASE_MARGIN * 2;
   const outerD = BOARD_D + CASE_MARGIN * 2;
-  const frame = roundedShape(outerW, outerD, 0.42) as THREE.Shape;
-  frame.holes.push(roundedShape(BOARD_W + 0.2, BOARD_D + 0.2, 0.1, new THREE.Path()));
+  const frame = roundedShape(outerW, outerD, 0.8) as THREE.Shape;
+  frame.holes.push(roundedShape(BOARD_W + 0.2, BOARD_D + 0.2, 0.35, new THREE.Path()));
   const caseGeometry = own(
     new THREE.ExtrudeGeometry(frame, { depth: CASE_H, bevelEnabled: true, bevelThickness: 0.07, bevelSize: 0.07, bevelSegments: 5, curveSegments: 12 }),
   );
@@ -243,14 +230,6 @@ function buildScene(renderer: THREE.WebGLRenderer) {
   led.position.set(outerW / 2 - 0.42, CASE_H + 0.05, -outerD / 2 + 0.25);
   board.add(led);
 
-  // Underglow.
-  const glowMaterial = own(
-    new THREE.MeshBasicMaterial({ map: own(glowTexture()), transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }),
-  );
-  const glow = new THREE.Mesh(own(new THREE.PlaneGeometry(outerW * 1.5, outerD * 2.6)), glowMaterial);
-  glow.rotation.x = -Math.PI / 2;
-  glow.position.y = -0.3;
-  board.add(glow);
 
   // Caps.
   const anisotropy = renderer.capabilities.getMaxAnisotropy();
@@ -303,7 +282,7 @@ function buildScene(renderer: THREE.WebGLRenderer) {
   const fill = new THREE.DirectionalLight('#c9d4ff', 0.35);
   fill.position.set(8, 5, 6);
   scene.add(fill);
-  const under = new THREE.PointLight(SIGNAL, 40, 22, 1.6);
+  const under = new THREE.PointLight(HOLE, 18, 22, 1.6);
   under.position.set(0, -2.2, 4.2);
   scene.add(under);
 
@@ -311,7 +290,6 @@ function buildScene(renderer: THREE.WebGLRenderer) {
     scene,
     board,
     keys,
-    glowMaterial,
     ledMaterial,
     under,
     dispose: () => disposables.forEach((thing) => thing.dispose()),
@@ -324,7 +302,7 @@ const BASE_YAW = THREE.MathUtils.degToRad(-3.5);
 
 /**
  * Renders the board into a canvas sized by its container. Keys whose ids are
- * in `lit` go down and glow; `live` brings up the underglow. If WebGL isn't
+ * in `lit` go down and glow; `live` lights the status LED. If WebGL isn't
  * available it calls `onUnavailable` so the caller can show the CSS board.
  */
 export default function Keyboard3D({
@@ -375,7 +353,7 @@ export default function Keyboard3D({
       canvas.setAttribute('aria-hidden', 'true');
       host.appendChild(canvas);
 
-      const { scene, board, keys, glowMaterial, ledMaterial, under, dispose } = buildScene(renderer);
+      const { scene, board, keys, ledMaterial, under, dispose } = buildScene(renderer);
       const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 200);
       const target = new THREE.Vector3(0, 0.3, 0.35);
 
@@ -388,7 +366,7 @@ export default function Keyboard3D({
         camera.aspect = aspect;
         const tan = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
         // Far enough back that the case fits the width with a margin, and its depth the height.
-        const byWidth = ((BOARD_W + CASE_MARGIN * 2) * 0.56) / (tan * aspect);
+        const byWidth = ((BOARD_W + CASE_MARGIN * 2) * 0.6) / (tan * aspect);
         const byHeight = 3.1 / tan;
         const distance = Math.max(byWidth, byHeight);
         camera.position.set(0, Math.sin(ELEVATION) * distance, Math.cos(ELEVATION) * distance).add(target);
@@ -464,8 +442,7 @@ export default function Keyboard3D({
         }
 
         const liveness = isLive ? 1 : 0;
-        glowMaterial.opacity += (0.42 + liveness * 0.5 - glowMaterial.opacity) * ease(4);
-        under.intensity += (30 + liveness * 25 - under.intensity) * ease(4);
+        under.intensity += (16 + liveness * 14 - under.intensity) * ease(4);
         ledMaterial.emissiveIntensity += (liveness * 2.5 - ledMaterial.emissiveIntensity) * ease(10);
 
         renderer.render(scene, camera);

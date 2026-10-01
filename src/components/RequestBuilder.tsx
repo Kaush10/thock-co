@@ -92,67 +92,72 @@ export function RequestBuilder() {
   };
 
   return (
-    <div className="grid overflow-hidden rounded-panel bg-panel shadow-[0_0_0_1px_var(--line)] lg:grid-cols-2">
-      {/* the keys */}
-      <div className="space-y-7 p-5 md:p-8">
-        {GROUPS.map((group) => (
-          <fieldset key={group.id}>
-            <legend className="t-small mb-3 text-ash">{group.label}</legend>
-            <div role="radiogroup" aria-label={group.label} className="flex flex-wrap gap-2.5">
-              {group.options.map((option) => {
-                const on = choices[group.id] === option;
-                return (
-                  <Keycap
-                    key={option}
-                    role="radio"
-                    aria-checked={on}
-                    align="label"
-                    variant={on ? 'signal' : 'dark'}
-                    down={on}
-                    legend={option}
-                    onClick={() => toggle(group.id, option)}
-                    style={SMALL_CAP}
-                  />
-                );
-              })}
-            </div>
-          </fieldset>
-        ))}
-      </div>
-
-      {/* the message it writes */}
-      <div className="flex flex-col gap-5 border-t border-line bg-black/40 p-5 md:p-8 lg:border-l lg:border-t-0">
+    <div className="overflow-hidden rounded-panel bg-panel shadow-[0_0_0_1px_var(--line)]">
+      {/* what the request is, at a glance */}
+      <div className="border-b border-line p-4 md:p-5">
         <div className="led-screen !p-3.5">
           <LedText text={led || (narrow ? 'pick keys' : 'pick a few keys')} cols={narrow ? 60 : 96} tone={led ? 'lit' : 'idle'} />
         </div>
+      </div>
 
-        <div>
-          <p className="t-small mb-2 text-ash">your message</p>
-          <p className="t-body whitespace-pre-line text-bone/85" aria-live="polite">
-            {compose(choices, '')}
-          </p>
+      <div className="grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+        {/* the keys */}
+        <div className="space-y-6 p-5 md:p-7">
+          {GROUPS.map((group) => (
+            <fieldset key={group.id}>
+              <legend className="t-small mb-2.5 text-ash">{group.label}</legend>
+              <div role="radiogroup" aria-label={group.label} className="flex flex-wrap gap-2">
+                {group.options.map((option) => {
+                  const on = choices[group.id] === option;
+                  return (
+                    <Keycap
+                      key={option}
+                      role="radio"
+                      aria-checked={on}
+                      align="label"
+                      variant={on ? 'signal' : 'dark'}
+                      down={on}
+                      legend={option}
+                      onClick={() => toggle(group.id, option)}
+                      style={SMALL_CAP}
+                    />
+                  );
+                })}
+              </div>
+            </fieldset>
+          ))}
         </div>
 
-        <label className="block">
-          <span className="t-small mb-2 block text-ash">anything else?</span>
-          <textarea
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}
-            rows={4}
-            maxLength={1200}
-            placeholder="the board you're picturing, parts you already have, links, a budget if you have one."
-            className="t-body block w-full resize-y rounded-xl border border-line bg-black/60 px-4 py-3 text-bone placeholder:text-ash/60 focus:border-signal/50 focus:outline-none focus-visible:outline-none"
-          />
-        </label>
-
-        <div className="mt-auto space-y-3">
-          <div className="flex flex-wrap gap-3">
-            <Keycap variant="signal" align="label" legend="send as email" onClick={sendEmail} style={SMALL_CAP} />
-            <Keycap variant="dark" align="label" legend={`dm @${siteConfig.contact.instagram}`} onClick={sendDm} style={SMALL_CAP} />
+        {/* the message it writes */}
+        <div className="flex flex-col gap-5 border-t border-line bg-black/40 p-5 md:border-l md:border-t-0 md:p-7">
+          <div>
+            <p className="t-small mb-2 text-ash">your message</p>
+            <p className="t-body whitespace-pre-line text-bone/85" aria-live="polite">
+              {compose(choices, '')}
+            </p>
           </div>
-          <p className="t-caption" aria-live="polite">
-            {copied ? 'message copied. paste it into the dm.' : 'email opens with this message filled in. dm copies it for you.'}
-          </p>
+
+          <label className="block">
+            <span className="t-small mb-2 block text-ash">anything else?</span>
+            <textarea
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              rows={4}
+              maxLength={1200}
+              placeholder="the board you're picturing, parts you already have, links, a budget if you have one."
+              className="t-body block w-full resize-y rounded-xl border border-line bg-black/60 px-4 py-3 text-bone placeholder:text-ash/60 focus:border-signal/50 focus:outline-none focus-visible:outline-none"
+            />
+          </label>
+
+          <div className="mt-auto space-y-3">
+            <div className="flex flex-wrap gap-3">
+              <Keycap variant="signal" align="label" legend="send as email" onClick={sendEmail} style={SMALL_CAP} />
+              <Keycap variant="dark" align="label" legend={`dm @${siteConfig.contact.instagram}`} onClick={sendDm} style={SMALL_CAP} />
+            </div>
+            <p className="t-caption" aria-live="polite">
+              {copied ? 'message copied. paste it into the dm.' : 'email opens with this filled in. dm copies it for you.'}
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -196,7 +196,7 @@ export function MessageComposer() {
         </div>
       </div>
 
-      <div className="relative z-10 -mx-5 mt-6 aspect-[2.1/1] w-[calc(100%+2.5rem)] max-w-[68rem] sm:mx-0 sm:aspect-[2.3/1] sm:w-full md:mt-2">
+      <div className="relative z-10 -mx-5 mt-6 aspect-[2.1/1] w-[calc(100%+2.5rem)] max-w-[54rem] sm:mx-0 sm:aspect-[2.3/1] sm:w-full md:mt-2">
         {webgl ? (
           near && (
             <Suspense fallback={null}>

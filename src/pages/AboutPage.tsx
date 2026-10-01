@@ -11,7 +11,7 @@ const LINKS = [
 
 export const AboutPage: React.FC = () => (
   <div className="mx-auto grid w-full max-w-[75rem] gap-12 px-5 pb-24 pt-12 md:px-8 md:pt-16 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-20">
-    <div>
+    <div className="scrim self-start">
       <h1 className="t-title">about</h1>
       <div className="t-lead mt-7 max-w-[36rem] space-y-5">
         <p>hey there, i'm kaush.</p>

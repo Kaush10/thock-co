@@ -529,6 +529,8 @@ body {
   background: #000;
   position: relative;
   min-height: 100vh;
+  /* Scrims and glows may spill past the edges; never scroll sideways for them. */
+  overflow-x: clip;
 }
 
 .light body {
@@ -544,13 +546,14 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, var(--grid-opacity)) 2px, transparent 2px),
-    linear-gradient(90deg, rgba(255, 255, 255, var(--grid-opacity)) 2px, transparent 2px);
-  background-size: 46px 46px;
+  /* Behind the content, not over it: panels and text sit on top of the grid. */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center top;
   pointer-events: none;
-  z-index: 3;
-  pointer-events: none;
+  z-index: -1;
   mask-image: linear-gradient(to top left, transparent, black 130%);
 }
 

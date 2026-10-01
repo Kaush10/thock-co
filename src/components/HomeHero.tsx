@@ -158,7 +158,7 @@ export function HomeHero() {
   const current = builds[slide];
   return (
     <section className="mx-auto grid max-w-[75rem] items-center gap-12 px-5 py-12 md:py-16 lg:min-h-[calc(100svh-4rem)] md:px-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-24">
-      <div>
+      <div className="scrim">
         <h1 className="t-display">thock&co.</h1>
         <div aria-hidden className="t-lead mt-7 max-w-[34rem] space-y-4">
           {rendered}

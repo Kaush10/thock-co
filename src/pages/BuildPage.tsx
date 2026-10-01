@@ -59,7 +59,7 @@ export const BuildPage: React.FC = () => {
         </div>
 
         <aside className="flex flex-col gap-8 lg:sticky lg:top-24">
-          <div>
+          <div className="scrim">
             <h1 className="t-title">{build.title}</h1>
             <p className="t-lead mt-4 !text-ash">{build.summary}</p>
             <p className="t-caption mt-2">built {build.built}</p>
@@ -67,7 +67,7 @@ export const BuildPage: React.FC = () => {
 
           <SoundTest key={build.slug} src={soundUrl(build.slug)} />
 
-          <Ledger rows={build.parts} />
+          <Ledger rows={build.parts} className="scrim" />
         </aside>
       </section>
 
@@ -91,7 +91,7 @@ export const BuildPage: React.FC = () => {
         </ul>
       )}
 
-      <section className="mt-14 lg:max-w-[calc(100%-29.5rem)]">
+      <section className="scrim mt-14 lg:max-w-[calc(100%-29.5rem)]">
         <h2 className="t-heading">notes</h2>
         <div className="t-body mt-5 space-y-4 text-bone/80">
           {build.notes.map((paragraph) => (

@@ -69,3 +69,10 @@ Lowercase, first person, plain verbs. The site is a hobby, not a shop: say
 "i built", "i'm not taking builds right now", "message me", never "our
 service", "order" or "clients". Commission status is two lamps: the inbox is
 always open; the bench is full or free.
+
+## Backdrop, scrims and screens
+
+- The page grid sits behind everything (`body::before`, z-index -1). Panels are opaque, so it never shows through a box.
+- `.scrim` fades the grid out behind a block of text with a soft black halo. Put it on headers, copy and lists that sit straight on the page.
+- `.led-screen` is the housing for an LED display you can type into, or that reports status. It glows pink while live.
+- The home keyboard is three.js (`system/Keyboard3D.tsx`). It loads lazily, shares the three chunk with the globe, and falls back to the CSS `Keyboard` without WebGL.

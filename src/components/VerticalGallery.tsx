@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { articles } from '../data/articles';
+import { photoUrl } from '../lib/photo';
 
 // Gallery config (match pen and stuff spec)
 const ITEM_COUNT = 10;
@@ -134,8 +135,9 @@ export const VerticalGallery: React.FC = () => {
                       <h2 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 500, textAlign: 'center' }}>your build here</h2>
                     ) : (
                       <img
-                        src={img.image}
+                        src={img.image && photoUrl(img.image, 640)}
                         alt={img.title}
+                        loading="lazy"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                     )}

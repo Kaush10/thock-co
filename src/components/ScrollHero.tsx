@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import './ScrollHero.css';
 import './KeyboardPageCard.css';
+import { articles } from '../data/articles';
+import { photoProps } from '../lib/photo';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -13,14 +15,7 @@ interface ScrollHeroProps {
   isDark: boolean;
 }
 
-const BUILD_IMAGES = [
-  '/article-images/azoth-cover.webp',
-  '/article-images/Bauer™ Lite-cover.webp',
-  '/article-images/neo-ergo-cover.webp',
-  '/article-images/nuphy65-cover.webp',
-  '/article-images/azoth-gmk-cover.webp',
-  '/article-images/azoth-dev-cover.webp',
-];
+const BUILD_IMAGES = articles.map((article) => article.image);
 
 export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   const slideIdxRef = useRef(0);
@@ -272,12 +267,11 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
               <div className="w-full max-w-sm h-[28rem] transform rotate-3">
                 <div ref={slideCardRef} className="k-card-container w-full h-full overflow-hidden">
                   <div className="k-card-content-area p-0 h-full relative">
-                    {/* Trail canvas — disabled until border animation is finalised */}
                     {BUILD_IMAGES.map((src, i) => (
                       <img
                         key={src}
                         ref={el => { slideImgRefs.current[i] = el; }}
-                        src={src}
+                        {...photoProps(src, '24rem')}
                         alt=""
                         className="absolute inset-0 w-full h-full object-cover"
                         style={{

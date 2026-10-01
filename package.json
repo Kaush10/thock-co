@@ -6,9 +6,10 @@
   "description": "thock&co. \u2014 Kaush's keyboard builds, and the occasional commission.",
   "homepage": "https://thockco.com",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/photos.mjs && vite",
+    "photos": "node scripts/photos.mjs",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
-    "build": "vite build",
+    "build": "node scripts/photos.mjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "@types/react-dom": "18.2.0",
     "@types/three": "^0.178.1",
     "@vitejs/plugin-react": "4.3.4",
+    "sharp": "^0.35.5",
     "tailwindcss": "3.4.16",
     "typescript": "^5.9.3",
     "vite": "6.0.4"

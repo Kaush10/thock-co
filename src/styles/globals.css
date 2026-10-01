@@ -164,7 +164,7 @@ a-hole canvas {
 /* Register Reddit Mono font for subheadings */
 @font-face {
   font-family: 'Reddit Mono';
-  src: url('../assets/fonts/RedditMono-VariableFont_wght.ttf') format('truetype');
+  src: url('../assets/fonts/RedditMono-VariableFont_wght.woff2') format('woff2');
   font-weight: 200 700;
   font-style: normal;
   font-display: swap;
@@ -180,7 +180,7 @@ h2, h3, h4, h5, h6 {
 
 @font-face {
   font-family: 'Varela Round';
-  src: url('../assets/fonts/VarelaRound-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/VarelaRound-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -445,7 +445,6 @@ html.dark, body.dark, :root:not(.light) {
   50% { scale: 1.1 1; }
   100% { scale: 1 1; }
 }
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -456,6 +455,7 @@ html.dark, body.dark, :root:not(.light) {
   src: url('../assets/fonts/MatrixSansPrint-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 

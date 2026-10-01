@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { articles } from '../data/articles';
+import { photoProps } from '../lib/photo';
 import { useEffect } from 'react';
 import { NotFoundPage } from './NotFoundPage';
 
@@ -22,7 +23,7 @@ const ArticlePage = () => {
     <div className="article-page container mx-auto px-4 py-8 pt-24 text-primary">
       <h1 className="text-4xl font-bold mb-4">{article.title}</h1>
       <p className="text-sm text-secondary mb-4">{article.date}</p>
-      <img src={article.image} alt={article.title} className="w-full h-96 object-cover rounded-lg mb-4" />
+      <img {...photoProps(article.image, '(min-width: 1024px) 1024px, 100vw')} alt={article.title} className="w-full h-96 object-cover rounded-lg mb-4" />
       <div className="mb-6 flex items-center">
         <span className="spec-tag">{article.specs}</span>
       </div>
@@ -33,8 +34,9 @@ const ArticlePage = () => {
           {article.images.map(img => (
             <img
               key={img}
-              src={img}
+              {...photoProps(img, '(min-width: 768px) 33vw, 50vw')}
               alt={article.title}
+              loading="lazy"
               className="w-full rounded-lg"
               style={{ display: 'block' }}
             />

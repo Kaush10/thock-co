@@ -3,6 +3,7 @@ import { useTilt } from '../hooks/useTilt';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 import './KeyboardPageCard.css';
 import { Article } from '../data/articles';
+import { photoProps } from '../lib/photo';
 
 interface KeyboardPageCardProps {
   review: Article;
@@ -30,7 +31,7 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review, onRe
     >
       <div className="k-card-content-area">
         {review.image && (
-          <img src={review.image} alt={review.title} className="k-card-image" />
+          <img {...photoProps(review.image, '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw')} alt={review.title} loading="lazy" className="k-card-image" />
         )}
         <div className="k-card-text-block">
           <div className="flex justify-between items-center mb-2">

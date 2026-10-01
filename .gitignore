@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Generated from photos/ by scripts/photos.mjs
+public/builds/

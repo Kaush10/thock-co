@@ -53,7 +53,7 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review, onRe
           </blockquote>
           {onReadMore && (
             <button
-              className="mt-2 text-sm font-medium hover:underline flex items-center gap-1 group bg-transparent p-0 border-0 outline-none focus:underline secondary-highlight"
+              className="mt-2 text-sm font-medium hover:underline flex items-center gap-1 group bg-transparent p-0 border-0 focus:underline secondary-highlight"
               style={{ background: 'none', boxShadow: 'none', cursor: 'pointer' }}
               onClick={e => {
                 e.stopPropagation();

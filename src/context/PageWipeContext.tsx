@@ -1,3 +1,5 @@
+import { prefersReducedMotion } from '../lib/motion';
+
 // Ordered left→right: navigating to a higher index = forward (right→left sweep)
 const PAGE_ORDER = ['/', '/about', '/keyboards', '/build-service'];
 
@@ -11,3 +13,13 @@ export function dispatchPageWipe(fromPath: string, toPath: string) {
 // Time until all panels are fully covering — callers delay navigate() by this
 // Last panel (stagger i=2): 40% × 900ms + 2 × 90ms = 360 + 180 = 540ms, +10ms buffer
 export const PAGE_WIPE_COVER_MS = 550;
+
+/** Plays the wipe, then navigates once it covers the page. Navigates straight away for reduced motion. */
+export function navigateWithWipe(fromPath: string, toPath: string, navigate: (path: string) => void) {
+  if (prefersReducedMotion()) {
+    navigate(toPath);
+    return;
+  }
+  dispatchPageWipe(fromPath, toPath);
+  setTimeout(() => navigate(toPath), PAGE_WIPE_COVER_MS);
+}

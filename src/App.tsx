@@ -54,9 +54,11 @@ function AppContent() {
       <PageWipe isDark={isDark} />
       <RouteMeta />
       <ScrollToTop />
+      <a href="#main" className="skip-link">skip to content</a>
       <div className="min-h-screen flex flex-col">
         <Navbar isDark={isDark} onThemeToggle={handleThemeToggle} />
         {/* Only apply overflow-x-hidden to content below hero on homepage */}
+        <main id="main" className="flex-1">
         <Suspense fallback={<div className="min-h-screen" />}>
         <Routes>
           <Route path="/" element={<HomePage isDark={isDark} overflowXHiddenClass="overflow-x-hidden-except-hero" />} />
@@ -67,6 +69,7 @@ function AppContent() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </Suspense>
+        </main>
         <ConditionalFooter />
       </div>
     </Router>

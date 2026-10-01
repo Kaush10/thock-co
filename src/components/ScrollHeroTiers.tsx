@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { HomeTierIntroCards } from './HomeTierIntroCards';
+import { prefersReducedMotion } from '../lib/motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
@@ -21,7 +22,7 @@ export const ScrollHeroTiers: React.FC<ScrollHeroTiersProps> = ({ isDark }) => {
     const scrollDistance = isMobile ? 1800 : 2800;
     const pinEl = pinRef.current;
     const easeEl = easeRef.current;
-    if (componentRef.current && pinEl && easeEl) {
+    if (componentRef.current && pinEl && easeEl && !prefersReducedMotion()) {
       componentRef.current.style.height = `calc(100vh + ${scrollDistance}px)`;
 
       // Ease-in/out cushion on a separate inner wrapper (opacity + scale

@@ -37,7 +37,7 @@ export const FAQCard: React.FC = () => {
         {FAQ.map((item, idx) => (
           <li key={item.q} className="py-3">
             <button
-              className={`flex items-center w-full text-left text-sm font-semibold focus:outline-none transition-colors ${openIdx === idx ? 'text-interactive' : 'text-theme-body'} hover:text-interactive`}
+              className={`flex items-center w-full text-left text-sm font-semibold transition-colors ${openIdx === idx ? 'text-interactive' : 'text-theme-body'} hover:text-interactive`}
               onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
               aria-expanded={openIdx === idx}
               aria-controls={`faq-answer-${idx}`}

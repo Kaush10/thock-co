@@ -828,3 +828,33 @@ body::after {
   border-color: color-mix(in srgb, var(--c-light) 80%, transparent);
 }
 
+
+/* Keyboard focus: always visible, never shown for mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--interactive-highlight, #ff00aa);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 10000;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--c-bg);
+  color: inherit;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

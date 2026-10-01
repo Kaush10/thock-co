@@ -1,7 +1,7 @@
 import { ScrollHero } from '../components/ScrollHero';
 import { AnimatedHole } from '../components/AnimatedHole';
 import { useNavigate } from 'react-router-dom';
-import { dispatchPageWipe, PAGE_WIPE_COVER_MS } from '../context/PageWipeContext';
+import { navigateWithWipe } from '../context/PageWipeContext';
 import { ScrollHeroTiers } from '../components/ScrollHeroTiers';
 import keyboardBlank from '../assets/stuff/keyboard blank.png';
 
@@ -50,7 +50,7 @@ at thock & co., my mission is to transform your vision into a typing masterpiece
                 '0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent)',
               // width is now handled by Tailwind classes
             }}
-            onClick={() => { dispatchPageWipe('/', '/build-service'); setTimeout(() => navigate('/build-service'), PAGE_WIPE_COVER_MS); }}
+            onClick={() => navigateWithWipe('/', '/build-service', navigate)}
           >
             <h2
               className={`font-subheading m-0 p-0 ${isDark ? 'text-white' : 'text-black'}`}

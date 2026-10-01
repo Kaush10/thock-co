@@ -2,7 +2,7 @@
 import { Sun, Moon } from 'lucide-react';
 import './menu-drawer-card.css';
 import { Link, useLocation } from 'react-router-dom';
-import { dispatchPageWipe, PAGE_WIPE_COVER_MS } from '../context/PageWipeContext';
+import { navigateWithWipe } from '../context/PageWipeContext';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
@@ -61,8 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     handleNavClick();
     if (WIPED_PAGES.includes(path) && path !== location.pathname) {
       e.preventDefault();
-      dispatchPageWipe(location.pathname, path);
-      setTimeout(() => navigate(path), PAGE_WIPE_COVER_MS);
+      navigateWithWipe(location.pathname, path, navigate);
     }
   };
 
@@ -143,6 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <VolumeControl />
           <GlassCard
             onClick={onThemeToggle}
+            ariaLabel={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
             className="theme-toggle-card w-10 h-10 flex items-center justify-center"
             exaggerated={true}
           >

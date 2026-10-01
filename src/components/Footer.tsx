@@ -1,7 +1,7 @@
 
 import { Instagram, MessageCircle, Mail } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { dispatchPageWipe, PAGE_WIPE_COVER_MS } from '../context/PageWipeContext';
+import { navigateWithWipe } from '../context/PageWipeContext';
 
 const WIPED_PAGES = ['/', '/about', '/keyboards', '/build-service'];
 
@@ -20,8 +20,7 @@ export const Footer: React.FC = () => {
     handleLinkClick();
     if (WIPED_PAGES.includes(to) && to !== location.pathname) {
       e.preventDefault();
-      dispatchPageWipe(location.pathname, to);
-      setTimeout(() => navigate(to), PAGE_WIPE_COVER_MS);
+      navigateWithWipe(location.pathname, to, navigate);
     }
   };
 
@@ -57,13 +56,13 @@ export const Footer: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-3 w-full justify-center md:justify-end">
-          <a href="#" className="hover:text-interactive transition-colors">
+          <a href="#" aria-label="Instagram" className="hover:text-interactive transition-colors">
             <Instagram size={18} />
           </a>
-          <a href="#" className="hover:text-interactive transition-colors">
+          <a href="#" aria-label="Discord" className="hover:text-interactive transition-colors">
             <MessageCircle size={18} />
           </a>
-          <a href="#" className="hover:text-interactive transition-colors">
+          <a href="#" aria-label="Email" className="hover:text-interactive transition-colors">
             <Mail size={18} />
           </a>
         </div>

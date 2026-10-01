@@ -3,6 +3,7 @@ import './ScrollHero.css';
 import './KeyboardPageCard.css';
 import { articles } from '../data/articles';
 import { photoProps } from '../lib/photo';
+import { prefersReducedMotion } from '../lib/motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -29,6 +30,11 @@ export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   useEffect(() => {
     let st: ScrollTrigger | undefined;
     let scrollTimeout: ReturnType<typeof setTimeout>;
+
+    if (prefersReducedMotion()) {
+      if (cursorRef.current) cursorRef.current.style.display = 'none';
+      return;
+    }
 
     if (componentRef.current && textContainerRef.current && cursorRef.current) {
       // Set the container's height to be the animation scroll distance + 1 screen height

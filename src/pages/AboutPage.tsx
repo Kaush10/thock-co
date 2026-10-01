@@ -41,7 +41,7 @@ export const AboutPage: React.FC = () => {
           <div className="k-card-container mt-8">
             <div className="k-card-content-area p-8 flex justify-center">
               <div className="flex flex-wrap justify-center gap-4">
-                <a
+                <a aria-label="Instagram"
                   href="https://instagram.com/kaush.me"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -50,7 +50,7 @@ export const AboutPage: React.FC = () => {
                 >
                   <Instagram size={28} strokeWidth={2} />
                 </a>
-                <a
+                <a aria-label="YouTube"
                   href="https://youtube.com/@kaushme"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -59,7 +59,7 @@ export const AboutPage: React.FC = () => {
                 >
                   <Youtube size={28} strokeWidth={2} />
                 </a>
-                <a
+                <a aria-label="LinkedIn"
                   href="https://linkedin.com/in/kaushrajesh"
                   target="_blank"
                   rel="noopener noreferrer"

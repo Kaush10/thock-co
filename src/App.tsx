@@ -10,6 +10,8 @@ import { AboutPage } from './pages/AboutPage';
 import ArticlePage from './pages/ArticlePage'; // Import the new ArticlePage
 import { SiteConfigProvider, useSiteConfig } from './context/SiteConfigContext';
 import { PageWipe } from './components/PageWipe';
+import { RouteMeta } from './components/RouteMeta';
+import { NotFoundPage } from './pages/NotFoundPage';
 import './styles/globals.css';
 
 
@@ -47,6 +49,7 @@ function AppContent() {
   return (
     <Router>
       <PageWipe isDark={isDark} />
+      <RouteMeta />
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Navbar isDark={isDark} onThemeToggle={handleThemeToggle} />
@@ -57,6 +60,7 @@ function AppContent() {
           <Route path="/keyboards/:slug" element={<ArticlePage />} />
           <Route path="/build-service" element={<BuildServicePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <ConditionalFooter />
       </div>

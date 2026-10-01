@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { articles } from '../data/articles';
 import { useEffect } from 'react';
+import { NotFoundPage } from './NotFoundPage';
 
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -11,7 +12,7 @@ const ArticlePage = () => {
   }, []);
 
   if (!article) {
-    return <div>Article not found</div>;
+    return <NotFoundPage />;
   }
 
   // Find additional images matching the article title (excluding the cover)

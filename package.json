@@ -3,11 +3,11 @@
   "source": "./index.html",
   "type": "module",
   "name": "thock-co",
-  "description": "thock&co. — Kaush's keyboard builds, and the occasional commission.",
+  "description": "thock&co. \u2014 Kaush's keyboard builds, and the occasional commission.",
   "homepage": "https://thockco.com",
   "scripts": {
     "dev": "vite",
-    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -21,6 +21,7 @@
     "vanilla-tilt": "^1.8.1"
   },
   "devDependencies": {
+    "@types/node": "^20.19.43",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.0",
     "@types/three": "^0.178.1",

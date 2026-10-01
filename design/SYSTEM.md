@@ -43,13 +43,18 @@ Radii: `stage` 28px (photos), `panel` 20px, `cap` 12px.
 - **Reddit Mono** (`font-mono`): specs, data, controls, labels. Lowercase, no
   tracking, no all-caps.
 - **Varela Round** (`font-body`): sentences. Lines under 70 characters.
+- **Inter** (self-hosted, 500–700): keycap legends only, standing in for the
+  Helvetica printed on Cherry-profile caps. Capital alphas, top-left;
+  shifted symbols stacked over numbers; modifiers ("Caps Lock") smaller and
+  in mixed case, as on a real board.
 - LED text uses the 5×7 font in `src/system/glyphs.ts`, rendered by `LedText`.
 
 ## Components
 
 | component | use |
 |---|---|
-| `Keycap` | every button; `down` while held or playing, `lit` when typed |
+| `Keycap` | every button: a Cherry-profile cap (mitred walls, dished face) with a printed legend; `down` while held or playing, `lit` when typed |
+| `Keyboard` | a 65% board in a silver case; pink underglow is ember at rest and signal while someone types |
 | `Kbd` | a key named inside a sentence |
 | `LedText` | text on an LED display; long text shows its end |
 | `DotWave` | an audio waveform as an LED meter |

@@ -3,6 +3,14 @@
  * Written up in design/SYSTEM.md.
  */
 
+/* Keycap legends: Inter stands in for the Helvetica printed on Cherry-profile caps. */
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/Inter-latin-500-700.woff2') format('woff2');
+  font-weight: 500 700;
+  font-display: swap;
+}
+
 :root {
   /* surfaces, darkest first */
   --void: #000000;      /* the page */
@@ -42,69 +50,134 @@
   background-size: calc(var(--dot-pitch) * 5) calc(var(--dot-pitch) * 5);
 }
 
-/* ---- keycap: the only button style ---------------------------------- */
+/* ---- keycap: the only button style ----------------------------------
+ * Modelled on a Cherry-profile PBT cap seen from slightly in front: four
+ * walls (the front one tallest) drawn as borders so the corners mitre, and
+ * a dished top face drawn by ::before. Legends sit top-left in Helvetica,
+ * like printed caps. Size comes from --u, one keyboard unit.
+ */
 
 .keycap {
-  --cap-top: #fbfaf7;
-  --cap-face: #e7e4de;
-  --cap-side: #cfccc6;
-  --cap-base: #9e9a93;
-  --cap-ink: #36342f;
-  --cap-travel: 6px;
+  --u: 4rem;
+  --face: #f5f4f1;
+  --face-shade: #e6e4df;
+  --wall-back: #e9e7e3;
+  --wall-side: #d8d5cf;
+  --wall-front: #c4c0b9;
+  --ink: #141414;
+  --wall-b: calc(var(--u) * 0.06);
+  --wall-s: calc(var(--u) * 0.11);
+  --wall-f: calc(var(--u) * 0.19);
   position: relative;
-  display: inline-grid;
-  place-items: center;
-  min-width: 3rem;
-  min-height: 3rem;
-  padding: 0 1.25rem;
-  border: 0;
-  border-radius: var(--radius-cap, 0.75rem);
-  background: var(--cap-side);
-  box-shadow: 0 var(--cap-travel) 0 var(--cap-base), 0 calc(var(--cap-travel) * 2) 24px rgba(0, 0, 0, 0.5);
-  color: var(--cap-ink);
-  font-family: 'Reddit Mono', monospace;
-  font-size: 0.875rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: var(--u);
+  height: var(--u);
+  padding: calc(var(--u) * 0.07) calc(var(--u) * 0.1);
+  border-style: solid;
+  border-width: var(--wall-b) var(--wall-s) var(--wall-f);
+  border-color: var(--wall-back) var(--wall-side) var(--wall-front);
+  border-radius: calc(var(--u) * 0.13);
+  background: var(--wall-side);
+  box-shadow: 0 calc(var(--u) * 0.03) 0 rgba(0, 0, 0, 0.35), 0 calc(var(--u) * 0.08) calc(var(--u) * 0.2) rgba(0, 0, 0, 0.45);
+  color: var(--ink);
+  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: calc(var(--u) * 0.3);
+  line-height: 1;
+  text-align: left;
   cursor: pointer;
   user-select: none;
-  transition: transform var(--release) ease-out, box-shadow var(--release) ease-out;
+  transition: transform var(--release) ease-out, box-shadow var(--release) ease-out, filter var(--release);
 }
 .keycap::before {
   content: '';
   position: absolute;
-  inset: 4px 5px calc(4px + var(--cap-travel) * 0.5);
-  border-radius: calc(0.75rem - 4px);
-  background: linear-gradient(var(--cap-top), var(--cap-face));
-  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+  inset: 0;
+  border-radius: calc(var(--u) * 0.07);
+  /* the dish: lighter where it catches light at the back, shading toward you */
+  background: radial-gradient(130% 110% at 50% -10%, #ffffff 0%, var(--face) 55%, var(--face-shade) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 .keycap > * { position: relative; }
+
+/* legends */
+.keycap .legend-mod { font-size: calc(var(--u) * 0.17); font-weight: 500; white-space: nowrap; }
+.keycap .legend-pair { display: flex; flex-direction: column; gap: calc(var(--u) * 0.07); font-size: calc(var(--u) * 0.21); font-weight: 500; }
+.keycap[data-align='center'] { align-items: center; justify-content: center; text-align: center; }
+.keycap[data-align='label'] { justify-content: center; font-size: calc(var(--u) * 0.24); font-weight: 600; white-space: nowrap; padding-inline: calc(var(--u) * 0.16); }
+
+/* pressed: the cap drops and its front wall shortens */
 .keycap:active,
 .keycap[data-down='true'] {
-  transform: translateY(calc(var(--cap-travel) - 1px));
-  box-shadow: 0 1px 0 var(--cap-base), 0 4px 12px rgba(0, 0, 0, 0.5);
+  transform: translateY(calc(var(--u) * 0.045));
+  border-bottom-width: calc(var(--wall-f) * 0.7);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35), 0 calc(var(--u) * 0.03) calc(var(--u) * 0.08) rgba(0, 0, 0, 0.45);
   transition-duration: var(--press);
 }
+
 .keycap[data-variant='dark'] {
-  --cap-top: #4a4a50;
-  --cap-face: #3a3a3f;
-  --cap-side: #2c2c30;
-  --cap-base: #141416;
-  --cap-ink: #c9c9cc;
+  --face: #45454b;
+  --face-shade: #36363b;
+  --wall-back: #3c3c41;
+  --wall-side: #2c2c31;
+  --wall-front: #1f1f23;
+  --ink: #ececec;
 }
+.keycap[data-variant='dark']::before { background: radial-gradient(130% 110% at 50% -10%, #55555c 0%, var(--face) 55%, var(--face-shade) 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12); }
+
 .keycap[data-variant='signal'] {
-  --cap-top: #ff6fd0;
-  --cap-face: #ff1fb4;
-  --cap-side: #d4008a;
-  --cap-base: #6d0047;
-  --cap-ink: #2a0019;
-  box-shadow: 0 var(--cap-travel) 0 var(--cap-base), 0 calc(var(--cap-travel) * 2) 32px rgba(255, 0, 170, 0.35);
+  --face: #ff2fb9;
+  --face-shade: #e6009c;
+  --wall-back: #ff4cc4;
+  --wall-side: #cc0088;
+  --wall-front: #99005f;
+  --ink: #2b0019;
 }
-.keycap[data-lit='true']::before {
-  background: linear-gradient(#ffd6f0, #ff8fd8);
-}
+.keycap[data-variant='signal']::before { background: radial-gradient(130% 110% at 50% -10%, #ff8fdc 0%, var(--face) 55%, var(--face-shade) 100%); }
+
+/* lit: typed on the visitor's own keyboard; pink light comes up through the cap */
 .keycap[data-lit='true'] {
-  box-shadow: 0 1px 0 var(--cap-base), 0 0 26px rgba(255, 0, 170, 0.8);
-  transform: translateY(calc(var(--cap-travel) - 2px));
+  --wall-side: #f7b3df;
+  --wall-front: #e88cc8;
+  filter: drop-shadow(0 0 calc(var(--u) * 0.18) rgba(255, 0, 170, 0.75));
 }
+.keycap[data-lit='true']::before { background: radial-gradient(130% 110% at 50% -10%, #fff 0%, #ffe0f3 55%, #ffc2e8 100%); }
+
+.keycap:disabled { cursor: not-allowed; }
+
+/* ---- keyboard housing: silver case, pink underglow through the gaps --- */
+
+.board {
+  --u: 3.25rem;
+  --gap: calc(var(--u) * 0.07);
+  display: inline-block;
+  padding: calc(var(--u) * 0.32);
+  border-radius: calc(var(--u) * 0.28);
+  background: linear-gradient(180deg, #c9ccd2 0%, #aeb2b9 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    0 calc(var(--u) * 0.5) calc(var(--u) * 1.2) rgba(0, 0, 0, 0.6);
+}
+.board-plate {
+  display: grid;
+  gap: var(--gap);
+  padding: var(--gap);
+  border-radius: calc(var(--u) * 0.12);
+  background: #0b0b0d;
+  /* underglow: ember at rest, signal while someone types */
+  box-shadow: inset 0 0 calc(var(--u) * 0.35) rgba(143, 13, 99, 0.55);
+  transition: box-shadow 400ms ease;
+}
+.board[data-live='true'] .board-plate {
+  box-shadow: inset 0 0 calc(var(--u) * 0.5) rgba(255, 0, 170, 0.85), 0 0 calc(var(--u) * 0.6) rgba(255, 0, 170, 0.35);
+}
+.board-row { display: flex; gap: var(--gap); }
+.board .keycap { --u: inherit; width: calc(var(--u) * var(--w, 1) + var(--gap) * (var(--w, 1) - 1)); min-width: 0; flex: none; }
 
 /* ---- kbd: a key named in running text ------------------------------- */
 
@@ -135,5 +208,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .keycap { transition: none; }
+  .keycap, .board-plate { transition: none; }
 }

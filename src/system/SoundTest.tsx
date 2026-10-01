@@ -112,16 +112,14 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
       <div className="flex items-center gap-5">
         <Keycap
           variant={recorded ? 'signal' : 'dark'}
+          align="label"
           down={playing}
           onClick={toggle}
           disabled={!recorded}
           aria-label={playing ? 'pause the sound test' : 'play the sound test'}
-          className="h-14 min-w-36 disabled:cursor-not-allowed"
-        >
-          <span className="inline-flex items-center gap-2">
-            {playing ? '❚❚' : '▶'} space
-          </span>
-        </Keycap>
+          legend={playing ? '❚❚  space' : '▶  space'}
+          className="min-w-40"
+        />
         <p className="font-mono text-label text-ash">
           {recorded ? (note ?? <>press <Kbd>space</Kbd> to play or pause.</>) : 'no recording yet.'}
         </p>

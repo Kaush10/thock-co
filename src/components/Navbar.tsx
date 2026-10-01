@@ -53,12 +53,12 @@ export const Navbar: React.FC<NavbarProps> = () => {
 
   return (
     <nav className="navbar-glass sticky top-0 z-[10000] border-b border-line bg-black/75 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-[82.5rem] items-center gap-6 px-5 md:px-9">
-        <Link to="/" onClick={(event) => go(event, '/')} className="font-display text-[1.375rem] leading-none text-bone hover:opacity-80">
+      <div className="mx-auto flex h-16 max-w-[75rem] items-center gap-6 px-5 md:px-8">
+        <Link to="/" onClick={(event) => go(event, '/')} className="font-display text-xl leading-none text-bone hover:opacity-80">
           thock&co.
         </Link>
 
-        <ul className="mx-auto hidden items-center gap-8 font-mono text-sm md:flex">
+        <ul className="t-small mx-auto hidden items-center gap-8 md:flex">
           {NAV_ITEMS.map((item) => (
             <li key={item.path}>
               <Link
@@ -84,14 +84,14 @@ export const Navbar: React.FC<NavbarProps> = () => {
 
       {menuOpen && (
         <div className="border-t border-line bg-black/95 md:hidden">
-          <ul className="mx-auto max-w-[82.5rem] px-5 py-4">
+          <ul className="mx-auto max-w-[75rem] px-5 py-2">
             {NAV_ITEMS.map((item) => (
               <li key={item.path} className="border-b border-line last:border-0">
                 <Link
                   to={item.path}
                   onClick={(event) => go(event, item.path)}
                   aria-current={isActive(item.path) ? 'page' : undefined}
-                  className="flex items-center justify-between py-4 font-display text-3xl text-bone"
+                  className="t-heading flex items-center justify-between py-4"
                 >
                   {item.label}
                   <Led on={isActive(item.path)} />
@@ -99,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
               </li>
             ))}
           </ul>
-          <div className="mx-auto flex max-w-[82.5rem] gap-6 px-5 pb-6 font-mono text-sm text-ash">
+          <div className="t-small mx-auto flex max-w-[75rem] gap-6 px-5 pb-6 text-ash">
             <a href={instagramUrl} target="_blank" rel="noreferrer" className="hover:text-bone">
               @{siteConfig.contact.instagram}
             </a>

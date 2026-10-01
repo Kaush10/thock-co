@@ -117,7 +117,7 @@ function SlideCard({ onSlide }: { onSlide: (index: number) => void }) {
         {builds.map((b, i) => (
           <img
             key={b.slug}
-            {...photoProps(b.image, '(min-width: 1024px) 28rem, 90vw')}
+            {...photoProps(b.image, '(min-width: 1024px) 20rem, 90vw')}
             alt=""
             loading={i === 0 ? 'eager' : 'lazy'}
             className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
@@ -157,14 +157,14 @@ export function HomeHero() {
 
   const current = builds[slide];
   return (
-    <section className="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[82.5rem] items-center gap-14 px-5 py-14 md:px-9 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-20">
+    <section className="mx-auto grid max-w-[75rem] items-center gap-12 px-5 py-12 md:py-16 lg:min-h-[calc(100svh-4rem)] md:px-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-24">
       <div>
-        <h1 className="font-display text-[clamp(3.5rem,9vw,7.25rem)] font-normal leading-[0.9] text-bone">thock&co.</h1>
-        <div aria-hidden className="mt-9 max-w-[40rem] space-y-5 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.7] text-bone/85">
+        <h1 className="t-display">thock&co.</h1>
+        <div aria-hidden className="t-lead mt-7 max-w-[34rem] space-y-4">
           {rendered}
         </div>
         <p className="sr-only">{INTRO}</p>
-        <a href="#boards" className="mt-10 inline-flex items-center gap-3 font-mono text-sm text-ash transition-colors hover:text-bone">
+        <a href="#boards" className="t-small mt-9 inline-flex items-center gap-3 text-ash transition-colors hover:text-bone">
           <span aria-hidden className="flex flex-col gap-1">
             {[0, 1, 2].map((i) => (
               <span key={i} className="led-chase block size-1 rounded-full bg-current" style={{ animationDelay: `${i * 160}ms` }} />
@@ -174,13 +174,13 @@ export function HomeHero() {
         </a>
       </div>
 
-      <div className="mx-auto w-full max-w-[26rem] lg:mx-0 lg:justify-self-end">
+      <div className="mx-auto w-full max-w-[20rem] lg:mx-0 lg:justify-self-end">
         <SlideCard onSlide={setSlide} />
-        <div className="mt-5 flex items-center gap-4">
+        <div className="mt-4 flex items-center gap-3">
           <div className="min-w-0 flex-1 rounded-md bg-panel p-2 shadow-[0_0_0_1px_var(--line)]">
             <LedText text={current.title} cols={60} />
           </div>
-          <span className="font-mono text-label text-ash">
+          <span className="t-caption tabular-nums">
             {String(slide + 1).padStart(2, '0')} / {String(builds.length).padStart(2, '0')}
           </span>
         </div>

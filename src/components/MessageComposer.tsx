@@ -122,7 +122,7 @@ export function MessageComposer({ withKeyboard = true }: { withKeyboard?: boolea
 
   return (
     <div ref={sectionRef} className="flex w-full flex-col items-center">
-      <Panel className="w-full max-w-[52rem] !p-6">
+      <Panel className="w-full max-w-[46rem] !p-5 md:!p-6">
         <label className="relative block cursor-text rounded-md p-1 transition-shadow focus-within:shadow-[0_0_0_1px_rgba(255,0,170,0.35)]">
           <span className="sr-only">a message to kaush</span>
           <LedText text={typing ? text : ledCols < 96 ? 'say hi' : 'type to say hi'} cols={ledCols} cursor={focused} tone={typing ? 'lit' : 'idle'} />
@@ -140,7 +140,7 @@ export function MessageComposer({ withKeyboard = true }: { withKeyboard?: boolea
             autoComplete="off"
           />
         </label>
-        <div className="mt-3 flex justify-between font-mono text-label text-ash">
+        <div className="t-caption mt-3 flex justify-between">
           <span>
             type anything, then press <Kbd>enter</Kbd> to send it to my inbox.
           </span>
@@ -153,16 +153,15 @@ export function MessageComposer({ withKeyboard = true }: { withKeyboard?: boolea
               <Lamp on>inbox open</Lamp>
               <Lamp on={benchOpen}>{benchOpen ? 'bench open' : 'bench full'}</Lamp>
             </div>
-            <p className="max-w-[52ch] text-sm leading-relaxed text-ash">
+            <p className="t-small max-w-[46ch] text-ash">
               {benchOpen
                 ? "i'm taking a build or two right now. tell me what you have in mind and i'll quote it."
                 : "i'm not taking builds right now, but i read every message. if your idea is one i'd want to build, i'll tell you."}
             </p>
           </div>
-          <div className="flex flex-wrap items-start gap-3 [--u:3.25rem] sm:gap-4 sm:[--u:4rem]">
-            <Keycap variant="signal" align="label" legend="send as email" onClick={send} aria-describedby="send-hint" className="[--u:inherit]" />
+          <div className="flex flex-wrap items-start gap-3">
+            <Keycap variant="signal" align="label" legend="send as email" onClick={send} aria-describedby="send-hint" />
             <Keycap
-              className="[--u:inherit]"
               align="label"
               legend={`dm @${siteConfig.contact.instagram}`}
               onClick={() => window.open(instagramUrl, '_blank', 'noreferrer')}
@@ -178,7 +177,7 @@ export function MessageComposer({ withKeyboard = true }: { withKeyboard?: boolea
         <Keyboard
           angled
           finish="graphite"
-          unit="clamp(1.1rem, 3.5vw, 3.1rem)"
+          unit="clamp(1.1rem, 3.2vw, 2.75rem)"
           lit={lit}
           live={typing}
           onKey={onScreenKey}

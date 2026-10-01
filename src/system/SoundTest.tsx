@@ -103,9 +103,9 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
   return (
     <Panel as="section" className="shadow-[0_0_0_1px_var(--line),0_30px_80px_rgba(255,0,170,0.07)]">
       <div className="flex items-baseline justify-between">
-        <h2 className="font-mono text-[0.9375rem] font-normal normal-case tracking-normal text-bone">{title}</h2>
+        <h2 className="t-small text-bone">{title}</h2>
         {recorded && (
-          <span className="font-mono text-label text-ash">
+          <span className="t-caption tabular-nums">
             <span className={playing ? 'text-signal' : ''}>{clock(progress * duration)}</span> / {clock(duration)}
           </span>
         )}
@@ -126,9 +126,9 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
           disabled={!recorded}
           aria-label={playing ? 'pause the sound test' : 'play the sound test'}
           legend={`${playing ? '❚❚' : '▶'}  ${finePointer ? 'space' : playing ? 'pause' : 'play'}`}
-          className="min-w-40"
+          className="min-w-32"
         />
-        <p className="font-mono text-label text-ash">
+        <p className="t-caption">
           {recorded ? (note ?? <>press <Kbd>space</Kbd> to play or pause.</>) : 'no recording yet.'}
         </p>
       </div>

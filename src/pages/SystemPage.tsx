@@ -51,7 +51,7 @@ function useSynthTyping() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="grid gap-8 border-t border-line py-14 md:grid-cols-[14rem_1fr]">
-      <h2 className="font-mono text-[0.9375rem] font-normal normal-case tracking-normal text-ash">{title}</h2>
+      <h2 className="t-small text-ash">{title}</h2>
       <div>{children}</div>
     </section>
   );
@@ -61,7 +61,7 @@ export const SystemPage: React.FC = () => {
   const synth = useSynthTyping();
   return (
     <div className="mx-auto max-w-6xl px-8 pb-32 pt-28 font-body text-bone">
-      <h1 className="font-display text-display-xl">system</h1>
+      <h1 className="t-display">system</h1>
       <p className="mt-4 max-w-xl text-ash">
         thock&co. is an instrument panel: every lit element is a dot on one 8px grid, pink means
         something is live, and the only button is a keycap.
@@ -72,8 +72,8 @@ export const SystemPage: React.FC = () => {
           {COLORS.map(([name, value, role]) => (
             <div key={name}>
               <div className="h-20 rounded-panel shadow-[0_0_0_1px_var(--line)]" style={{ background: `var(--${name})` }} />
-              <p className="mt-3 font-mono text-sm">{name}</p>
-              <p className="font-mono text-label text-ash">{value}</p>
+              <p className="t-small mt-3">{name}</p>
+              <p className="t-caption">{value}</p>
               <p className="mt-1 text-sm text-ash">{role}</p>
             </div>
           ))}
@@ -82,13 +82,15 @@ export const SystemPage: React.FC = () => {
 
       <Section title="type">
         <div className="space-y-6">
-          <p className="font-display text-display-xl">bauer lite</p>
-          <p className="font-display text-display-lg">display large</p>
-          <p className="font-display text-display-md">display medium, for section titles</p>
-          <p className="font-mono text-[0.9375rem]">mono: specs, data, controls. always lowercase.</p>
-          <p className="font-mono text-label text-ash">mono label: secondary details and captions</p>
-          <p className="max-w-[62ch] text-[1.0625rem] leading-relaxed">
-            body: varela round for sentences. a 65% aluminium board with a polycarbonate plate, built
+          <p className="t-display">bauer lite</p>
+          <p className="t-title">display large</p>
+          <p className="t-heading">display medium, for section titles</p>
+          <p className="t-subheading">subheading: card names</p>
+          <p className="t-lead">lead: the first paragraph on a page, 18px.</p>
+          <p className="t-small">small: interface text, lamps, spec sheets, 14px.</p>
+          <p className="t-caption">caption: dates, counts and quiet details, 13px.</p>
+          <p className="t-body max-w-[62ch]">
+            body: varela round for everything people read, 16px. a 65% aluminium board with a polycarbonate plate, built
             to sound soft and low. lines stay under 70 characters.
           </p>
         </div>
@@ -103,7 +105,7 @@ export const SystemPage: React.FC = () => {
             <LedText text="abcdefghijklmnopqrstuvwxyz 0123456789 .,'!?-:/@&()" cols={96} />
           </Panel>
           <DotRule cols={120} />
-          <p className="font-mono text-label text-ash">
+          <p className="t-caption">
             one font, one grid: 5×7 glyphs on an 8px pitch. long text shows its end, like a sign
             scrolling as you type.
           </p>
@@ -135,16 +137,16 @@ export const SystemPage: React.FC = () => {
         <div className="space-y-10 overflow-x-auto pb-4">
           <Keyboard unit="2.9rem" lit={new Set(['h', 'i'])} />
           <Keyboard unit="2.9rem" lit={new Set(['enter'])} live />
-          <p className="font-mono text-label text-ash">
+          <p className="t-caption">
             silver case, pink underglow: ember at rest, signal while someone types (second board).
           </p>
           <div className="grid gap-16 pt-10">
             <div>
-              <p className="mb-6 font-mono text-sm text-ash">angled, graphite (as in mockup b)</p>
+              <p className="mb-6 t-small text-ash">angled, graphite (as in mockup b)</p>
               <Keyboard angled finish="graphite" unit="2.9rem" lit={new Set(['h', 'i', ' '])} live />
             </div>
             <div>
-              <p className="mb-6 font-mono text-sm text-ash">angled, silver</p>
+              <p className="mb-6 t-small text-ash">angled, silver</p>
               <Keyboard angled unit="2.9rem" lit={new Set(['h', 'i', ' '])} live />
             </div>
           </div>

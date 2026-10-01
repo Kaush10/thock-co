@@ -38,8 +38,8 @@ export const BuildPage: React.FC = () => {
   const photos = build.images.length ? build.images : [build.image];
 
   return (
-    <div className="mx-auto w-full max-w-[82.5rem] px-5 pb-28 pt-8 font-body text-bone md:px-9 md:pt-12">
-      <nav aria-label="other builds" className="mb-7 flex justify-between font-mono text-sm">
+    <div className="mx-auto w-full max-w-[75rem] px-5 pb-24 pt-8 text-bone md:px-8 md:pt-10">
+      <nav aria-label="other builds" className="t-small mb-6 flex justify-between">
         <Link to={`/builds/${previous.slug}`} className="inline-flex items-center gap-2.5 text-ash hover:text-bone">
           <Kbd>←</Kbd> {previous.title}
         </Link>
@@ -48,23 +48,21 @@ export const BuildPage: React.FC = () => {
         </Link>
       </nav>
 
-      <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_32.5rem] lg:gap-12">
+      <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-14">
         <div className="overflow-hidden rounded-stage bg-surface">
           <img
             key={photos[photo]}
             {...photoProps(photos[photo], '(min-width: 1024px) 55vw, 100vw')}
             alt={`${build.title}, photo ${photo + 1} of ${photos.length}`}
-            className="aspect-[4/3] w-full object-cover sm:aspect-[4/5] lg:max-h-[54rem]"
+            className="aspect-[4/3] w-full object-cover sm:aspect-[4/5] lg:max-h-[44rem]"
           />
         </div>
 
-        <aside className="flex flex-col gap-9 lg:sticky lg:top-24">
+        <aside className="flex flex-col gap-8 lg:sticky lg:top-24">
           <div>
-            <h1 className="font-display text-[clamp(3rem,7vw,5.25rem)] font-normal leading-[0.92] tracking-normal normal-case">
-              {build.title}
-            </h1>
-            <p className="mt-4 text-[1.0625rem] leading-relaxed text-ash">{build.summary}</p>
-            <p className="mt-2 font-mono text-label text-ash">built {build.built}</p>
+            <h1 className="t-title">{build.title}</h1>
+            <p className="t-lead mt-4 !text-ash">{build.summary}</p>
+            <p className="t-caption mt-2">built {build.built}</p>
           </div>
 
           <SoundTest key={build.slug} src={soundUrl(build.slug)} />
@@ -74,7 +72,7 @@ export const BuildPage: React.FC = () => {
       </section>
 
       {photos.length > 1 && (
-        <ul className="mt-12 grid grid-cols-4 gap-3 md:gap-4">
+        <ul className="mt-10 grid grid-cols-4 gap-3 lg:max-w-[calc(100%-29.5rem)]">
           {photos.map((ref, i) => (
             <li key={ref}>
               <button
@@ -93,9 +91,9 @@ export const BuildPage: React.FC = () => {
         </ul>
       )}
 
-      <section className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1fr)_32.5rem] lg:gap-12">
-        <h2 className="font-display text-display-md font-normal normal-case tracking-normal">notes</h2>
-        <div className="space-y-4 text-[1.0625rem] leading-[1.75] text-[#c9c9cc]">
+      <section className="mt-14 lg:max-w-[calc(100%-29.5rem)]">
+        <h2 className="t-heading">notes</h2>
+        <div className="t-body mt-5 space-y-4 text-bone/80">
           {build.notes.map((paragraph) => (
             <p key={paragraph} className="max-w-[62ch]">
               {paragraph}

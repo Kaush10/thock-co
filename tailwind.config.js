@@ -17,15 +17,7 @@ module.exports = {
       },
       fontFamily: {
         display: ["Matrix Sans Print", "monospace"],
-        mono: ["Reddit Mono", "monospace"],
         body: ["Varela Round", "system-ui", "sans-serif"],
-      },
-      fontSize: {
-        // 1.333 scale from a 16px base, set for this site's three faces
-        "display-xl": ["5.25rem", { lineHeight: "0.9" }],
-        "display-lg": ["3.5rem", { lineHeight: "0.95" }],
-        "display-md": ["2.125rem", { lineHeight: "1" }],
-        label: ["0.8125rem", { lineHeight: "1.4" }],
       },
       borderRadius: {
         stage: "1.75rem",

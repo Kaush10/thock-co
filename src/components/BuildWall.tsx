@@ -5,7 +5,7 @@ import { useTilt } from '../hooks/useTilt';
 import { photoProps } from '../lib/photo';
 
 /** One board on the wall: its photo with a nameplate, leaning toward the pointer. */
-function BuildTile({ build, feature }: { build: Build; feature: boolean }) {
+function BuildTile({ build, feature, wide }: { build: Build; feature: boolean; wide: boolean }) {
   const ref = useRef<HTMLAnchorElement>(null);
   useTilt(ref, 'subtle');
   return (
@@ -13,21 +13,21 @@ function BuildTile({ build, feature }: { build: Build; feature: boolean }) {
       ref={ref}
       to={`/builds/${build.slug}`}
       className={`group relative block overflow-hidden rounded-stage bg-surface shadow-[0_0_0_1px_var(--line)] ${
-        feature ? 'aspect-[4/5] md:col-span-4 md:row-span-2 md:aspect-auto' : 'aspect-[4/3] md:col-span-2'
+        feature ? 'col-span-2 aspect-[4/5] md:col-span-4 md:row-span-2 md:aspect-auto' : `${wide ? 'col-span-2 aspect-[2/1]' : 'aspect-[4/5]'} md:col-span-2 md:aspect-[4/3]`
       }`}
     >
       <img
-        {...photoProps(build.image, feature ? '(min-width: 768px) 60vw, 100vw' : '(min-width: 768px) 30vw, 100vw')}
+        {...photoProps(build.image, feature ? '(min-width: 768px) 60vw, 100vw' : '(min-width: 768px) 30vw, 50vw')}
         alt=""
         loading="lazy"
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
       />
-      <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 md:p-6">
-        <h3 className={`font-display font-normal leading-[0.95] text-bone ${feature ? 'text-[clamp(2rem,4vw,3.5rem)]' : 'text-[clamp(1.5rem,2.2vw,2rem)]'}`}>
+      <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-1 p-3.5 sm:flex-row sm:items-end sm:justify-between sm:gap-4 md:p-5">
+        <h3 className={feature ? 't-heading' : 't-subheading'}>
           {build.title}
         </h3>
-        <span className="shrink-0 font-mono text-label text-bone/70">built {build.built}</span>
+        <span className="t-caption shrink-0 !text-bone/70">{build.built}</span>
       </div>
     </Link>
   );
@@ -35,13 +35,19 @@ function BuildTile({ build, feature }: { build: Build; feature: boolean }) {
 
 /**
  * The boards as a photo wall: the first is large, the rest fill around it.
- * One column on phones.
+ * Two columns on phones, with the first spanning both.
  */
 export function BuildWall({ builds }: { builds: Build[] }) {
   return (
-    <div className="grid gap-4 md:auto-rows-[minmax(13rem,1fr)] md:grid-cols-6 md:gap-5">
+    <div className="grid grid-cols-2 gap-3 md:gap-4 md:auto-rows-[minmax(11rem,1fr)] md:grid-cols-6">
       {builds.map((build, i) => (
-        <BuildTile key={build.slug} build={build} feature={i === 0} />
+        <BuildTile
+          key={build.slug}
+          build={build}
+          feature={i === 0}
+          // On phones an odd tile out takes the full row rather than leaving a hole.
+          wide={i === builds.length - 1 && builds.length % 2 === 0}
+        />
       ))}
     </div>
   );

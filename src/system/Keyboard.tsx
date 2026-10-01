@@ -14,14 +14,16 @@ type KeySpec = {
 };
 
 const k = (legend: string, id = legend.toLowerCase(), extra: Partial<KeySpec> = {}): KeySpec => ({ legend, id, ...extra });
+// Modifiers and navigation keys are dark, like a two-tone keycap set.
+const mod = (legend: string, id: string, extra: Partial<KeySpec> = {}): KeySpec => k(legend, id, { variant: 'dark', ...extra });
 const pair = (shift: string, legend: string): KeySpec => ({ legend, shift, id: legend });
 
 export const LAYOUT_65: KeySpec[][] = [
-  [k('Esc', 'escape'), pair('!', '1'), pair('@', '2'), pair('#', '3'), pair('$', '4'), pair('%', '5'), pair('^', '6'), pair('&', '7'), pair('*', '8'), pair('(', '9'), pair(')', '0'), pair('_', '-'), pair('+', '='), k('Backspace', 'backspace', { units: 2 }), k('Del', 'delete')],
-  [k('Tab', 'tab', { units: 1.5 }), ...'QWERTYUIOP'.split('').map((c) => k(c)), pair('{', '['), pair('}', ']'), pair('|', '\\'), k('PgUp', 'pageup')].map((key, i, row) => (i === row.length - 2 ? { ...key, units: 1.5 } : key)),
-  [k('Caps Lock', 'capslock', { units: 1.75 }), ...'ASDFGHJKL'.split('').map((c) => k(c)), pair(':', ';'), pair('"', "'"), k('Enter', 'enter', { units: 2.25, variant: 'signal' }), k('PgDn', 'pagedown')],
-  [k('Shift', 'shift', { units: 2.25 }), ...'ZXCVBNM'.split('').map((c) => k(c)), pair('<', ','), pair('>', '.'), pair('?', '/'), k('Shift', 'shift', { units: 1.75 }), k('↑', 'arrowup', { align: 'center' }), k('End', 'end')],
-  [k('Control', 'control', { units: 1.25 }), k('Alt', 'alt', { units: 1.25 }), k('Cmd', 'meta', { units: 1.25 }), k('', ' ', { units: 6.25, align: 'center' }), k('Alt', 'alt'), k('Fn', 'fn', { align: 'center' }), k('Ctrl', 'control'), k('←', 'arrowleft', { align: 'center' }), k('↓', 'arrowdown', { align: 'center' }), k('→', 'arrowright', { align: 'center' })],
+  [mod('Esc', 'escape', { variant: 'signal' }), pair('!', '1'), pair('@', '2'), pair('#', '3'), pair('$', '4'), pair('%', '5'), pair('^', '6'), pair('&', '7'), pair('*', '8'), pair('(', '9'), pair(')', '0'), pair('_', '-'), pair('+', '='), mod('Backspace', 'backspace', { units: 2 }), mod('Del', 'delete')],
+  [mod('Tab', 'tab', { units: 1.5 }), ...'QWERTYUIOP'.split('').map((c) => k(c)), pair('{', '['), pair('}', ']'), { ...pair('|', '\\'), units: 1.5 }, mod('PgUp', 'pageup')],
+  [mod('Caps Lock', 'capslock', { units: 1.75 }), ...'ASDFGHJKL'.split('').map((c) => k(c)), pair(':', ';'), pair('"', "'"), k('Enter', 'enter', { units: 2.25, variant: 'signal' }), mod('PgDn', 'pagedown')],
+  [mod('Shift', 'shift', { units: 2.25 }), ...'ZXCVBNM'.split('').map((c) => k(c)), pair('<', ','), pair('>', '.'), pair('?', '/'), mod('Shift', 'shift', { units: 1.75 }), mod('↑', 'arrowup', { align: 'center' }), mod('End', 'end')],
+  [mod('Control', 'control', { units: 1.25 }), mod('Alt', 'alt', { units: 1.25 }), mod('Cmd', 'meta', { units: 1.25 }), k('', ' ', { units: 6.25, align: 'center' }), mod('Alt', 'alt'), mod('Fn', 'fn', { align: 'center' }), mod('Ctrl', 'control'), mod('←', 'arrowleft', { align: 'center' }), mod('↓', 'arrowdown', { align: 'center' }), mod('→', 'arrowright', { align: 'center' })],
 ];
 
 /**

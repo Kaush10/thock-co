@@ -7,7 +7,7 @@ import { HomePage } from './pages/HomePage';
 
 // Pages other than the homepage load on first visit. The build service page
 // alone pulls in three.js for its globe.
-const KeyboardsPage = lazy(() => import('./pages/KeyboardsPage').then((m) => ({ default: m.KeyboardsPage })));
+const BuildsPage = lazy(() => import('./pages/BuildsPage').then((m) => ({ default: m.BuildsPage })));
 const CommissionsPage = lazy(() => import('./pages/CommissionsPage').then((m) => ({ default: m.CommissionsPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const BuildPage = lazy(() => import('./pages/BuildPage').then((m) => ({ default: m.BuildPage })));
@@ -48,7 +48,7 @@ function AppContent() {
         <Suspense fallback={<div className="min-h-screen" />}>
         <Routes>
           <Route path="/" element={<HomePage isDark={isDark} overflowXHiddenClass="overflow-x-hidden-except-hero" />} />
-          <Route path="/builds" element={<KeyboardsPage />} />
+          <Route path="/builds" element={<BuildsPage />} />
           <Route path="/builds/:slug" element={<BuildPage />} />
           <Route path="/commissions" element={<CommissionsPage />} />
           {/* Old addresses from when the site was a build service */}

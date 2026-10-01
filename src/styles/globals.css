@@ -169,14 +169,6 @@ a-hole canvas {
   font-style: normal;
   font-display: swap;
 }
-/* Apply Reddit Mono to all subheadings (h2–h6), all caps, lightest weight */
-h2, h3, h4, h5, h6 {
-  font-family: 'Reddit Mono', monospace;
-  font-weight: 200;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-feature-settings: "kern" 1, "liga" 1;
-}
 
 @font-face {
   font-family: 'Varela Round';

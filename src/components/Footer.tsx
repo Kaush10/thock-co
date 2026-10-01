@@ -1,68 +1,58 @@
-
 import { Instagram, Mail } from 'lucide-react';
-import { emailUrl, instagramUrl } from '../config/siteConfig';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { emailUrl, instagramUrl, siteConfig } from '../config/siteConfig';
 import { navigateWithWipe } from '../context/PageWipeContext';
+import { Lamp } from '../system';
 
-const WIPED_PAGES = ['/', '/about', '/builds', '/commissions'];
+const LINKS = [
+  { path: '/builds', label: 'builds' },
+  { path: '/about', label: 'about' },
+  { path: '/commissions', label: 'commissions' },
+];
 
 export const Footer: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLinkClick = () => {
-    // Simulate click sound
-    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
-    audio.volume = 0.1;
-    audio.play().catch(() => {});
-  };
-
-  const handleWipedLink = (e: React.MouseEvent, to: string) => {
-    handleLinkClick();
-    if (WIPED_PAGES.includes(to) && to !== location.pathname) {
-      e.preventDefault();
-      navigateWithWipe(location.pathname, to, navigate);
+  const go = (event: React.MouseEvent, path: string) => {
+    if (path !== location.pathname) {
+      event.preventDefault();
+      navigateWithWipe(location.pathname, path, navigate);
     }
   };
 
   return (
-    <footer className="w-full px-6 py-6">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full">
-          <div className="flex items-center gap-6 mb-2 md:mb-0 whitespace-nowrap">
-            <Link
-              to="/about"
-              onClick={(e) => handleWipedLink(e, '/about')}
-              className="text-sm hover:text-interactive transition-colors"
-            >
-              about me
-            </Link>
-            <Link
-              to="/builds"
-              onClick={(e) => handleWipedLink(e, '/builds')}
-              className="text-sm hover:text-interactive transition-colors"
-            >
-              builds
-            </Link>
-            <Link
-              to="/commissions"
-              onClick={(e) => handleWipedLink(e, '/commissions')}
-              className="text-sm hover:text-interactive transition-colors"
-            >
-              commissions
-            </Link>
-          </div>
-          <div className="flex items-center gap-2 text-sm mb-2 md:mb-0 whitespace-nowrap">
-            <span>© {new Date().getFullYear()} thock&co.</span>
+    <footer className="mt-auto border-t border-line">
+      <div className="mx-auto grid max-w-[82.5rem] gap-10 px-5 py-12 md:grid-cols-[1fr_auto_auto] md:items-end md:px-9">
+        <div>
+          <p className="font-display text-[1.75rem] leading-none text-bone">thock&co.</p>
+          <p className="mt-3 max-w-[40ch] text-sm leading-relaxed text-ash">
+            keyboards built by kaush in champaign, illinois.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-5">
+            <Lamp on>inbox open</Lamp>
+            <Lamp on={siteConfig.bench === 'open'}>{siteConfig.bench === 'open' ? 'bench open' : 'bench full'}</Lamp>
           </div>
         </div>
-        <div className="flex items-center gap-3 w-full justify-center md:justify-end">
-          <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-interactive transition-colors">
+
+        <ul className="flex flex-wrap gap-x-7 gap-y-3 font-mono text-sm">
+          {LINKS.map((link) => (
+            <li key={link.path}>
+              <Link to={link.path} onClick={(event) => go(event, link.path)} className="text-ash transition-colors hover:text-bone">
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center gap-3">
+          <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram" className="keycap" data-variant="dark" data-align="center" style={{ '--u': '2.75rem' } as React.CSSProperties}>
             <Instagram size={18} />
           </a>
-          <a href={emailUrl} aria-label="Email" className="hover:text-interactive transition-colors">
+          <a href={emailUrl} aria-label="Email" className="keycap" data-variant="dark" data-align="center" style={{ '--u': '2.75rem' } as React.CSSProperties}>
             <Mail size={18} />
           </a>
+          <span className="ml-2 font-mono text-label text-ash">© {new Date().getFullYear()}</span>
         </div>
       </div>
     </footer>

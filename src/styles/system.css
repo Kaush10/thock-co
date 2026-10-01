@@ -30,7 +30,7 @@
   --dot-pitch: 8px;
   --dot-radius: 2.5px;
   --dot-off: #1f1f22;
-  --dot-idle: #55555a; /* dots that are on but not yet lit, like unplayed waveform */
+  --dot-idle: #6a6a70; /* dots that are on but not lit: prompts, unplayed waveform */
   --dot-glow: drop-shadow(0 0 2.5px var(--signal));
 
   /* motion */
@@ -190,8 +190,8 @@
 /* angled: the board tipped back in perspective, floating over whatever is below it */
 .board-stage {
   display: inline-block;
-  perspective: calc(var(--u, 3.25rem) * 28);
-  perspective-origin: 50% 0%;
+  perspective: calc(var(--u, 3.25rem) * 30);
+  perspective-origin: 50% 40%;
 }
 .board[data-angled='true'] {
   --tilt: rotateX(48deg) rotateZ(-2deg);
@@ -201,18 +201,43 @@
   animation: board-float 6s ease-in-out infinite;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 calc(var(--u) * 0.42) 0 var(--edge),
+    0 calc(var(--u) * 0.2) 0 var(--edge),
     0 calc(var(--u) * 1.4) calc(var(--u) * 2.6) rgba(255, 0, 170, 0.32),
     0 calc(var(--u) * 0.9) calc(var(--u) * 1.2) rgba(0, 0, 0, 0.7);
 }
 .board[data-angled='true'][data-finish='graphite'] {
-  --edge: #0c0c0e;
+  --edge: #0e0e10;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 calc(var(--u) * 0.42) 0 var(--edge),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 calc(var(--u) * 0.2) 0 var(--edge),
     0 calc(var(--u) * 1.4) calc(var(--u) * 2.6) rgba(255, 0, 170, 0.38),
     0 calc(var(--u) * 0.9) calc(var(--u) * 1.2) rgba(0, 0, 0, 0.7);
 }
+/* At this angle full-height walls read as lumps; flatten the caps. */
+.board[data-angled='true'] .keycap {
+  --wall-b: calc(var(--u) * 0.035);
+  --wall-s: calc(var(--u) * 0.07);
+  --wall-f: calc(var(--u) * 0.12);
+  box-shadow: 0 calc(var(--u) * 0.06) 0 rgba(0, 0, 0, 0.5);
+}
+.board[data-angled='true'] .keycap:active,
+.board[data-angled='true'] .keycap[data-down='true'],
+.board[data-angled='true'] .keycap[data-lit='true'] {
+  box-shadow: 0 calc(var(--u) * 0.02) 0 rgba(0, 0, 0, 0.5), 0 0 calc(var(--u) * 0.4) rgba(255, 0, 170, 0.7);
+}
+.board[data-angled='true'] {
+  padding: calc(var(--u) * 0.3) calc(var(--u) * 0.34) calc(var(--u) * 0.36);
+}
+.board[data-angled='true'] .board-plate {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+.board[data-angled='true'][data-live='true'] {
+  filter: drop-shadow(0 0 calc(var(--u) * 0.6) rgba(255, 0, 170, 0.35));
+}
+
 @keyframes board-float {
   50% { transform: var(--tilt) translateZ(calc(var(--u) * 0.28)); }
 }
@@ -246,7 +271,14 @@
   transform: translateY(-0.2em);
 }
 
+/* LEDs switch rather than fade. */
+@keyframes led-blink { 50% { opacity: 0; } }
+.led-blink { animation: led-blink 1.1s steps(1, end) infinite; }
+@keyframes led-chase { 0%, 60%, 100% { opacity: 0.25; } 20% { opacity: 1; } }
+.led-chase { animation: led-chase 1.4s steps(1, end) infinite; }
+
 @media (prefers-reduced-motion: reduce) {
+  .led-blink, .led-chase { animation: none; }
   .keycap, .board-plate { transition: none; }
   .board[data-angled='true'] { animation: none; }
 }

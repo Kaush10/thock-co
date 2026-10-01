@@ -38,7 +38,7 @@ export const BuildPage: React.FC = () => {
   const photos = build.images.length ? build.images : [build.image];
 
   return (
-    <div className="mx-auto w-full max-w-[82.5rem] px-5 pb-28 pt-28 font-body text-bone md:px-9">
+    <div className="mx-auto w-full max-w-[82.5rem] px-5 pb-28 pt-8 font-body text-bone md:px-9 md:pt-12">
       <nav aria-label="other builds" className="mb-7 flex justify-between font-mono text-sm">
         <Link to={`/builds/${previous.slug}`} className="inline-flex items-center gap-2.5 text-ash hover:text-bone">
           <Kbd>←</Kbd> {previous.title}
@@ -54,7 +54,7 @@ export const BuildPage: React.FC = () => {
             key={photos[photo]}
             {...photoProps(photos[photo], '(min-width: 1024px) 55vw, 100vw')}
             alt={`${build.title}, photo ${photo + 1} of ${photos.length}`}
-            className="aspect-[4/5] w-full object-cover lg:max-h-[54rem]"
+            className="aspect-[4/3] w-full object-cover sm:aspect-[4/5] lg:max-h-[54rem]"
           />
         </div>
 

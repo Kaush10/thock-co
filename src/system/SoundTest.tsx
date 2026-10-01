@@ -98,6 +98,8 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
   }, []);
 
   const recorded = Boolean(src) && !missing;
+  // Touch screens have no space bar to point at.
+  const finePointer = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
   return (
     <Panel as="section" className="shadow-[0_0_0_1px_var(--line),0_30px_80px_rgba(255,0,170,0.07)]">
       <div className="flex items-baseline justify-between">
@@ -123,7 +125,7 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
           onClick={toggle}
           disabled={!recorded}
           aria-label={playing ? 'pause the sound test' : 'play the sound test'}
-          legend={playing ? '❚❚  space' : '▶  space'}
+          legend={`${playing ? '❚❚' : '▶'}  ${finePointer ? 'space' : playing ? 'pause' : 'play'}`}
           className="min-w-40"
         />
         <p className="font-mono text-label text-ash">

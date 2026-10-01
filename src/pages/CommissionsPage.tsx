@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
 import { MessageComposer } from '../components/MessageComposer';
 import { GlobeBanner } from '../components/GlobeBanner';
 import { VerticalGallery } from '../components/VerticalGallery';
-import '../components/KeyboardPageCard.css';
 
 const QUESTIONS = [
   {
@@ -28,44 +26,51 @@ export const CommissionsPage: React.FC = () => {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 pt-28 pb-24">
-      <section className="grid gap-12 md:grid-cols-[1.2fr_1fr] items-center">
-        <div className="space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold accent-text page-header">commissions</h1>
-          <p className="text-lg leading-relaxed opacity-90 max-w-xl">
+    <div className="mx-auto w-full max-w-[82.5rem] px-5 pb-28 pt-12 md:px-9 md:pt-16">
+      <section className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <div>
+          <h1 className="font-display text-[clamp(3rem,7vw,5.25rem)] font-normal leading-[0.92] text-bone">commissions</h1>
+          <p className="mt-7 max-w-[42ch] text-[clamp(1.05rem,1.4vw,1.25rem)] leading-[1.7] text-bone/85">
             thock&co. isn't a shop. i build for other people now and then, when the idea is one i'd
             want to build anyway.
           </p>
-          <p className="text-ash">have something in mind? message me for a quote.</p>
+          <p className="mt-4 max-w-[42ch] text-[1.0625rem] leading-relaxed text-ash">
+            have something in mind? message me below for a quote.
+          </p>
         </div>
-        <div className="hidden md:flex justify-center">
-          <GlobeBanner containerHeight={360} containerWidth={360} glowMarker={{ lat: 40.1106, lng: -88.2073 }} />
-        </div>
+        <figure className="hidden flex-col items-center md:flex">
+          <GlobeBanner containerHeight={380} containerWidth={380} glowMarker={{ lat: 40.1106, lng: -88.2073 }} />
+          <figcaption className="mt-2 font-mono text-label text-ash">champaign, illinois</figcaption>
+        </figure>
       </section>
 
-      <section aria-label="say hi" className="mt-20">
+      <section aria-label="say hi" className="mt-16 md:mt-20">
         <MessageComposer withKeyboard={false} />
       </section>
 
-      <section className="mt-24 grid gap-12 lg:grid-cols-[1fr_2fr]">
+      <section aria-labelledby="questions-title" className="mt-24 grid gap-12 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-16">
         <div className="hidden lg:block">
           <VerticalGallery />
         </div>
         <div>
-          <h2 className="mb-6 text-xl">questions</h2>
-          <ul className="space-y-3">
+          <h2 id="questions-title" className="font-display text-display-md font-normal text-bone">questions</h2>
+          <ul className="mt-8 border-t border-line">
             {QUESTIONS.map((item, i) => (
-              <li key={item.q} className="glass-card rounded-2xl">
+              <li key={item.q} className="border-b border-line">
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                  className="flex w-full items-center justify-between gap-6 py-5 text-left font-mono text-[0.9375rem] text-bone transition-colors hover:text-white"
                   aria-expanded={open === i}
                   onClick={() => setOpen(open === i ? null : i)}
                 >
-                  <span className="font-semibold">{item.q}</span>
-                  <ChevronDown size={18} className={`shrink-0 transition-transform ${open === i ? 'rotate-180' : ''}`} />
+                  {item.q}
+                  <span
+                    aria-hidden
+                    className="inline-block size-2 shrink-0 rounded-full transition-colors"
+                    style={open === i ? { background: 'var(--signal)', boxShadow: '0 0 10px var(--signal)' } : { background: '#333336' }}
+                  />
                 </button>
-                {open === i && <p className="px-5 pb-5 opacity-85 leading-relaxed">{item.a}</p>}
+                {open === i && <p className="max-w-[62ch] pb-6 text-[1.0625rem] leading-relaxed text-ash">{item.a}</p>}
               </li>
             ))}
           </ul>

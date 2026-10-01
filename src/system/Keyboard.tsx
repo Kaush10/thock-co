@@ -33,6 +33,8 @@ export function Keyboard({
   live = false,
   onKey,
   unit,
+  angled = false,
+  finish = 'silver',
   className = '',
 }: {
   lit?: Set<string>;
@@ -41,10 +43,20 @@ export function Keyboard({
   onKey?: (id: string) => void;
   /** One key unit, e.g. "3.25rem". */
   unit?: string;
+  /** Tip the board back in perspective and let it float, for showpiece moments. */
+  angled?: boolean;
+  finish?: 'silver' | 'graphite';
   className?: string;
 }) {
-  return (
-    <div className={`board ${className}`} data-live={live || undefined} style={unit ? ({ '--u': unit } as React.CSSProperties) : undefined}>
+  const unitStyle = unit ? ({ '--u': unit } as React.CSSProperties) : undefined;
+  const board = (
+    <div
+      className={`board ${angled ? '' : className}`}
+      data-live={live || undefined}
+      data-angled={angled || undefined}
+      data-finish={finish === 'silver' ? undefined : finish}
+      style={unitStyle}
+    >
       <div className="board-plate">
         {LAYOUT_65.map((row, r) => (
           <div key={r} className="board-row">
@@ -66,5 +78,12 @@ export function Keyboard({
         ))}
       </div>
     </div>
+  );
+  return angled ? (
+    <div className={`board-stage ${className}`} style={unitStyle}>
+      {board}
+    </div>
+  ) : (
+    board
   );
 }

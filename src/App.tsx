@@ -10,7 +10,7 @@ import { HomePage } from './pages/HomePage';
 const KeyboardsPage = lazy(() => import('./pages/KeyboardsPage').then((m) => ({ default: m.KeyboardsPage })));
 const CommissionsPage = lazy(() => import('./pages/CommissionsPage').then((m) => ({ default: m.CommissionsPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
-const ArticlePage = lazy(() => import('./pages/ArticlePage'));
+const BuildPage = lazy(() => import('./pages/BuildPage').then((m) => ({ default: m.BuildPage })));
 // Design system reference, development builds only.
 const SystemPage = import.meta.env.DEV
   ? lazy(() => import('./pages/SystemPage').then((m) => ({ default: m.SystemPage })))
@@ -49,7 +49,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<HomePage isDark={isDark} overflowXHiddenClass="overflow-x-hidden-except-hero" />} />
           <Route path="/builds" element={<KeyboardsPage />} />
-          <Route path="/builds/:slug" element={<ArticlePage />} />
+          <Route path="/builds/:slug" element={<BuildPage />} />
           <Route path="/commissions" element={<CommissionsPage />} />
           {/* Old addresses from when the site was a build service */}
           <Route path="/keyboards" element={<Navigate to="/builds" replace />} />

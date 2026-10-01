@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { articles } from '../data/articles';
+import { builds } from '../data/builds';
 import { photoUrl } from '../lib/photo';
 
 // Gallery config (match pen and stuff spec)
@@ -53,11 +53,11 @@ export const VerticalGallery: React.FC = () => {
   // Shine is now applied per-item (see inside the <li>) so it only
   // lights the image tiles and never bleeds into the gaps between them.
 
-  // Carousel items — cycle through available articles to fill the wheel.
+  // Carousel items — cycle through available builds to fill the wheel.
   // Once enough real builds exist this naturally becomes a straight slice.
   const filledImages: { image?: string; title?: string; isPlaceholder: boolean }[] =
-    articles.length > 0
-      ? Array.from({ length: ITEM_COUNT }, (_, i) => ({ ...articles[i % articles.length], isPlaceholder: false }))
+    builds.length > 0
+      ? Array.from({ length: ITEM_COUNT }, (_, i) => ({ ...builds[i % builds.length], isPlaceholder: false }))
       : Array.from({ length: ITEM_COUNT }, () => ({ isPlaceholder: true }));
 
   return (

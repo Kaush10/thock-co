@@ -13,3 +13,6 @@ export const photoProps = (ref: string, sizes: string) => ({
   srcSet: WIDTHS.map((w) => `${photoUrl(ref, w)} ${w}w`).join(', '),
   sizes,
 });
+
+/** Where a build's sound test lives once it's been recorded (photos/<slug>/sound.mp3). */
+export const soundUrl = (slug: string) => `${import.meta.env.BASE_URL}builds/${slug}/sound.mp3`;

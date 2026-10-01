@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Instagram, Mail, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { MessageComposer } from '../components/MessageComposer';
 import { GlobeBanner } from '../components/GlobeBanner';
 import { VerticalGallery } from '../components/VerticalGallery';
-import { emailUrl, instagramUrl, siteConfig } from '../config/siteConfig';
 import '../components/KeyboardPageCard.css';
 
 const QUESTIONS = [
@@ -36,23 +36,15 @@ export const CommissionsPage: React.FC = () => {
             thock&co. isn't a shop. i build for other people now and then, when the idea is one i'd
             want to build anyway.
           </p>
-          <p className="flex items-center gap-3 text-base">
-            <span aria-hidden className="inline-block size-2.5 rounded-full bg-[var(--interactive-highlight)] shadow-[0_0_10px_var(--interactive-highlight)]" />
-            not taking orders. ideas are always welcome.
-          </p>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <a href={instagramUrl} target="_blank" rel="noreferrer" className="glass-card inline-flex items-center gap-2 rounded-full px-5 py-3 hover:text-interactive transition-colors">
-              <Instagram size={18} /> @{siteConfig.contact.instagram}
-            </a>
-            <a href={emailUrl} className="glass-card inline-flex items-center gap-2 rounded-full px-5 py-3 hover:text-interactive transition-colors">
-              <Mail size={18} /> {siteConfig.contact.email}
-            </a>
-          </div>
-          <p className="text-sm opacity-60">message me for a quote.</p>
+          <p className="text-ash">have something in mind? message me for a quote.</p>
         </div>
         <div className="hidden md:flex justify-center">
           <GlobeBanner containerHeight={360} containerWidth={360} glowMarker={{ lat: 40.1106, lng: -88.2073 }} />
         </div>
+      </section>
+
+      <section aria-label="say hi" className="mt-20">
+        <MessageComposer withKeyboard={false} />
       </section>
 
       <section className="mt-24 grid gap-12 lg:grid-cols-[1fr_2fr]">

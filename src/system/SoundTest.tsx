@@ -24,13 +24,18 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  // Boards point at their conventional sound file; it may not exist yet.
+  const [missing, setMissing] = useState(false);
 
   useEffect(() => {
     if (!src) return;
+    setMissing(false);
     const audio = new Audio(src);
     audio.preload = 'metadata';
     audioRef.current = audio;
     const onMeta = () => setDuration(audio.duration);
+    const onError = () => setMissing(true);
+    audio.addEventListener('error', onError);
     const onEnd = () => {
       setPlaying(false);
       setProgress(1);
@@ -41,6 +46,7 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
     return () => {
       audio.pause();
       duckAmbient(false);
+      audio.removeEventListener('error', onError);
       audio.removeEventListener('loadedmetadata', onMeta);
       audio.removeEventListener('ended', onEnd);
       audioRef.current = null;
@@ -91,7 +97,7 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const recorded = Boolean(src);
+  const recorded = Boolean(src) && !missing;
   return (
     <Panel as="section" className="shadow-[0_0_0_1px_var(--line),0_30px_80px_rgba(255,0,170,0.07)]">
       <div className="flex items-baseline justify-between">
@@ -103,7 +109,7 @@ export function SoundTest({ src, note, title = 'sound test' }: { src?: string; n
         )}
       </div>
       <DotWave
-        peaks={peaks ?? SILENCE}
+        peaks={recorded && peaks ? peaks : SILENCE}
         progress={recorded ? progress : 0}
         rows={15}
         label={recorded ? `${title} waveform` : undefined}

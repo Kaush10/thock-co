@@ -1,4 +1,4 @@
-import { articles } from './data/articles';
+import { builds } from './data/builds';
 
 // Every page's title and description, in one place. The app sets them as you
 // navigate, and the build writes them into a real HTML file per route so
@@ -31,7 +31,7 @@ export const NOT_FOUND: PageMeta = {
 
 /** Every path that should exist as a real file in the build. */
 export function allPaths(): string[] {
-  return [...Object.keys(STATIC_PAGES), ...articles.map((a) => `/builds/${a.slug}`)];
+  return [...Object.keys(STATIC_PAGES), ...builds.map((b) => `/builds/${b.slug}`)];
 }
 
 /** Addresses from when the site was a build service, and where they live now. */
@@ -39,7 +39,7 @@ export function redirects(): Record<string, string> {
   return {
     '/keyboards': '/builds',
     '/build-service': '/commissions',
-    ...Object.fromEntries(articles.map((a) => [`/keyboards/${a.slug}`, `/builds/${a.slug}`])),
+    ...Object.fromEntries(builds.map((b) => [`/keyboards/${b.slug}`, `/builds/${b.slug}`])),
   };
 }
 
@@ -47,7 +47,7 @@ export function metaFor(path: string): PageMeta {
   const clean = path !== '/' ? path.replace(/\/+$/, '') : path;
   if (STATIC_PAGES[clean]) return STATIC_PAGES[clean];
   if (clean === '/system') return { title: `system | ${SITE_NAME}`, description: 'design system reference' };
-  const build = articles.find((a) => `/builds/${a.slug}` === clean);
-  if (build) return { title: `${build.title} | ${SITE_NAME}`, description: build.snippet };
+  const build = builds.find((b) => `/builds/${b.slug}` === clean);
+  if (build) return { title: `${build.title} | ${SITE_NAME}`, description: `${build.title}, a keyboard kaush built in ${build.built}: the parts, photos and a sound test.` };
   return NOT_FOUND;
 }

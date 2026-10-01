@@ -5,6 +5,11 @@ export const siteConfig = {
     instagram: 'kaushrajesh',
     email: 'kaushrajesh04@gmail.com',
   },
+  /**
+   * Commission status, shown as two lamps. The inbox is always open; the bench
+   * is "full" when you aren't taking builds and "open" when you are.
+   */
+  bench: 'full' as 'full' | 'open',
   theme: {
     vars: {
       '--c-glass': '#bbbbbc',

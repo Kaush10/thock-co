@@ -2,11 +2,11 @@ import React from 'react';
 import { useTilt } from '../hooks/useTilt';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 import './KeyboardPageCard.css';
-import { Article } from '../data/articles';
+import type { Build } from '../data/builds';
 import { photoProps } from '../lib/photo';
 
 interface KeyboardPageCardProps {
-  review: Article;
+  review: Build;
   onReadMore?: () => void;
 }
 
@@ -38,19 +38,11 @@ export const KeyboardPageCard: React.FC<KeyboardPageCardProps> = ({ review, onRe
             <h3 className="text-xl sm:text-2xl font-bold">
               {review.title}
             </h3>
-            <span className="text-xs text-secondary">{review.date}</span>
+            <span className="text-xs text-secondary">built {review.built}</span>
           </div>
           <p className="text-sm sm:text-base font-light mb-4">
-            {review.snippet}
+            {review.summary}
           </p>
-          <div className="mb-4">
-            <span className="spec-tag">
-              {review.specs}
-            </span>
-          </div>
-          <blockquote className="testimonial-quote mb-4">
-            "{review.testimonial}"
-          </blockquote>
           {onReadMore && (
             <button
               className="mt-2 text-sm font-medium hover:underline flex items-center gap-1 group bg-transparent p-0 border-0 focus:underline secondary-highlight"

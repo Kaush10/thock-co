@@ -13,11 +13,14 @@ export function useWaveform(src: string | undefined, columns: number) {
     const context = new AudioContext();
     fetch(src)
       .then((response) => {
-        if (!response.ok) throw new Error(`${response.status} loading ${src}`);
+        // A board without a recording gets a 404 (or the dev server's HTML fallback); that's expected.
+        const type = response.headers.get('content-type') ?? '';
+        if (!response.ok || type.includes('text/html')) return null;
         return response.arrayBuffer();
       })
-      .then((data) => context.decodeAudioData(data))
+      .then((data) => (data ? context.decodeAudioData(data) : null))
       .then((buffer) => {
+        if (!buffer) return;
         const samples = buffer.getChannelData(0);
         const size = Math.floor(samples.length / columns);
         const raw = Array.from({ length: columns }, (_, col) => {

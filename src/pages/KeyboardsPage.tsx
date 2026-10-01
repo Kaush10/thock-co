@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react';
 import { KeyboardPageCard } from '../components/KeyboardPageCard';
-import { articles } from '../data/articles';
+import { builds } from '../data/builds';
 import { useNavigate } from 'react-router-dom';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 
@@ -9,9 +9,7 @@ export const KeyboardsPage: React.FC = () => {
   const { handleCardClick: playCardAnimation } = useGlassCardEffect();
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const sortedArticles = useMemo(() => {
-    return [...articles].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, []);
+  const sortedArticles = useMemo(() => [...builds].sort((a, b) => Number(b.built) - Number(a.built)), []);
 
   const handleCardClick = (index: number) => {
     const cardElement = cardRefs.current[index];
@@ -32,7 +30,7 @@ export const KeyboardsPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 w-full max-w-full">
           {sortedArticles.map((article, index) => (
             <div 
-              key={article.id}
+              key={article.slug}
               onClick={() => handleCardClick(index)}
               ref={el => cardRefs.current[index] = el}
               className="w-full max-w-full"

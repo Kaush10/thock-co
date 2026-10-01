@@ -138,6 +138,16 @@ export const SystemPage: React.FC = () => {
           <p className="font-mono text-label text-ash">
             silver case, pink underglow: ember at rest, signal while someone types (second board).
           </p>
+          <div className="grid gap-16 pt-10">
+            <div>
+              <p className="mb-6 font-mono text-sm text-ash">angled, graphite (as in mockup b)</p>
+              <Keyboard angled finish="graphite" unit="2.9rem" lit={new Set(['h', 'i', ' '])} live />
+            </div>
+            <div>
+              <p className="mb-6 font-mono text-sm text-ash">angled, silver</p>
+              <Keyboard angled unit="2.9rem" lit={new Set(['h', 'i', ' '])} live />
+            </div>
+          </div>
         </div>
       </Section>
 

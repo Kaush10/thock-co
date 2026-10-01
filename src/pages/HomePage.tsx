@@ -1,8 +1,6 @@
 import { ScrollHero } from '../components/ScrollHero';
 import { AnimatedHole } from '../components/AnimatedHole';
-import { useNavigate } from 'react-router-dom';
-import { navigateWithWipe } from '../context/PageWipeContext';
-import keyboardBlank from '../assets/stuff/keyboard blank.png';
+import { MessageComposer } from '../components/MessageComposer';
 
 
 interface HomePageProps {
@@ -11,7 +9,6 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ isDark, overflowXHiddenClass }) => {
-  const navigate = useNavigate();
   const bodyText = `to touch and to feel is deeply human. 
 it's something i've always believed defines our connection to the world. 
 
@@ -25,95 +22,12 @@ thock&co. is where i keep the boards i've built: what went into each one, and wh
       <ScrollHero bodyText={bodyText} isDark={isDark} />
       {/* Remove extra vertical space between heroes */}
       <div className={`${overflowXHiddenClass || ''} overflow-x-hidden w-full`}>
-        <div className="w-full" style={{ height: '50vh' }}></div>
-        {/* Replace button with commission status card style, including full glass styling and interactive effect */}
-        <div className="w-full flex justify-center items-center" style={{ position: 'relative', zIndex: 2, marginBottom: '4rem' }}>
-          <div
-            className="homepage-cta-card fade-in-up px-8 py-12 rounded-lg flex items-center justify-center w-[80%] lg:w-[45%] text-center gap-3 cursor-pointer"
-            style={{
-              background: 'color-mix(in srgb, var(--c-glass) 12%, transparent)',
-              border: '1.5px solid color-mix(in srgb, var(--c-light) 60%, transparent)',
-              backdropFilter: 'blur(8px) saturate(var(--saturation))',
-              WebkitBackdropFilter: 'blur(8px) saturate(var(--saturation))',
-              boxShadow:
-                'inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent), ' +
-                'inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), ' +
-                'inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), ' +
-                'inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), ' +
-                'inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), ' +
-                'inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), ' +
-                'inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), ' +
-                'inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), ' +
-                '0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), ' +
-                '0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent)',
-              // width is now handled by Tailwind classes
-            }}
-            onClick={() => navigateWithWipe('/', '/commissions', navigate)}
-          >
-            <h2
-              className={`font-subheading m-0 p-0 ${isDark ? 'text-white' : 'text-black'}`}
-              style={{ fontFamily: 'Reddit Mono, monospace', fontSize: '1.6875rem', fontWeight: 300, textTransform: 'uppercase', letterSpacing: 'normal' }}
-            >
-              ask about a build
-            </h2>
-          </div>
-        </div>
-        {/* Keyboard silhouette sits flush against the hole, covering its flat top edge */}
-        <div className="w-full flex justify-center" style={{ position: 'relative', zIndex: 2, marginBottom: '-1px' }}>
-          <div className="relative flex justify-center" style={{ width: '100%', maxWidth: 630 }}>
-            {/* Static white glow behind the keyboard silhouette */}
-            <div
-              style={{
-                position: 'absolute',
-                inset: '10%',
-                transform: 'translateY(15px)',
-                background: '#fff',
-                filter: 'blur(40px)',
-                opacity: 0.5,
-                zIndex: 0,
-              }}
-            />
-            <img
-              src={keyboardBlank}
-              alt=""
-              className="w-full"
-              style={{ position: 'relative', zIndex: 1, objectFit: 'contain', display: 'block' }}
-            />
-            {/* Static white glow overlaid on top of the keyboard silhouette */}
-            <div
-              style={{
-                position: 'absolute',
-                inset: '10%',
-                transform: 'translateY(15px)',
-                background: '#fff',
-                filter: 'blur(40px)',
-                opacity: 0.5,
-                mixBlendMode: 'screen',
-                pointerEvents: 'none',
-                zIndex: 2,
-              }}
-            />
-            {/* TEMP label — remove once final artwork is confirmed */}
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#000',
-                fontWeight: 700,
-                fontSize: '2rem',
-                pointerEvents: 'none',
-                zIndex: 3,
-              }}
-            >
-              [TEMP ASSET]
-            </div>
-          </div>
-        </div>
-        <div className="w-full" style={{ position: 'relative', zIndex: 1 }}>
-          {/* @ts-ignore: custom element is injected at runtime */}
+        <div className="h-[30vh] w-full" />
+        <section aria-label="say hi" className="relative z-10 flex flex-col items-center px-1">
+          <MessageComposer />
+        </section>
+        {/* The board floats over the hole; the hole sits up under it. */}
+        <div className="relative z-0 -mt-[12vw] w-full">
           <AnimatedHole />
         </div>
       </div>

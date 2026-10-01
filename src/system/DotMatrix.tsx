@@ -66,13 +66,16 @@ export function LedText({
   text,
   cols,
   cursor = false,
+  tone = 'lit',
   className,
 }: {
   text: string;
   /** Display width in dots. Each character takes 6. */
   cols: number;
-  /** Show a blinking-free underscore cursor after the text. */
+  /** Show an underscore cursor after the text. */
   cursor?: boolean;
+  /** `lit` (pink) for live text; `idle` (grey) for prompts and placeholders. */
+  tone?: 'lit' | 'idle';
   className?: string;
 }) {
   const columns = textToColumns(cursor ? `${text}_` : text);
@@ -84,7 +87,7 @@ export function LedText({
       rows={GLYPH_ROWS + 2}
       label={text}
       className={className}
-      state={(col, row) => (row > 0 && row <= GLYPH_ROWS && columns[col + offset]?.[row - 1] ? 'lit' : 'off')}
+      state={(col, row) => (row > 0 && row <= GLYPH_ROWS && columns[col + offset]?.[row - 1] ? tone : 'off')}
     />
   );
 }

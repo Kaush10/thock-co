@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './ScrollHero.css';
 import './KeyboardPageCard.css';
-import { articles } from '../data/articles';
+import { builds } from '../data/builds';
 import { photoProps } from '../lib/photo';
 import { prefersReducedMotion } from '../lib/motion';
 import gsap from 'gsap';
@@ -16,7 +16,7 @@ interface ScrollHeroProps {
   isDark: boolean;
 }
 
-const BUILD_IMAGES = articles.map((article) => article.image);
+const BUILD_IMAGES = builds.map((build) => build.image);
 
 export const ScrollHero: React.FC<ScrollHeroProps> = ({ bodyText, isDark }) => {
   const slideIdxRef = useRef(0);

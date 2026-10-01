@@ -3,9 +3,10 @@
 // build and skips anything already up to date.
 //
 // To add photos: drop them in photos/<build-slug>/ (cover.jpg, 1.jpg, ...)
-// and reference them in src/data/articles.ts as "<build-slug>/<name>".
+// and reference them in src/data/builds.ts as "<build-slug>/<name>".
+// A sound test goes in as photos/<build-slug>/sound.mp3 and is copied as-is.
 
-import { mkdir, readdir, stat } from 'node:fs/promises';
+import { copyFile, mkdir, readdir, stat } from 'node:fs/promises';
 import { join, parse } from 'node:path';
 import sharp from 'sharp';
 
@@ -29,6 +30,14 @@ for (const build of await readdir(SOURCE)) {
   await mkdir(join(OUTPUT, build), { recursive: true });
 
   for (const file of await readdir(dir)) {
+    if (file === 'sound.mp3') {
+      const target = join(OUTPUT, build, 'sound.mp3');
+      if (await newer(join(dir, file), target)) {
+        await copyFile(join(dir, file), target);
+        written++;
+      }
+      continue;
+    }
     if (!IMAGE.test(file)) continue;
     const source = join(dir, file);
     const { name } = parse(file);
@@ -44,4 +53,4 @@ for (const build of await readdir(SOURCE)) {
     }
   }
 }
-console.log(`photos: ${written} image${written === 1 ? '' : 's'} written`);
+console.log(`photos: ${written} file${written === 1 ? '' : 's'} written`);

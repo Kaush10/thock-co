@@ -1,4 +1,3 @@
-import { LiquidButton } from '../components/LiquidButton';
 import { ScrollHero } from '../components/ScrollHero';
 import { HomeTierIntroCards } from '../components/HomeTierIntroCards';
 import { AnimatedHole } from '../components/AnimatedHole';

@@ -1,12 +1,10 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
-import { LiquidButton } from '../components/LiquidButton';
+import { useMemo, useRef } from 'react';
 import { KeyboardPageCard } from '../components/KeyboardPageCard';
 import { articles } from '../data/articles';
 import { useNavigate } from 'react-router-dom';
 import { useGlassCardEffect } from '../hooks/useGlassCardEffect';
 
 export const KeyboardsPage: React.FC = () => {
-  const [visibleCount, setVisibleCount] = useState(9);
   const navigate = useNavigate();
   const { handleCardClick: playCardAnimation } = useGlassCardEffect();
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -24,10 +22,6 @@ export const KeyboardsPage: React.FC = () => {
     // Navigation disabled: do not open article page
   };
 
-  const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 9, sortedArticles.length));
-  };
-
   return (
     <div className="min-h-screen w-full overflow-x-hidden px-4 sm:px-6 py-12 pt-24 overflow-x-hidden">
       <div className="max-w-7xl mx-auto w-full">
@@ -36,7 +30,7 @@ export const KeyboardsPage: React.FC = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 w-full max-w-full">
-          {sortedArticles.slice(0, visibleCount).map((article, index) => (
+          {sortedArticles.map((article, index) => (
             <div 
               key={article.id}
               onClick={() => handleCardClick(article.slug, index)}
@@ -54,13 +48,6 @@ export const KeyboardsPage: React.FC = () => {
           ))}
         </div>
 
-        {visibleCount < sortedArticles.length && (
-          <div className="flex justify-center">
-            <LiquidButton onClick={loadMore} className="px-8 py-3">
-              load more
-            </LiquidButton>
-          </div>
-        )}
       </div>
     </div>
   );

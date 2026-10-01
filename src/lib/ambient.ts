@@ -82,6 +82,12 @@ export function setAmbientVolume(volume: number) {
   }
 }
 
+/** Quiets the ambient music while something else is playing (e.g. a sound test), then restores it. */
+export function duckAmbient(ducked: boolean) {
+  if (!state.on || !audio) return;
+  fadeTo(ducked ? gain(state.volume) * 0.15 : gain(state.volume));
+}
+
 function subscribe(listener: () => void) {
   listeners.add(listener);
   return () => listeners.delete(listener);

@@ -1,0 +1,139 @@
+/*
+ * thock&co. design system: tokens and the few primitives Tailwind can't express.
+ * Written up in design/SYSTEM.md.
+ */
+
+:root {
+  /* surfaces, darkest first */
+  --void: #000000;      /* the page */
+  --panel: #070708;     /* LED display housings, sound test, composer */
+  --surface: #1c1c1e;   /* photo stages, keycap wells */
+  --line: rgba(255, 255, 255, 0.07);
+
+  /* ink */
+  --bone: #ededed;      /* primary text */
+  --ash: #8a8a8e;       /* secondary text, labels */
+
+  /* signal: only for things that are live (playing, lit, open, pressed) */
+  --signal: #ff00aa;
+  --ember: #8f0d63;     /* signal at rest, e.g. the page wipe */
+
+  /* the dot grid every lit element shares */
+  --dot-pitch: 8px;
+  --dot-radius: 2.5px;
+  --dot-off: #1f1f22;
+  --dot-idle: #55555a; /* dots that are on but not yet lit, like unplayed waveform */
+  --dot-glow: drop-shadow(0 0 2.5px var(--signal));
+
+  /* motion */
+  --press: 80ms;        /* a key going down */
+  --release: 140ms;     /* and coming back */
+  --led-step: 70ms;     /* LEDs switch in steps, they don't fade */
+
+  /* legacy names still read by older components */
+  --interactive-highlight: var(--signal);
+}
+
+/* The page backdrop: a faint grid, ruled at five dot pitches. */
+.backdrop-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: calc(var(--dot-pitch) * 5) calc(var(--dot-pitch) * 5);
+}
+
+/* ---- keycap: the only button style ---------------------------------- */
+
+.keycap {
+  --cap-top: #fbfaf7;
+  --cap-face: #e7e4de;
+  --cap-side: #cfccc6;
+  --cap-base: #9e9a93;
+  --cap-ink: #36342f;
+  --cap-travel: 6px;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-width: 3rem;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  border: 0;
+  border-radius: var(--radius-cap, 0.75rem);
+  background: var(--cap-side);
+  box-shadow: 0 var(--cap-travel) 0 var(--cap-base), 0 calc(var(--cap-travel) * 2) 24px rgba(0, 0, 0, 0.5);
+  color: var(--cap-ink);
+  font-family: 'Reddit Mono', monospace;
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+  transition: transform var(--release) ease-out, box-shadow var(--release) ease-out;
+}
+.keycap::before {
+  content: '';
+  position: absolute;
+  inset: 4px 5px calc(4px + var(--cap-travel) * 0.5);
+  border-radius: calc(0.75rem - 4px);
+  background: linear-gradient(var(--cap-top), var(--cap-face));
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+.keycap > * { position: relative; }
+.keycap:active,
+.keycap[data-down='true'] {
+  transform: translateY(calc(var(--cap-travel) - 1px));
+  box-shadow: 0 1px 0 var(--cap-base), 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition-duration: var(--press);
+}
+.keycap[data-variant='dark'] {
+  --cap-top: #4a4a50;
+  --cap-face: #3a3a3f;
+  --cap-side: #2c2c30;
+  --cap-base: #141416;
+  --cap-ink: #c9c9cc;
+}
+.keycap[data-variant='signal'] {
+  --cap-top: #ff6fd0;
+  --cap-face: #ff1fb4;
+  --cap-side: #d4008a;
+  --cap-base: #6d0047;
+  --cap-ink: #2a0019;
+  box-shadow: 0 var(--cap-travel) 0 var(--cap-base), 0 calc(var(--cap-travel) * 2) 32px rgba(255, 0, 170, 0.35);
+}
+.keycap[data-lit='true']::before {
+  background: linear-gradient(#ffd6f0, #ff8fd8);
+}
+.keycap[data-lit='true'] {
+  box-shadow: 0 1px 0 var(--cap-base), 0 0 26px rgba(255, 0, 170, 0.8);
+  transform: translateY(calc(var(--cap-travel) - 2px));
+}
+
+/* ---- kbd: a key named in running text ------------------------------- */
+
+.kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 0.4em;
+  border: 1px solid #3a3a3f;
+  border-bottom-width: 3px;
+  border-radius: 0.375rem;
+  font-family: 'Reddit Mono', monospace;
+  font-size: 0.75em;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ash);
+}
+
+/* ---- leader: the dotted rule between a label and its value ---------- */
+
+.leader {
+  flex: 1;
+  height: 3px;
+  min-width: 1.5rem;
+  background-image: radial-gradient(circle, #46464b 1.2px, transparent 1.5px);
+  background-size: var(--dot-pitch) 3px;
+  background-repeat: repeat-x;
+  transform: translateY(-0.2em);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keycap { transition: none; }
+}

@@ -1,72 +1,41 @@
+// Tailwind is wired to the thock&co. design system tokens in src/styles/system.css.
 module.exports = {
-  darkMode: "class",
-  content: [
-    "./src/**/*.{html,js,ts,jsx,tsx}",
-    "app/**/*.{ts,tsx}",
-    "components/**/*.{ts,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        interactive: 'var(--interactive-highlight)',
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        void: "var(--void)",
+        panel: "var(--panel)",
+        surface: "var(--surface)",
+        line: "var(--line)",
+        bone: "var(--bone)",
+        ash: "var(--ash)",
+        signal: "var(--signal)",
+        ember: "var(--ember)",
+        // Older pages call the accent "interactive"; it is the same pink.
+        interactive: "var(--signal)",
       },
       fontFamily: {
-        sans: [
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-          '"Apple Color Emoji"',
-          '"Segoe UI Emoji"',
-          '"Segoe UI Symbol"',
-          '"Noto Color Emoji"',
-        ],
+        display: ["Matrix Sans Print", "monospace"],
+        mono: ["Reddit Mono", "monospace"],
+        body: ["Varela Round", "system-ui", "sans-serif"],
       },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
+      fontSize: {
+        // 1.333 scale from a 16px base, set for this site's three faces
+        "display-xl": ["5.25rem", { lineHeight: "0.9" }],
+        "display-lg": ["3.5rem", { lineHeight: "0.95" }],
+        "display-md": ["2.125rem", { lineHeight: "1" }],
+        label: ["0.8125rem", { lineHeight: "1.4" }],
       },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+      borderRadius: {
+        stage: "1.75rem",
+        panel: "1.25rem",
+        cap: "0.75rem",
+      },
+      spacing: {
+        dot: "var(--dot-pitch)",
       },
     },
-    container: { center: true, padding: "2rem", screens: { "2xl": "1400px" } },
   },
   plugins: [],
 };

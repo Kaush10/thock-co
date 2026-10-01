@@ -46,6 +46,7 @@ export function redirects(): Record<string, string> {
 export function metaFor(path: string): PageMeta {
   const clean = path !== '/' ? path.replace(/\/+$/, '') : path;
   if (STATIC_PAGES[clean]) return STATIC_PAGES[clean];
+  if (clean === '/system') return { title: `system | ${SITE_NAME}`, description: 'design system reference' };
   const build = articles.find((a) => `/builds/${a.slug}` === clean);
   if (build) return { title: `${build.title} | ${SITE_NAME}`, description: build.snippet };
   return NOT_FOUND;

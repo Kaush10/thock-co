@@ -11,11 +11,16 @@ const KeyboardsPage = lazy(() => import('./pages/KeyboardsPage').then((m) => ({ 
 const CommissionsPage = lazy(() => import('./pages/CommissionsPage').then((m) => ({ default: m.CommissionsPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const ArticlePage = lazy(() => import('./pages/ArticlePage'));
+// Design system reference, development builds only.
+const SystemPage = import.meta.env.DEV
+  ? lazy(() => import('./pages/SystemPage').then((m) => ({ default: m.SystemPage })))
+  : null;
 import { SiteConfigProvider, useSiteConfig } from './context/SiteConfigContext';
 import { siteConfig } from './config/siteConfig';
 import { PageWipe } from './components/PageWipe';
 import { RouteMeta } from './components/RouteMeta';
 import { NotFoundPage } from './pages/NotFoundPage';
+import './styles/system.css';
 import './styles/globals.css';
 
 
@@ -51,6 +56,7 @@ function AppContent() {
           <Route path="/keyboards/:slug" element={<OldBuildRedirect />} />
           <Route path="/build-service" element={<Navigate to="/commissions" replace />} />
           <Route path="/about" element={<AboutPage />} />
+          {SystemPage && <Route path="/system" element={<SystemPage />} />}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </Suspense>
